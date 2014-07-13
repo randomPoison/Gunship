@@ -1,16 +1,10 @@
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <iostream>
-
-#include <OgreRoot.h>
-#include <OgreManualObject.h>
-#include <OgreRenderWindow.h>
+#include "gunship.h"
 
 // NOTE THIS IS A SUPER HACKY TEMPORARY VALUE
 // UNTIL I CAN BE BOTHERED TO GET CMAKE SETUP CORRECTLY
 #define WINDOWS
 
-bool InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::RenderWindow* render )
+bool Gunship::InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::RenderWindow* render )
 {
 	SDL_Init( SDL_INIT_VIDEO );
 
@@ -76,7 +70,7 @@ bool InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::RenderWin
 	return true;
 }
 
-int main( int argc, char** argv )
+Gunship::Gunship()
 {
 	SDL_Window* window;
 	Ogre::Root* root;
@@ -85,6 +79,7 @@ int main( int argc, char** argv )
 	if ( !InitRenderingSystems( window, root, render ) )
 	{
 		std::cout << "Could not initialize rendering systems!" << std::endl;
+		return;
 	}
 
 	Ogre::SceneManager* sceneMgr = root->createSceneManager( Ogre::ST_GENERIC );
@@ -116,6 +111,4 @@ int main( int argc, char** argv )
 
 	// Clean up
 	SDL_Quit();
-
-	return 0;
 }
