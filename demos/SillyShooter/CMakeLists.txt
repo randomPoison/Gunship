@@ -1,4 +1,5 @@
 cmake_minimum_required (VERSION 3.0)
+include (ExternalProject)
 
 # Set project name
 set (PROJECT_NAME "SillyShooter")
@@ -15,10 +16,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # load gunship
 find_package (GUNSHIP REQUIRED)
-message ("GUNSHIP_ROOT_DIR: " ${GUNSHIP_ROOT_DIR})
+#message ("GUNSHIP_ROOT_DIR: " ${GUNSHIP_ROOT_DIR})
 
 # add gunship as external project
-project (Gunship CXX C)
+externalproject_add(gunship
+	PREFIX ${GUNSHIP_ROOT_DIR}
+	SOURCE_DIR ${GUNSHIP_ROOT_DIR}/source)
+include_directories (${PROJECT_INCLUDES} ${GUNSHIP_ROOT_DIR}/include)
 
 # The project's include directories
 file(GLOB PROJECT_INCLUDES
@@ -32,4 +36,4 @@ file(GLOB PROJECT_SOURCES
 
 # configure executable
 add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
-target_link_libraries (${PROJECT_NAME} gunship)
+add_dependencies (${PROJECT_NAME} gunship)
