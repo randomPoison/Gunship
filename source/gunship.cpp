@@ -12,7 +12,7 @@
 // UNTIL I CAN BE BOTHERED TO GET CMAKE SETUP CORRECTLY
 #define WINDOWS
 
-bool Gunship::InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::RenderWindow* render )
+bool Gunship::InitRenderingSystems()
 {
 	SDL_Init( SDL_INIT_VIDEO );
 
@@ -80,11 +80,7 @@ bool Gunship::InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::
 
 Gunship::Gunship()
 {
-	SDL_Window* window;
-	Ogre::Root* root;
-	Ogre::RenderWindow* render;
-
-	if ( !InitRenderingSystems( window, root, render ) )
+	if ( !InitRenderingSystems() )
 	{
 		std::cout << "Could not initialize rendering systems!" << std::endl;
 		return;

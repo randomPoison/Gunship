@@ -15,7 +15,7 @@ class Gunship
 	Ogre::RenderWindow* render;
 
 	// initialization functions
-	bool InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::RenderWindow* render );
+	bool InitRenderingSystems();
 
 public:
 	// default constructor
