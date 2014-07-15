@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 # Include path for additional CMake library finding scripts
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # We want the binaries to be easily accessible
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -47,6 +47,7 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 file(GLOB PROJECT_INCLUDES
 	include)
 include_directories(${PROJECT_INCLUDES})
+set(GUNSHIP_INCLUDES ${PROJECT_INCLUDES})
 
 # The project's sources
 file(GLOB PROJECT_SOURCES
@@ -55,7 +56,7 @@ file(GLOB PROJECT_SOURCES
 
 # Now compile the executable
 add_library(${PROJECT_NAME} ${PROJECT_SOURCES})
-target_link_libraries(${PROJECT_NAME} ${LIBS})
+
 
 # Visual Studio-specific configurations
 if (MSVC)
@@ -67,7 +68,8 @@ if (MSVC)
 
 	# Set compiler flags and options. 
 	# Here it is setting the Visual Studio warning level to 4
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+#	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+	set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /MACHINE:X86")
 
 	# Command to output information to the console
 	# Useful for displaying errors, warnings, and debugging

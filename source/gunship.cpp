@@ -1,5 +1,13 @@
 #include "gunship.h"
 
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <iostream>
+
+#include <OgreRoot.h>
+#include <OgreManualObject.h>
+#include <OgreRenderWindow.h>
+
 // NOTE THIS IS A SUPER HACKY TEMPORARY VALUE
 // UNTIL I CAN BE BOTHERED TO GET CMAKE SETUP CORRECTLY
 #define WINDOWS
