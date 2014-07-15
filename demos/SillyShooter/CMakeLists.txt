@@ -20,8 +20,7 @@ find_package (GUNSHIP REQUIRED)
 
 # add gunship as external project
 externalproject_add(gunship
-	PREFIX ${GUNSHIP_ROOT_DIR}
-	SOURCE_DIR ${GUNSHIP_ROOT_DIR}/source)
+	SOURCE_DIR ${GUNSHIP_ROOT_DIR})
 include_directories (${PROJECT_INCLUDES} ${GUNSHIP_ROOT_DIR}/include)
 
 # The project's include directories
