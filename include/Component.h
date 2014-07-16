@@ -3,7 +3,9 @@
 #include <vector>
 
 #define COMPONENT_MEMBERS(componentName)	int index;\
-											void update();
+											void Update();
+
+#define DEFINE_COMPONENT(componentName) std::vector<componentName> __componentName__;
 
 #define ADD_COMPONENT(componentName)
 

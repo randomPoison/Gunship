@@ -5,12 +5,17 @@
 
 class CameraComponent
 {
-private:
-	COMPONENT_MEMBERS(CameraComponent)
-
 public:
 	CameraComponent();
+	COMPONENT_MEMBERS(CameraComponent)
 };
+
+DEFINE_COMPONENT(CameraComponent)
+
+void CameraComponent::Update()
+{
+	// do cool things
+}
 
 class Camera : public GameObject
 {
