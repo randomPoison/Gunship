@@ -56,3 +56,4 @@ file(GLOB PROJECT_SOURCES
 
 # Now compile the library
 add_library(${PROJECT_NAME} ${PROJECT_SOURCES})
+target_link_libraries(${PROJECT_NAME} ${LIBS})
