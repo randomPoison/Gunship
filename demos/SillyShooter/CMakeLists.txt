@@ -40,11 +40,4 @@ file(GLOB PROJECT_SOURCES
 
 # configure executable
 add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
-
-if (MSVC)
-	target_link_libraries (${PROJECT_NAME}
-		${CMAKE_BINARY_DIR}/Gunship/Debug/gunship.lib
-		${GUNSHIP_LIBS})
-else ()
-# no libraries to link yet
-endif()
+target_link_libraries(${PROJECT_NAME} gunship ${GUNSHIP_LIBS})

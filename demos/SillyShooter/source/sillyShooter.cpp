@@ -11,7 +11,7 @@ int main( int argc, char** argv )
 	if ( !engine.InitSystems() )
 	{
 		std::cout << "Could not initialize rendering systems!" << std::endl;
-		return;
+		return 1;
 	}
 
 	engine.Start();

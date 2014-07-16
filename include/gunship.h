@@ -24,7 +24,7 @@ public:
 	// initialization functions
 	bool InitSystems();
 	bool Configure();
-	bool Start();
+	void Start();
 
 	bool ShutDown();
 };

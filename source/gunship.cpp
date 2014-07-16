@@ -80,7 +80,7 @@ bool Gunship::InitSystems()
 	return true;
 }
 
-bool Gunship::Start()
+void Gunship::Start()
 {
 	SDL_ShowWindow( window );
 
@@ -112,6 +112,8 @@ bool Gunship::ShutDown()
 
 	// Clean up
 	SDL_Quit();
+
+	return true;
 }
 
 void Gunship::UpdateComponents()
