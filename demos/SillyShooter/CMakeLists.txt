@@ -12,20 +12,25 @@ if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 endif (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 
 # Include path for additional CMake library finding scripts
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # load gunship
 find_package (GUNSHIP REQUIRED)
-#message ("GUNSHIP_ROOT_DIR: " ${GUNSHIP_ROOT_DIR})
 
 # add gunship as external project
-externalproject_add(gunship
-	SOURCE_DIR ${GUNSHIP_ROOT_DIR})
-include_directories (${PROJECT_INCLUDES} ${GUNSHIP_ROOT_DIR}/include)
+add_subdirectory (${GUNSHIP_ROOT_DIR} ${CMAKE_BINARY_DIR}/Gunship)
+
+# retrieve the list of libraries from gunship
+get_directory_property (GUNSHIP_LIBS DIRECTORY ${GUNSHIP_ROOT_DIR} DEFINITION LIBS)
+get_directory_property (GUNSHIP_LIB_DIRS DIRECTORY ${GUNSHIP_ROOT_DIR} DEFINITION LIB_DIRS)
+message ("gunship libs: " ${GUNSHIP_LIBS})
+message ("gunship library dirs: " ${GUNSHIP_LIB_DIRS})
 
 # The project's include directories
 file(GLOB PROJECT_INCLUDES
-	include)
+	${PROJECT_INCLUDES}
+	include
+	${GUNSHIP_ROOT_DIR}/include)
 include_directories(${PROJECT_INCLUDES})
 
 # The project's sources
@@ -35,4 +40,11 @@ file(GLOB PROJECT_SOURCES
 
 # configure executable
 add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
-add_dependencies (${PROJECT_NAME} gunship)
+
+if (MSVC)
+	target_link_libraries (${PROJECT_NAME}
+		${CMAKE_BINARY_DIR}/Gunship/Debug/gunship.lib
+		${GUNSHIP_LIBS})
+else ()
+# no libraries to link yet
+endif()

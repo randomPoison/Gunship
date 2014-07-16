@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 # Include path for additional CMake library finding scripts
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # We want the binaries to be easily accessible
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -31,12 +31,12 @@ set(SDL2_BUILDING_LIBRARY true)
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
-link_directories(${SDL2_LIBRARY_DIRS})
+set(LIB_DIRS ${LIB_DIRS} ${SDL2_LIBRARY_DIRS})
 list(APPEND LIBS ${SDL2_LIBRARY})
 
 find_package(OGRE REQUIRED)
-link_directories(${OGRE_LIBRARY_DIRS})
-link_directories(${Boost_LIBRARY_DIR})
+set(LIB_DIRS ${LIB_DIRS} ${OGRE_LIBRARY_DIRS})
+set(LIB_DIRS ${LIB_DIRS} ${Boost_LIBRARY_DIR})
 include_directories(${OGRE_INCLUDE_DIRS})
 list(APPEND LIBS ${OGRE_LIBRARIES})
 
@@ -47,29 +47,12 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 file(GLOB PROJECT_INCLUDES
 	include)
 include_directories(${PROJECT_INCLUDES})
+set(GUNSHIP_INCLUDES ${PROJECT_INCLUDES})
 
 # The project's sources
 file(GLOB PROJECT_SOURCES
 	source/*.cpp
 	include/*.h)
 
-# Now compile the executable
+# Now compile the library
 add_library(${PROJECT_NAME} ${PROJECT_SOURCES})
-target_link_libraries(${PROJECT_NAME} ${LIBS})
-
-# Visual Studio-specific configurations
-if (MSVC)
-	# Turn on the ability to create folders to organize projects (.vcproj)
-	# It creates "CMakePredefinedTargets" folder by default and adds CMake
-	# defined projects like INSTALL.vcproj and ZERO_CHECK.vcproj
-	# Not yet sure if this should only be set for VS development or what...
-	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-	# Set compiler flags and options. 
-	# Here it is setting the Visual Studio warning level to 4
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-
-	# Command to output information to the console
-	# Useful for displaying errors, warnings, and debugging
-	message ("cxx Flags: " ${CMAKE_CXX_FLAGS})
-endif()

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <iostream>
+namespace Ogre {
+	class Root;
+	class RenderWindow;
+};
+struct SDL_Window;
 
-#include <OgreRoot.h>
-#include <OgreManualObject.h>
-#include <OgreRenderWindow.h>
 
 class Gunship
 {
@@ -16,7 +15,7 @@ class Gunship
 	Ogre::RenderWindow* render;
 
 	// initialization functions
-	bool InitRenderingSystems( SDL_Window* window, Ogre::Root* root, Ogre::RenderWindow* render );
+	bool InitRenderingSystems();
 
 public:
 	// default constructor
