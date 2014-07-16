@@ -12,7 +12,9 @@
 // UNTIL I CAN BE BOTHERED TO GET CMAKE SETUP CORRECTLY
 #define WINDOWS
 
-bool Gunship::InitRenderingSystems()
+Gunship::Gunship() {}
+
+bool Gunship::InitSystems()
 {
 	SDL_Init( SDL_INIT_VIDEO );
 
@@ -78,23 +80,15 @@ bool Gunship::InitRenderingSystems()
 	return true;
 }
 
-Gunship::Gunship()
+bool Gunship::Start()
 {
-	if ( !InitRenderingSystems() )
-	{
-		std::cout << "Could not initialize rendering systems!" << std::endl;
-		return;
-	}
-
-	Ogre::SceneManager* sceneMgr = root->createSceneManager( Ogre::ST_GENERIC );
-	Ogre::Camera* camera = sceneMgr->createCamera( "cam" );
-	Ogre::Viewport* vp = render->addViewport( camera );
-	vp->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
-
 	SDL_ShowWindow( window );
 
+	// enter main loop
 	while( true )
 	{
+		UpdateComponents();
+
 		root->renderOneFrame();
 		SDL_GL_SwapWindow( window );
 
@@ -107,7 +101,10 @@ Gunship::Gunship()
 			}
 		}
 	}
+}
 
+bool Gunship::ShutDown()
+{
 	delete root;
 
 	// Close and destroy the window
@@ -115,4 +112,9 @@ Gunship::Gunship()
 
 	// Clean up
 	SDL_Quit();
+}
+
+void Gunship::UpdateComponents()
+{
+	// TODO someday there will be something here
 }

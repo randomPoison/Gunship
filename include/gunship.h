@@ -1,23 +1,30 @@
 #pragma once
 
+// forward declarations because reasons
 namespace Ogre {
 	class Root;
 	class RenderWindow;
 };
 struct SDL_Window;
 
-
 class Gunship
 {
+private:
 	// Variables and stuffs
 	SDL_Window* window;
 	Ogre::Root* root;
 	Ogre::RenderWindow* render;
 
-	// initialization functions
-	bool InitRenderingSystems();
+	void UpdateComponents();
 
 public:
 	// default constructor
 	Gunship();
+
+	// initialization functions
+	bool InitSystems();
+	bool Configure();
+	bool Start();
+
+	bool ShutDown();
 };
