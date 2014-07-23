@@ -8,10 +8,6 @@
 #include <OgreManualObject.h>
 #include <OgreRenderWindow.h>
 
-// NOTE THIS IS A SUPER HACKY TEMPORARY VALUE
-// UNTIL I CAN BE BOTHERED TO GET CMAKE SETUP CORRECTLY
-#define WINDOWS
-
 Gunship::Gunship() {}
 
 bool Gunship::InitSystems()
@@ -58,7 +54,7 @@ bool Gunship::InitSystems()
 	params.insert( std::make_pair( "FSAA", "0" ) );
 	params.insert( std::make_pair( "vsync", "false" ) );
 
-#ifdef WINDOWS
+#ifdef _WINDOWS
 	params["externalWindowHandle"] = Ogre::StringConverter::toString( reinterpret_cast<size_t>( wmInfo.info.win.window ) );
 	params["externalGLContext"] = "True";
 	params["externalGLControl"] = "True";
