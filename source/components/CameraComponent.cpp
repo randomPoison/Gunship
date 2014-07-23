@@ -1,8 +1,7 @@
 #include "components/CameraComponent.h"
 
-CameraComponent::CameraComponent( ComponentLocator<CameraComponent> locator )
+CameraComponent::CameraComponent( ComponentLocator<CameraComponent> locator ) : locator(locator)
 {
-	this->locator = locator;
 	// setup the component
 }
 
