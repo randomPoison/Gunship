@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 // forward declarations because reasons
 namespace Ogre {
 	class Root;
@@ -7,24 +9,34 @@ namespace Ogre {
 };
 struct SDL_Window;
 
+class Scene;
+
 class Gunship
 {
 private:
 	// Variables and stuffs
 	SDL_Window* window;
 	Ogre::Root* root;
-	Ogre::RenderWindow* render;
+	Ogre::RenderWindow* renderWindow;
 
 	void UpdateComponents();
+
+	Scene* currentScene;
 
 public:
 	// default constructor
 	Gunship();
 
-	// initialization functions
+	~Gunship();
+
+	// initialization and shutdown functions
 	bool InitSystems();
 	bool Configure();
 	void Start();
 
 	bool ShutDown();
+
+	// other functions
+	Scene* CurrentScene();
+	Scene* ResetCurrentScene();
 };

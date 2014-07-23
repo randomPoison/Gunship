@@ -2,32 +2,24 @@
 
 #include <vector>
 
-#include <OgreRoot.h>
-#include <OgreManualObject.h>
-#include <OgreRenderWindow.h>
+namespace Ogre {
+	class Root;
+	class RenderWindow;
+};
 
 #include "GameObject.h"
 
 class Scene
 {
 private:
-	std::vector<GameObject> gameObjects;
+	std::vector< GameObject > gameObjects;
 
 	Ogre::Root* root;
-	Ogre::SceneManager* sceneMgr;
-	Ogre::RenderWindow* render;
+	Ogre::SceneManager* sceneManager;
+	Ogre::RenderWindow* renderWindow;
 	Ogre::Camera* camera;
-	Ogre::Viewport* vp;
+	Ogre::Viewport* viewport;
 
 public:
-	Scene(Ogre::Root* r, Ogre::RenderWindow* renderWindow)
-	{
-		root = r;
-		render = renderWindow;
-		sceneMgr = root->createSceneManager( Ogre::ST_GENERIC );
-		camera = sceneMgr->createCamera( "cam" );
-
-		vp = render->addViewport( camera );
-		vp->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
-	}
+	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 };

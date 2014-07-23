@@ -7,8 +7,17 @@
 #include <OgreRenderWindow.h>
 
 #include "Gunship.h"
+#include "Scene.h"
 
-Gunship::Gunship() {}
+Gunship::Gunship() : currentScene( nullptr ) { }
+
+Gunship::~Gunship()
+{
+	if ( currentScene != nullptr )
+	{
+		delete currentScene;
+	}
+}
 
 bool Gunship::InitSystems()
 {
@@ -71,7 +80,10 @@ bool Gunship::InitSystems()
 	}
 #endif
 
-	render = Ogre::Root::getSingleton().createRenderWindow( "OGRE Window", 640, 480, false, &params );
+	renderWindow = Ogre::Root::getSingleton().createRenderWindow( "OGRE Window", 640, 480, false, &params );
+
+	// initialize the current scene
+	currentScene = new Scene( root, renderWindow );
 
 	return true;
 }
@@ -115,4 +127,16 @@ bool Gunship::ShutDown()
 void Gunship::UpdateComponents()
 {
 	// TODO someday there will be something here
+}
+
+Scene* Gunship::CurrentScene()
+{
+	return currentScene;
+}
+
+Scene* Gunship::ResetCurrentScene()
+{
+	delete currentScene;
+	currentScene = new Scene( root, renderWindow );
+	return currentScene;
 }
