@@ -44,16 +44,32 @@ add_definitions(-DOGRE_PLUGIN_DIR_REL="${OGRE_PLUGIN_DIR_REL}")
 add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 
 # The project's include directories
-file(GLOB PROJECT_INCLUDES
+file(GLOB PROJECT_INCLUDE_DIRS
 	include)
-include_directories(${PROJECT_INCLUDES})
-set(GUNSHIP_INCLUDES ${PROJECT_INCLUDES})
+include_directories(${PROJECT_INCLUDE_DIRS})
+set(GUNSHIP_INCLUDES ${PROJECT_INCLUDES_DIRS})
 
 # The project's sources
 file(GLOB PROJECT_SOURCES
-	source/*.cpp
+	source/*.cpp)
+source_group("source" FILES ${PROJECT_SOURCES})
+
+file(GLOB PROJECT_INCLUDES
 	include/*.h)
+source_group("include" FILES ${PROJECT_INCLUDES})
+
+file(GLOB COMPONENT_SOURCES
+	source/components/*.cpp)
+source_group("source\\components" FILES ${COMPONENT_SOURCES})
+
+file(GLOB COMPONENT_INCLUDES
+	include/components/*.h)
+source_group("include\\components" FILES ${COMPONENT_INCLUDES})
 
 # Now compile the library
-add_library(${PROJECT_NAME} ${PROJECT_SOURCES})
+add_library(${PROJECT_NAME}
+			${PROJECT_SOURCES}
+			${PROJECT_INCLUDES}
+			${COMPONENT_SOURCES}
+			${COMPONENT_INCLUDES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

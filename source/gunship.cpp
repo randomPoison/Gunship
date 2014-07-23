@@ -1,5 +1,3 @@
-#include "gunship.h"
-
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <iostream>
@@ -7,6 +5,8 @@
 #include <OgreRoot.h>
 #include <OgreManualObject.h>
 #include <OgreRenderWindow.h>
+
+#include "Gunship.h"
 
 Gunship::Gunship() {}
 
