@@ -6,7 +6,7 @@
 class GameObject
 {
 public:
-	virtual ~GameObject();
+	~GameObject() { };
 
 protected:
 	ComponentLocator< CameraComponent > cameraComponet;
