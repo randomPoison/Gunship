@@ -7,16 +7,15 @@ namespace Ogre
 	class SceneNode;
 }
 
-#include "Scene.h"
+class Scene;
+
 #include "components/Component.h"
 #include "components/CameraComponent.h"
 
 class GameObject
 {
 public:
-	GameObject( Scene* scene, const char* baseName = "Game Object" );
-
-	~GameObject() { };
+	GameObject( Scene* scene, const char* name = "Game Object" );
 
 protected:
 	ComponentLocator< CameraComponent > cameraComponet;
@@ -25,8 +24,9 @@ protected:
 	Ogre::SceneNode* node;
 
 	std::string name;
-	std::string id;
+	component_id id;
 
 private:
-	static std::string GenerateUniqueID( const char* base );
+
+	friend class Scene;
 };

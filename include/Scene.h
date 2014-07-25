@@ -8,8 +8,7 @@ namespace Ogre {
 	class SceneManager;
 };
 
-class GameObject;
-
+#include "GameObject.h"
 #include "components/Component.h"
 
 class Scene

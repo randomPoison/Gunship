@@ -10,7 +10,6 @@
 #include <OgreSceneNode.h>
 
 #include "Scene.h"
-#include "GameObject.h"
 
 void createColourCube()
 {
@@ -171,7 +170,7 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 ComponentLocator< GameObject > Scene::AddGameObject( const char* name )
 {
 	gameObjects.emplace_back( this, name );
-	return ComponentLocator< GameObject >( &gameObjects, gameObjects.size() - 1 );
+	return ComponentLocator< GameObject >( &gameObjects, gameObjects.back().id, gameObjects.size() - 1 );
 }
 
 Ogre::SceneManager* Scene::SceneManager()

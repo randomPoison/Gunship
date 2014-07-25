@@ -1,22 +1,36 @@
 #pragma once
 
 #include <vector>
+#include <limits>
 
 // forward declarations
 class GameObject;
 
-// MACROS
+typedef unsigned int component_id;
 
 #define COMPONENT_MEMBERS(componentName)	ComponentLocator< componentName > locator;\
-											ComponentLocator< GameObject > owner;
+											ComponentLocator< GameObject > owner;\
+											component_id id;
 
-// HELPERS
+component_id GenerateUniqueComponentID();
 
 template< typename T >
-struct ComponentLocator
+class ComponentLocator
 {
 	std::vector<T>* componentSet;
-	int index;
+	component_id id;
+	size_t index;
 
-	ComponentLocator( std::vector<T>* set = nullptr, int index = -1) : componentSet(set), index(index) { }
+public:
+	ComponentLocator( std::vector<T>* set = nullptr, component_id id = 0, size_t index = std::numeric_limits< size_t >::max() ) :
+		componentSet( set ),
+		id( id ),
+		index( index )
+	{
+	}
+
+	T* GetComponent()
+	{
+		return (*componentSet)[index];
+	}
 };
