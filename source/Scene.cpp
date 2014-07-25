@@ -10,6 +10,7 @@
 #include <OgreSceneNode.h>
 
 #include "Scene.h"
+#include "GameObject.h"
 
 void createColourCube()
 {
@@ -145,12 +146,17 @@ void createColourCube()
 Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), renderWindow( render )
 {
 	sceneManager = root->createSceneManager( Ogre::ST_GENERIC );
-	camera = sceneManager->createCamera( "cam" );
+	//camera = sceneManager->createCamera( "cam" );
 
-	viewport = renderWindow->addViewport( camera );
-	viewport->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
+	//viewport = renderWindow->addViewport( camera );
+	//viewport->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
 
 	// create the colour cube mesh and then add one to the scene
+
+	//camera->setPosition( Ogre::Vector3( 0, 0, 10 ) );
+	//camera->lookAt( Ogre::Vector3( 0, 0, 0 ) );
+	//camera->setNearClipDistance( 5 );
+
 	createColourCube();
 
 	Ogre::Entity* cubeEntity = sceneManager->createEntity( "cc", "ColourCube" );
@@ -160,13 +166,15 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 	thisSceneNode->attachObject( cubeEntity );
 
 	sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
-	camera->setPosition( Ogre::Vector3( 0, 0, 10 ) );
-	camera->lookAt( Ogre::Vector3( 0, 0, 0 ) );
-	camera->setNearClipDistance( 5 );
 }
 
-ComponentLocator< GameObject > Scene::AddGameObject()
+ComponentLocator< GameObject > Scene::AddGameObject( const char* name )
 {
-	gameObjects.emplace_back();
+	gameObjects.emplace_back( this, name );
 	return ComponentLocator< GameObject >( &gameObjects, gameObjects.size() - 1 );
+}
+
+Ogre::SceneManager* Scene::SceneManager()
+{
+	return sceneManager;
 }

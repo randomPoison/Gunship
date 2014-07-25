@@ -2,14 +2,14 @@
 
 #include <vector>
 
-#include "GameObject.h"
-
 namespace Ogre {
 	class Root;
 	class RenderWindow;
+	class SceneManager;
 };
 
-#include "GameObject.h"
+class GameObject;
+
 #include "components/Component.h"
 
 class Scene
@@ -20,11 +20,11 @@ private:
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
 	Ogre::RenderWindow* renderWindow;
-	Ogre::Camera* camera;
-	Ogre::Viewport* viewport;
 
 public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-	ComponentLocator< GameObject > AddGameObject();
+	ComponentLocator< GameObject > AddGameObject( const char* name = "Game Object" );
+
+	Ogre::SceneManager* SceneManager();
 };
