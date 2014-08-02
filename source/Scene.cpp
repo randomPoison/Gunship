@@ -183,7 +183,6 @@ ComponentLocator< CameraComponent > Scene::AddCameraComponent( const GameObject&
 	return ComponentLocator< CameraComponent >( &cameraComponents, cameraComponents.back().id, cameraComponents.size() - 1 );
 }
 
-
 Ogre::SceneManager* Scene::SceneManager()
 {
 	return sceneManager;

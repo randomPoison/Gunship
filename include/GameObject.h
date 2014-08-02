@@ -17,7 +17,8 @@ class GameObject
 public:
 	GameObject( Scene* scene, const char* name = "Game Object" );
 
-	ComponentLocator< CameraComponent > AddCameraComponent();
+	template< typename Component >
+	ComponentLocator< Component > AddComponent();
 
 private:
 	ComponentLocator< CameraComponent > cameraComponent;

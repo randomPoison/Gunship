@@ -142,3 +142,11 @@ Scene* Gunship::ResetCurrentScene()
 	currentScene = new Scene( root, renderWindow );
 	return currentScene;
 }
+
+Scene* Gunship::ResetCurrentScene( std::function< void( Scene& ) > init )
+{
+	delete currentScene;
+	currentScene = new Scene( root, renderWindow );
+	init( *currentScene );
+	return currentScene;
+}

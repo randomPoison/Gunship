@@ -39,4 +39,5 @@ public:
 	// other functions
 	Scene* CurrentScene();
 	Scene* ResetCurrentScene();
+	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
 };
