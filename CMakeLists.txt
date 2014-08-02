@@ -31,12 +31,9 @@ set(SDL2_BUILDING_LIBRARY true)
 
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
-set(LIB_DIRS ${LIB_DIRS} ${SDL2_LIBRARY_DIRS})
 list(APPEND LIBS ${SDL2_LIBRARY})
 
 find_package(OGRE REQUIRED)
-set(LIB_DIRS ${LIB_DIRS} ${OGRE_LIBRARY_DIRS})
-set(LIB_DIRS ${LIB_DIRS} ${Boost_LIBRARY_DIR})
 include_directories(${OGRE_INCLUDE_DIRS})
 list(APPEND LIBS ${OGRE_LIBRARIES})
 

@@ -1,11 +1,16 @@
+#include <OgreCamera.h>
+#include <OgreViewport.h>
+
 #include "components/CameraComponent.h"
 
-CameraComponent::CameraComponent( ComponentLocator<CameraComponent> locator ) : locator(locator)
+CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view, ComponentLocator< GameObject > owner ) :
+	camera( cam ),
+	viewport( view ),
+	owner( owner )
 {
-	// setup the component
 }
 
-void CameraComponent::Update()
+bool operator==( const CameraComponent& first, const CameraComponent& second )
 {
-	// do cool things
+	return first.id == second.id;
 }

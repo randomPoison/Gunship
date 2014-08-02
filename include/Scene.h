@@ -15,6 +15,7 @@ class Scene
 {
 private:
 	std::vector< GameObject > gameObjects;
+	std::vector< CameraComponent > cameraComponents;
 
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
@@ -24,6 +25,8 @@ public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
 	ComponentLocator< GameObject > AddGameObject( const char* name = "Game Object" );
+	ComponentLocator< CameraComponent > AddCameraComponent( const GameObject& owner );
 
 	Ogre::SceneManager* SceneManager();
+	ComponentLocator< GameObject > LocateGameObject( const GameObject& gameObject );
 };

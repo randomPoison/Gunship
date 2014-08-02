@@ -84,6 +84,8 @@ bool Gunship::InitSystems()
 
 	// initialize the current scene
 	currentScene = new Scene( root, renderWindow );
+	GameObject* obj = currentScene->AddGameObject( "Camera" ).GetComponent();
+	obj->AddCameraComponent();
 
 	return true;
 }

@@ -17,8 +17,10 @@ class GameObject
 public:
 	GameObject( Scene* scene, const char* name = "Game Object" );
 
-protected:
-	ComponentLocator< CameraComponent > cameraComponet;
+	ComponentLocator< CameraComponent > AddCameraComponent();
+
+private:
+	ComponentLocator< CameraComponent > cameraComponent;
 
 	Scene* scene;
 	Ogre::SceneNode* node;
@@ -26,7 +28,10 @@ protected:
 	std::string name;
 	component_id id;
 
-private:
-
 	friend class Scene;
+	friend bool operator==( const GameObject& first, const GameObject& second );
+	friend bool operator!=( const GameObject& first, const GameObject& second );
 };
+
+bool operator==( const GameObject& first, const GameObject& second );
+bool operator!=( const GameObject& first, const GameObject& second );

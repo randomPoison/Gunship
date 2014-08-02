@@ -8,11 +8,6 @@
 class GameObject;
 
 typedef unsigned int component_id;
-
-#define COMPONENT_MEMBERS(componentName)	ComponentLocator< componentName > locator;\
-											ComponentLocator< GameObject > owner;\
-											component_id id;
-
 component_id GenerateUniqueComponentID();
 
 template< typename T >
@@ -32,6 +27,6 @@ public:
 
 	T* GetComponent()
 	{
-		return (*componentSet)[index];
+		return componentSet->data() + index;
 	}
 };
