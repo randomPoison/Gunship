@@ -49,8 +49,8 @@
 # (To distribute this file outside of CMake, substitute the full
 # License text for the above reference.)
 
-#find_path (GUNSHIP_ROOT_DIR
-#	HINTS $ENV{GUNSHIP_HOME}
-#	)
+find_path (GUNSHIP_ROOT_DIR
+	INCLUDE_DIR include/Gunship.h
+	HINTS $ENV{GUNSHIP_HOME}
+	)
 
-set (GUNSHIP_ROOT_DIR $ENV{GUNSHIP_HOME})

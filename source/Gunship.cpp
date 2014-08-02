@@ -49,7 +49,7 @@ bool Gunship::InitSystems()
 
 	root->initialise( false );
 
-	//get the native whnd
+	// get the native window manager
 	struct SDL_SysWMinfo wmInfo;
 	SDL_VERSION( &wmInfo.version );
 
@@ -71,12 +71,12 @@ bool Gunship::InitSystems()
 	switch ( wmInfo.subsystem )
 	{
 	case SDL_SYSWM_X11:
-		winHandle = Ogre::StringConverter::toString( (unsigned long)wmInfo.info.x11.window );
+		Ogre::String winHandle = Ogre::StringConverter::toString( (unsigned long)wmInfo.info.x11.window );
 		params["currentGLContext"] = "True";
 		break;
-	default:
-		throw std::runtime_error( "Unexpected WM!" );
-		break;
+//	default:
+//		throw std::runtime_error( "Unexpected WM!" );
+//		break;
 	}
 #endif
 

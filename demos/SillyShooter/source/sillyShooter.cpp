@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <gunship.h>
+#include <Gunship.h>
 
 #include "sillyShooter.h"
 
