@@ -69,7 +69,7 @@ source_group("include\\components" FILES ${COMPONENT_INCLUDES})
 # Now compile the library
 add_library(${PROJECT_NAME}
 			${PROJECT_INCLUDES} ${PROJECT_SOURCES}
-			${COMPONENT_INCLUDES}) ${COMPONENT_SOURCES})
+			${COMPONENT_INCLUDES} ${COMPONENT_SOURCES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 if (CMAKE_COMPILER_IS_GNUCXX)

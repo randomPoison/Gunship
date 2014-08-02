@@ -44,7 +44,16 @@ bool Gunship::InitSystems()
 	SDL_GLContext glContext = SDL_GL_CreateContext( window );
 
 	root = new Ogre::Root( "", "", "" );
+
+	// TODO: Unfuck this bit of fragmentation here.
+	// This is only happening because I can't find the debug plugins for Ogre on my system.
+	// Either they don't come with default universe install, or I'm too unfamiliar
+	// with linux development to find them (and cmake isn't doing it for me).
+#ifdef WIN32
 	root->loadPlugin ( OGRE_PLUGIN_DIR_DBG + std::string( "/RenderSystem_GL_d" ) );
+#else
+	root->loadPlugin ( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
+#endif
 	root->setRenderSystem( root->getRenderSystemByName( "OpenGL Rendering Subsystem" ) );
 
 	root->initialise( false );
@@ -63,21 +72,12 @@ bool Gunship::InitSystems()
 	params.insert( std::make_pair( "FSAA", "0" ) );
 	params.insert( std::make_pair( "vsync", "false" ) );
 
-#ifdef _WINDOWS
+#ifdef WIN32
 	params["externalWindowHandle"] = Ogre::StringConverter::toString( reinterpret_cast<size_t>( wmInfo.info.win.window ) );
 	params["externalGLContext"] = "True";
 	params["externalGLControl"] = "True";
 #else
-	switch ( wmInfo.subsystem )
-	{
-	case SDL_SYSWM_X11:
-		Ogre::String winHandle = Ogre::StringConverter::toString( (unsigned long)wmInfo.info.x11.window );
-		params["currentGLContext"] = "True";
-		break;
-//	default:
-//		throw std::runtime_error( "Unexpected WM!" );
-//		break;
-	}
+	params["parentWindowHandle"] = Ogre::StringConverter::toString( reinterpret_cast<unsigned long>( wmInfo.info.x11.window ) );
 #endif
 
 	renderWindow = Ogre::Root::getSingleton().createRenderWindow( "OGRE Window", 640, 480, false, &params );

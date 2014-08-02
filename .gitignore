@@ -2,3 +2,10 @@ build
 tmp
 *.sublime-project
 *.sublime-workspace
+*.csettings
+*.cproject
+*.project
+*.a
+*.o
+*.make
+*.out
