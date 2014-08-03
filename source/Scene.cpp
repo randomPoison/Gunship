@@ -5,6 +5,10 @@
 #include <OgreViewport.h>
 #include <OgreEntity.h>
 
+#include "components/Component.h"
+#include "components/CameraComponent.h"
+#include "GameObject.h"
+
 #include "Scene.h"
 
 Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), renderWindow( render )
@@ -14,17 +18,18 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 	sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 }
 
-ComponentLocator< GameObject > Scene::AddGameObject( const char* name )
+GameObject Scene::AddGameObject( const char* name )
 {
-	gameObjects.emplace_back( this, name );
-	return ComponentLocator< GameObject >( &gameObjects, gameObjects.back().id, gameObjects.size() - 1 );
+	gameObjects.emplace_back( this, sceneManager->getRootSceneNode()->createChildSceneNode(), name );
+	return GameObject( *this, gameObjects.back().id, gameObjects.size() - 1 );
 }
 
-ComponentLocator< CameraComponent > Scene::AddCameraComponent( const GameObject& owner )
+ComponentLocator< CameraComponent > Scene::AddCameraComponent( GameObject gameObject )
 {
 	// create camera and viewport
-	Ogre::Camera* camera = sceneManager->createCamera( std::to_string( owner.id ) );
-	owner.node->attachObject( camera );
+	GameObjectComponent* owner = FindComponent( gameObject );
+	Ogre::Camera* camera = sceneManager->createCamera( std::to_string( owner->id ) );
+	owner->node->attachObject( camera );
 	Ogre::Viewport* viewport = renderWindow->addViewport( camera );
 	viewport->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
 
@@ -32,25 +37,37 @@ ComponentLocator< CameraComponent > Scene::AddCameraComponent( const GameObject&
 	camera->setNearClipDistance( 5 );
 
 	// create camera component
-	cameraComponents.emplace_back( camera, viewport, LocateGameObject( owner ) );
-	return ComponentLocator< CameraComponent >( &cameraComponents, cameraComponents.back().id, cameraComponents.size() - 1 );
+	cameraComponents.emplace_back( camera, viewport, gameObject );
+	return ComponentLocator< CameraComponent >( this, cameraComponents.back().id, cameraComponents.size() - 1 );
 }
 
-void Scene::AddMeshToGameObject( GameObject* gameObject, const char* name, const char* mesh )
+void Scene::AddMeshToGameObject( GameObject gameObject, const char* name, const char* mesh )
 {
+	GameObjectComponent* owner = FindComponent( gameObject );
 	Ogre::Entity* cubeEntity = sceneManager->createEntity( name, mesh );
 	cubeEntity->setMaterialName( "Test/ColourTest" );
-	gameObject->node->attachObject( cubeEntity );
+	owner->node->attachObject( cubeEntity );
 }
 
-Ogre::SceneManager* Scene::SceneManager()
+void Scene::TranslateGameObject( GameObject gameObject, float x, float y, float z )
 {
-	return sceneManager;
+	GameObjectComponent* obj = FindComponent( gameObject );
+	obj->node->translate( x, y, z );
 }
 
-ComponentLocator< GameObject > Scene::LocateGameObject( const GameObject& gameObject )
+void Scene::SetGameObjectPosition( GameObject gameObject, float x, float y, float z )
 {
-	size_t index = 0;
-	for ( ; index < gameObjects.size() && gameObjects[index] != gameObject; index++ );
-	return ComponentLocator< GameObject >( &gameObjects, gameObject.id, index );
+	GameObjectComponent* component = FindComponent( gameObject );
+	component->node->setPosition( x, y, z );
+}
+
+void Scene::SetGameObjectLook( GameObject gameObject, float x, float y, float z )
+{
+	GameObjectComponent* component = FindComponent( gameObject );
+	component->node->lookAt( Ogre::Vector3( x, y , z ), Ogre::Node::TS_WORLD );
+}
+
+GameObjectComponent* Scene::FindComponent( GameObject gameObject )
+{
+	return gameObjects.data() + gameObject.LastIndex();
 }

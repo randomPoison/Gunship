@@ -3,6 +3,11 @@
 #include <vector>
 #include <functional>
 
+#include "components/Component.h"
+#include "components/CameraComponent.h"
+#include "GameObject.h"
+#include "Scene.h"
+
 // forward declarations because reasons
 namespace Ogre {
 	class Root;

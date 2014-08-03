@@ -2,27 +2,19 @@
 
 #include <string>
 
+// forward declarations
 namespace Ogre
 {
 	class SceneNode;
 }
 
 class Scene;
+class CameraComponent;
 
-#include "components/Component.h"
-#include "components/CameraComponent.h"
-
-class GameObject
+class GameObjectComponent
 {
 public:
-	GameObject( Scene* scene, const char* name = "Game Object" );
-
-	ComponentLocator< CameraComponent > AddCamera();
-	void AddMesh( const char* name, const char* mesh );
-
-	void LookAt( float x, float y, float z );
-	void Translate( float x, float y, float z );
-	void SetPosition( float x, float y, float z );
+	GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name = "Game Object" );
 
 private:
 	ComponentLocator< CameraComponent > cameraComponent;
@@ -34,9 +26,32 @@ private:
 	component_id id;
 
 	friend class Scene;
-	friend bool operator==( const GameObject& first, const GameObject& second );
-	friend bool operator!=( const GameObject& first, const GameObject& second );
 };
 
-bool operator==( const GameObject& first, const GameObject& second );
-bool operator!=( const GameObject& first, const GameObject& second );
+template<>
+class ComponentLocator< GameObjectComponent >
+{
+public:
+	ComponentLocator( Scene& scene, component_id id, size_t index = 0 ) :
+		scene( scene ),
+		id( id ),
+		index( index )
+	{
+	}
+
+	ComponentLocator< CameraComponent > AddCamera();
+	void AddMesh( const char* name, const char* mesh );
+
+	void LookAt( float x, float y, float z );
+	void Translate( float x, float y, float z );
+	void SetPosition( float x, float y, float z );
+
+	size_t LastIndex() const;
+
+private:
+	Scene& scene;
+	component_id id;
+	size_t index;
+};
+
+typedef ComponentLocator< GameObjectComponent > GameObject;

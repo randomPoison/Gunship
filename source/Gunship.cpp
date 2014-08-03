@@ -14,7 +14,6 @@
 #include <OgreSceneNode.h>
 
 #include "Gunship.h"
-#include "Scene.h"
 
 void createColourCube()
 {

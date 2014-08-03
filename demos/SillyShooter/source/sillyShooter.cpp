@@ -1,8 +1,6 @@
 #include <iostream>
 
 #include <Gunship.h>
-#include <Scene.h>
-#include <GameObject.h>
 
 #include "sillyShooter.h"
 
@@ -18,15 +16,15 @@ int main( int argc, char** argv )
 
 	engine.ResetCurrentScene( []( Scene& scene )
 	{
-		GameObject* camera = scene.AddGameObject( "Camera" ).GetComponent();
-		camera->AddCamera();
-		camera->SetPosition( 0.0f, 0.0f, 10.0f );
-		camera->LookAt( 0.0f, 0.0f, 0.0f );
+		GameObject camera = scene.AddGameObject( "Camera" );
+		camera.AddCamera();
+		camera.SetPosition( 0.0f, 0.0f, 10.0f );
+		camera.LookAt( 0.0f, 0.0f, 0.0f );
 
-		GameObject* manager = scene.AddGameObject( "Manager" ).GetComponent();
+		GameObject manager = scene.AddGameObject( "Manager" );
 
-		GameObject* player = scene.AddGameObject( "Player" ).GetComponent();
-		player->AddMesh( "playerMesh", "ColourCube");
+		GameObject player = scene.AddGameObject( "Player" );
+		player.AddMesh( "playerMesh", "ColourCube");
 	} );
 
 	engine.Start();

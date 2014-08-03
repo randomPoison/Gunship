@@ -7,15 +7,15 @@ namespace Ogre
 	class Viewport;
 }
 
-#include "components/Component.h"
+#include "GameObject.h" // TODO figure out if there's a way to not have this here
 
 class CameraComponent
 {
 public:
-	CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view, ComponentLocator< GameObject > owner );
+	CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view, GameObject owner );
 
 private:
-	ComponentLocator< GameObject > owner;
+	GameObject owner;
 	component_id id;
 
 	Ogre::Camera* camera;

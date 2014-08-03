@@ -2,50 +2,46 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 
-#include "GameObject.h"
+#include "components/Component.h"
+#include "components/CameraComponent.h"
 #include "Scene.h"
 
-GameObject::GameObject( Scene* scene, const char* name ) :
+#include "GameObject.h"
+
+GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name ) :
 	scene( scene ),
 	name( name ),
-	id( GenerateUniqueComponentID() )
+	id( GenerateUniqueComponentID() ),
+	node( node )
 {
-	// setup the SceneNode for this object
-	node = scene->SceneManager()->getRootSceneNode()->createChildSceneNode();
 }
 
 ComponentLocator< CameraComponent > GameObject::AddCamera()
 {
-	cameraComponent = scene->AddCameraComponent( *this );
-	return cameraComponent;
+	return scene.AddCameraComponent( *this );
 }
 
 void GameObject::AddMesh( const char* name, const char* mesh )
 {
-	scene->AddMeshToGameObject( this, name, mesh );
+	scene.AddMeshToGameObject( *this, name, mesh );
 }
 
 void GameObject::LookAt( float x, float y, float z )
 {
-	node->lookAt( Ogre::Vector3( x, y , z ), Ogre::Node::TS_WORLD );
+	scene.SetGameObjectLook( *this, x, y, z );
 }
 
 void GameObject::Translate( float x, float y, float z )
 {
-	node->translate( x, y, z );
+	scene.TranslateGameObject( *this, x, y, z );
 }
 
 void GameObject::SetPosition( float x, float y, float z )
 {
-	node->setPosition( x, y, z );
+	scene.SetGameObjectPosition( *this, x, y, z );
 }
 
-bool operator==( const GameObject& first, const GameObject& second )
+size_t GameObject::LastIndex() const
 {
-	return first.id == second.id;
-}
-
-bool operator!=( const GameObject& first, const GameObject& second )
-{
-	return !( first == second );
+	return index;
 }
