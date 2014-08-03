@@ -18,6 +18,7 @@ public:
 	GameObject( Scene* scene, const char* name = "Game Object" );
 
 	ComponentLocator< CameraComponent > AddCameraComponent();
+	void AddMesh( const char* name, const char* mesh );
 
 	void LookAt( float x, float y, float z );
 	void Translate( float x, float y, float z );

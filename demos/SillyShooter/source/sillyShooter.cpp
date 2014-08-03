@@ -26,6 +26,7 @@ int main( int argc, char** argv )
 		GameObject* manager = scene.AddGameObject( "Manager" ).GetComponent();
 
 		GameObject* player = scene.AddGameObject( "Player" ).GetComponent();
+		player->AddMesh( "playerMesh", "ColourCube");
 	} );
 
 	engine.Start();

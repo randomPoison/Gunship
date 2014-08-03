@@ -20,6 +20,11 @@ ComponentLocator< CameraComponent > GameObject::AddCameraComponent()
 	return cameraComponent;
 }
 
+void GameObject::AddMesh( const char* name, const char* mesh )
+{
+	scene->AddMeshToGameObject( this, name, mesh );
+}
+
 void GameObject::LookAt( float x, float y, float z )
 {
 	node->lookAt( Ogre::Vector3( x, y , z ), Ogre::Node::TS_WORLD );

@@ -27,6 +27,8 @@ public:
 	ComponentLocator< GameObject > AddGameObject( const char* name = "Game Object" );
 	ComponentLocator< CameraComponent > AddCameraComponent( const GameObject& owner );
 
+	void AddMeshToGameObject( GameObject* gameObject, const char* name, const char* mesh );
+
 	Ogre::SceneManager* SceneManager();
 	ComponentLocator< GameObject > LocateGameObject( const GameObject& gameObject );
 };
