@@ -170,12 +170,11 @@ ComponentLocator< CameraComponent > Scene::AddCameraComponent( const GameObject&
 {
 	// create camera and viewport
 	Ogre::Camera* camera = sceneManager->createCamera( std::to_string( owner.id ) );
+	owner.node->attachObject( camera );
 	Ogre::Viewport* viewport = renderWindow->addViewport( camera );
 	viewport->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
 
 	// temporary values for testing purposes
-	camera->setPosition( Ogre::Vector3( 0, 0, 10 ) );
-	camera->lookAt( Ogre::Vector3( 0, 0, 0 ) );
 	camera->setNearClipDistance( 5 );
 
 	// create camera component

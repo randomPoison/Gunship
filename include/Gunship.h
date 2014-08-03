@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 // forward declarations because reasons
 namespace Ogre {
