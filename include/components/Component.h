@@ -6,21 +6,15 @@
 
 class Scene;
 
-typedef unsigned int component_id;
+typedef size_t component_id;
+
 component_id GenerateUniqueComponentID();
 
-template< typename T >
 class ComponentLocator
 {
 public:
-	ComponentLocator( Scene* scene = nullptr, component_id id = 0, size_t index = 0 ) :
-		scene( scene ),
-		id( id ),
-		index( index )
-	{
-	}
+	ComponentLocator( Scene* scene = nullptr, component_id id = 0, size_t index = 0 );
 
-private:
 	Scene* scene;
 	component_id id;
 	size_t index;

@@ -9,7 +9,7 @@ namespace Ogre
 }
 
 class Scene;
-class CameraComponent;
+class Camera;
 
 class GameObjectComponent
 {
@@ -17,7 +17,7 @@ public:
 	GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name = "Game Object" );
 
 private:
-	ComponentLocator< CameraComponent > cameraComponent;
+	Camera cameraComponent;
 
 	Scene* scene;
 	Ogre::SceneNode* node;
@@ -28,18 +28,12 @@ private:
 	friend class Scene;
 };
 
-template<>
-class ComponentLocator< GameObjectComponent >
+class GameObject : public ComponentLocator
 {
 public:
-	ComponentLocator( Scene& scene, component_id id, size_t index = 0 ) :
-		scene( scene ),
-		id( id ),
-		index( index )
-	{
-	}
+	GameObject( Scene& scene, component_id id, size_t index = 0 );
 
-	ComponentLocator< CameraComponent > AddCamera();
+	Camera AddCamera();
 	void AddMesh( const char* name, const char* mesh );
 
 	void LookAt( float x, float y, float z );
@@ -47,11 +41,4 @@ public:
 	void SetPosition( float x, float y, float z );
 
 	size_t LastIndex() const;
-
-private:
-	Scene& scene;
-	component_id id;
-	size_t index;
 };
-
-typedef ComponentLocator< GameObjectComponent > GameObject;

@@ -24,7 +24,7 @@ GameObject Scene::AddGameObject( const char* name )
 	return GameObject( *this, gameObjects.back().id, gameObjects.size() - 1 );
 }
 
-ComponentLocator< CameraComponent > Scene::AddCameraComponent( GameObject gameObject )
+Camera Scene::AddCameraComponent( GameObject gameObject )
 {
 	// create camera and viewport
 	GameObjectComponent* owner = FindComponent( gameObject );
@@ -37,8 +37,8 @@ ComponentLocator< CameraComponent > Scene::AddCameraComponent( GameObject gameOb
 	camera->setNearClipDistance( 5 );
 
 	// create camera component
-	cameraComponents.emplace_back( camera, viewport, gameObject );
-	return ComponentLocator< CameraComponent >( this, cameraComponents.back().id, cameraComponents.size() - 1 );
+	cameraComponents.emplace_back( camera, viewport );
+	return Camera( this, cameraComponents.back().id, cameraComponents.size() - 1 );
 }
 
 void Scene::AddMeshToGameObject( GameObject gameObject, const char* name, const char* mesh )

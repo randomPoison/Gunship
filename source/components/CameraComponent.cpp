@@ -5,15 +5,13 @@
 #include "components/CameraComponent.h"
 #include "GameObject.h"
 
-CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view, GameObject owner ) :
+CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view ) :
 	camera( cam ),
 	viewport( view ),
-	owner( owner ),
 	id( GenerateUniqueComponentID() )
 {
 }
 
-bool operator==( const CameraComponent& first, const CameraComponent& second )
+Camera::Camera( Scene* scene, component_id id, size_t index ) : ComponentLocator( scene, id, index )
 {
-	return first.id == second.id;
 }

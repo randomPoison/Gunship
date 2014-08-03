@@ -16,29 +16,33 @@ GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, c
 {
 }
 
-ComponentLocator< CameraComponent > GameObject::AddCamera()
+GameObject::GameObject( Scene& scene, component_id id, size_t index ) : ComponentLocator( &scene, id, index )
 {
-	return scene.AddCameraComponent( *this );
+}
+
+Camera GameObject::AddCamera()
+{
+	return scene->AddCameraComponent( *this );
 }
 
 void GameObject::AddMesh( const char* name, const char* mesh )
 {
-	scene.AddMeshToGameObject( *this, name, mesh );
+	scene->AddMeshToGameObject( *this, name, mesh );
 }
 
 void GameObject::LookAt( float x, float y, float z )
 {
-	scene.SetGameObjectLook( *this, x, y, z );
+	scene->SetGameObjectLook( *this, x, y, z );
 }
 
 void GameObject::Translate( float x, float y, float z )
 {
-	scene.TranslateGameObject( *this, x, y, z );
+	scene->TranslateGameObject( *this, x, y, z );
 }
 
 void GameObject::SetPosition( float x, float y, float z )
 {
-	scene.SetGameObjectPosition( *this, x, y, z );
+	scene->SetGameObjectPosition( *this, x, y, z );
 }
 
 size_t GameObject::LastIndex() const

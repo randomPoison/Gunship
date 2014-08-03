@@ -8,13 +8,18 @@ namespace Ogre {
 	class SceneManager;
 };
 
+class GameObjectComponent;
+class GameObject;
+class CameraComponent;
+class Camera;
+
 class Scene
 {
 public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
 	GameObject AddGameObject( const char* name = "Game Object" );
-	ComponentLocator< CameraComponent > AddCameraComponent( GameObject gameObject );
+	Camera AddCameraComponent( GameObject gameObject );
 
 	void AddMeshToGameObject( GameObject gameObject, const char* name, const char* mesh );
 	void TranslateGameObject( GameObject gameObject, float x, float y, float z );
@@ -30,5 +35,5 @@ private:
 	Ogre::RenderWindow* renderWindow;
 
 	GameObjectComponent* FindComponent( GameObject gameObject );
-	CameraComponent* FindComponent( ComponentLocator< CameraComponent > camera );
+	CameraComponent* FindComponent( Camera camera );
 };

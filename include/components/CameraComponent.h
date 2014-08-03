@@ -7,22 +7,24 @@ namespace Ogre
 	class Viewport;
 }
 
-#include "GameObject.h" // TODO figure out if there's a way to not have this here
+class GameObject;
 
 class CameraComponent
 {
 public:
-	CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view, GameObject owner );
+	CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view );
 
 private:
-	GameObject owner;
 	component_id id;
 
 	Ogre::Camera* camera;
 	Ogre::Viewport* viewport;
 
 	friend class Scene;
-	friend bool operator==( const CameraComponent& first, const CameraComponent& second );
 };
 
-bool operator==( const CameraComponent& first, const CameraComponent& second );
+class Camera : ComponentLocator
+{
+public:
+	Camera( Scene* scene = nullptr, component_id id = 0, size_t index = 0 );
+};
