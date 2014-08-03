@@ -19,7 +19,7 @@ int main( int argc, char** argv )
 	engine.ResetCurrentScene( []( Scene& scene )
 	{
 		GameObject* camera = scene.AddGameObject( "Camera" ).GetComponent();
-		camera->AddCameraComponent();
+		camera->AddCamera();
 		camera->SetPosition( 0.0f, 0.0f, 10.0f );
 		camera->LookAt( 0.0f, 0.0f, 0.0f );
 

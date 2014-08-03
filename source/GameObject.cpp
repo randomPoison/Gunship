@@ -14,7 +14,7 @@ GameObject::GameObject( Scene* scene, const char* name ) :
 	node = scene->SceneManager()->getRootSceneNode()->createChildSceneNode();
 }
 
-ComponentLocator< CameraComponent > GameObject::AddCameraComponent()
+ComponentLocator< CameraComponent > GameObject::AddCamera()
 {
 	cameraComponent = scene->AddCameraComponent( *this );
 	return cameraComponent;
