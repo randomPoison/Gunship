@@ -1,5 +1,4 @@
 cmake_minimum_required (VERSION 2.8)
-include (ExternalProject)
 
 # Set project name
 set (PROJECT_NAME "SillyShooter")
@@ -34,3 +33,7 @@ file(GLOB PROJECT_SOURCES
 # configure executable
 add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME} gunship)
+
+if (CMAKE_COMPILER_IS_GNUCXX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif(CMAKE_COMPILER_IS_GNUCXX)

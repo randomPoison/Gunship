@@ -214,10 +214,11 @@ bool Gunship::InitSystems()
 	params["externalGLContext"] = "True";
 	params["externalGLControl"] = "True";
 #else
-	params["parentWindowHandle"] = Ogre::StringConverter::toString( reinterpret_cast<unsigned long>( wmInfo.info.x11.window ) );
+	params["currentGLContext"] = Ogre::String("True");
 #endif
 
-	renderWindow = Ogre::Root::getSingleton().createRenderWindow( "OGRE Window", 640, 480, false, &params );
+	renderWindow = root->createRenderWindow( "OGRE Window", 640, 480, false, &params );
+	renderWindow->setVisible( true );
 
 	// initialize the current scene
 	currentScene = new Scene( root, renderWindow );

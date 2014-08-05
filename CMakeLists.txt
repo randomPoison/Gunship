@@ -21,9 +21,6 @@ endif(NOT CMAKE_BUILD_TYPE)
 # Include path for additional CMake library finding scripts
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# We want the binaries to be easily accessible
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-
 # Add the libraries
 
 # Tell SDL that we're a library, not an executable
@@ -70,6 +67,6 @@ add_library(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	add_definitions(-std=c++11)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
