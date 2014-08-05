@@ -24,6 +24,11 @@ int main( int argc, char** argv )
 		GameObject manager = scene.AddGameObject( "Manager" );
 
 		GameObject player = scene.AddGameObject( "Player" );
+		player.SetPosition( -3.5f, 0.0f, 0.0f );
+		player.AddBehavior( []( GameObject& gameObject )
+		{
+			gameObject.Translate( 0.001f, 0.0f, 0.0f );
+		} );
 		player.AddMesh( "playerMesh", "ColourCube");
 	} );
 

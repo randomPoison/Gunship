@@ -7,6 +7,7 @@
 
 #include "components/Component.h"
 #include "components/CameraComponent.h"
+#include "components/BehaviorComponent.h"
 #include "GameObject.h"
 
 #include "Scene.h"
@@ -24,7 +25,7 @@ GameObject Scene::AddGameObject( const char* name )
 	return GameObject( *this, gameObjects.back().id, gameObjects.size() - 1 );
 }
 
-Camera Scene::AddCameraComponent( GameObject gameObject )
+Camera Scene::AddCameraComponent( GameObject& gameObject )
 {
 	// create camera and viewport
 	GameObjectComponent* owner = FindComponent( gameObject );
@@ -39,6 +40,12 @@ Camera Scene::AddCameraComponent( GameObject gameObject )
 	// create camera component
 	cameraComponents.emplace_back( camera, viewport );
 	return Camera( this, cameraComponents.back().id, cameraComponents.size() - 1 );
+}
+
+Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior )
+{
+	behaviorComponents.emplace_back( behavior );
+	return Behavior( *this, behaviorComponents.back().id, behaviorComponents.size() - 1 );
 }
 
 void Scene::AddMeshToGameObject( GameObject gameObject, const char* name, const char* mesh )

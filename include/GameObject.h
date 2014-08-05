@@ -28,13 +28,14 @@ private:
 	friend class Scene;
 };
 
-class GameObject : public ComponentLocator
+class GameObject final : public ComponentLocator
 {
 public:
 	GameObject( Scene& scene, component_id id, size_t index = 0 );
 
 	Camera AddCamera();
 	void AddMesh( const char* name, const char* mesh );
+	Behavior AddBehavior( BehaviorFunction behavior );
 
 	void LookAt( float x, float y, float z );
 	void Translate( float x, float y, float z );

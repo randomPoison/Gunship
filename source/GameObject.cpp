@@ -4,6 +4,7 @@
 
 #include "components/Component.h"
 #include "components/CameraComponent.h"
+#include "components/BehaviorComponent.h"
 #include "Scene.h"
 
 #include "GameObject.h"
@@ -28,6 +29,11 @@ Camera GameObject::AddCamera()
 void GameObject::AddMesh( const char* name, const char* mesh )
 {
 	scene->AddMeshToGameObject( *this, name, mesh );
+}
+
+Behavior GameObject::AddBehavior( BehaviorFunction behavior )
+{
+	scene->AddBehaviorComponent( *this, behavior );
 }
 
 void GameObject::LookAt( float x, float y, float z )

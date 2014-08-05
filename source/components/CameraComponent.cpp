@@ -1,9 +1,7 @@
 #include <OgreCamera.h>
 #include <OgreViewport.h>
 
-#include "components/Component.h"
-#include "components/CameraComponent.h"
-#include "GameObject.h"
+#include "Gunship.h"
 
 CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view ) :
 	camera( cam ),

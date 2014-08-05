@@ -12,6 +12,8 @@ class GameObjectComponent;
 class GameObject;
 class CameraComponent;
 class Camera;
+class BehaviorComponent;
+class Behavior;
 
 class Scene
 {
@@ -19,7 +21,8 @@ public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
 	GameObject AddGameObject( const char* name = "Game Object" );
-	Camera AddCameraComponent( GameObject gameObject );
+	Camera AddCameraComponent( GameObject& gameObject );
+	Behavior AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior );
 
 	void AddMeshToGameObject( GameObject gameObject, const char* name, const char* mesh );
 	void TranslateGameObject( GameObject gameObject, float x, float y, float z );
@@ -29,6 +32,7 @@ public:
 private:
 	std::vector< GameObjectComponent > gameObjects;
 	std::vector< CameraComponent > cameraComponents;
+	std::vector< BehaviorComponent > behaviorComponents;
 
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;

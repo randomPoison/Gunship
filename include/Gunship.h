@@ -5,6 +5,7 @@
 
 #include "components/Component.h"
 #include "components/CameraComponent.h"
+#include "components/BehaviorComponent.h"
 #include "GameObject.h"
 #include "Scene.h"
 
@@ -14,8 +15,6 @@ namespace Ogre {
 	class RenderWindow;
 };
 struct SDL_Window;
-
-class Scene;
 
 class Gunship
 {
