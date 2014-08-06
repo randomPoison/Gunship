@@ -19,6 +19,15 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 	sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 }
 
+void Scene::Update()
+{
+	for ( BehaviorComponent& behavior : behaviorComponents )
+	{
+		GameObject obj( *this, behavior.ownerId, 0 );
+		behavior.behavior( obj );
+	}
+}
+
 GameObject Scene::AddGameObject( const char* name )
 {
 	gameObjects.emplace_back( this, sceneManager->getRootSceneNode()->createChildSceneNode(), name );
@@ -44,11 +53,11 @@ Camera Scene::AddCameraComponent( GameObject& gameObject )
 
 Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior )
 {
-	behaviorComponents.emplace_back( behavior );
+	behaviorComponents.emplace_back( gameObject, behavior );
 	return Behavior( *this, behaviorComponents.back().id, behaviorComponents.size() - 1 );
 }
 
-void Scene::AddMeshToGameObject( GameObject gameObject, const char* name, const char* mesh )
+void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh )
 {
 	GameObjectComponent* owner = FindComponent( gameObject );
 	Ogre::Entity* cubeEntity = sceneManager->createEntity( name, mesh );
@@ -56,25 +65,19 @@ void Scene::AddMeshToGameObject( GameObject gameObject, const char* name, const 
 	owner->node->attachObject( cubeEntity );
 }
 
-void Scene::TranslateGameObject( GameObject gameObject, float x, float y, float z )
+void Scene::TranslateGameObject( GameObject& gameObject, float x, float y, float z )
 {
 	GameObjectComponent* obj = FindComponent( gameObject );
 	obj->node->translate( x, y, z );
 }
 
-void Scene::SetGameObjectPosition( GameObject gameObject, float x, float y, float z )
+void Scene::SetGameObjectPosition( GameObject& gameObject, float x, float y, float z )
 {
 	GameObjectComponent* component = FindComponent( gameObject );
 	component->node->setPosition( x, y, z );
 }
 
-void Scene::SetGameObjectLook( GameObject gameObject, float x, float y, float z )
-{
-	GameObjectComponent* component = FindComponent( gameObject );
-	component->node->lookAt( Ogre::Vector3( x, y , z ), Ogre::Node::TS_WORLD );
-}
-
-GameObjectComponent* Scene::FindComponent( GameObject gameObject )
+GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
 	return gameObjects.data() + gameObject.LastIndex();
 }

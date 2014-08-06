@@ -38,7 +38,13 @@ Behavior GameObject::AddBehavior( BehaviorFunction behavior )
 
 void GameObject::LookAt( float x, float y, float z )
 {
-	scene->SetGameObjectLook( *this, x, y, z );
+	scene->FindComponent( *this )->node->lookAt( Ogre::Vector3( x, y , z ), Ogre::Node::TS_WORLD );
+}
+
+void GameObject::LookAt( GameObject& target )
+{
+	GameObjectComponent* targetComponent = scene->FindComponent( target );
+	scene->FindComponent( *this )->node->lookAt( targetComponent->node->getPosition(), Ogre::Node::TS_WORLD );
 }
 
 void GameObject::Translate( float x, float y, float z )

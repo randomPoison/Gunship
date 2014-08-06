@@ -16,20 +16,24 @@ int main( int argc, char** argv )
 
 	engine.ResetCurrentScene( []( Scene& scene )
 	{
-		GameObject camera = scene.AddGameObject( "Camera" );
-		camera.AddCamera();
-		camera.SetPosition( 0.0f, 0.0f, 10.0f );
-		camera.LookAt( 0.0f, 0.0f, 0.0f );
-
-		GameObject manager = scene.AddGameObject( "Manager" );
-
 		GameObject player = scene.AddGameObject( "Player" );
-		player.SetPosition( -3.5f, 0.0f, 0.0f );
+		player.SetPosition( -6.0f, 0.0f, 0.0f );
 		player.AddBehavior( []( GameObject& gameObject )
 		{
 			gameObject.Translate( 0.001f, 0.0f, 0.0f );
 		} );
 		player.AddMesh( "playerMesh", "ColourCube");
+
+		GameObject camera = scene.AddGameObject( "Camera" );
+		camera.AddCamera();
+		camera.SetPosition( 0.0f, 0.0f, 10.0f );
+		camera.LookAt( 0.0f, 0.0f, 0.0f );
+		camera.AddBehavior( [ &player ]( GameObject& gameObject )
+		{
+//			gameObject.LookAt( player );
+		} );
+
+		GameObject manager = scene.AddGameObject( "Manager" );
 	} );
 
 	engine.Start();

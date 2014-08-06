@@ -9,12 +9,13 @@ typedef std::function< void( GameObject& ) > BehaviorFunction;
 class BehaviorComponent
 {
 public:
-	BehaviorComponent( BehaviorFunction function );
+	BehaviorComponent( GameObject& owner, BehaviorFunction function );
 
 	BehaviorFunction behavior;
 
 private:
 	component_id id;
+	component_id ownerId;
 
 	friend class Scene;
 };

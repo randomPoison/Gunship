@@ -16,7 +16,6 @@ class GameObjectComponent
 public:
 	GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name = "Game Object" );
 
-private:
 	Camera cameraComponent;
 
 	Scene* scene;
@@ -24,8 +23,6 @@ private:
 
 	std::string name;
 	component_id id;
-
-	friend class Scene;
 };
 
 class GameObject final : public ComponentLocator
@@ -38,6 +35,7 @@ public:
 	Behavior AddBehavior( BehaviorFunction behavior );
 
 	void LookAt( float x, float y, float z );
+	void LookAt( GameObject& target );
 	void Translate( float x, float y, float z );
 	void SetPosition( float x, float y, float z );
 

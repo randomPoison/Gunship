@@ -249,6 +249,9 @@ void Gunship::Start()
 				break;
 			}
 		}
+
+		// update stuffs
+		currentScene->Update();
 	}
 }
 

@@ -1,8 +1,9 @@
-#include "components/Component.h"
+#include "Gunship.h"
 
 #include "components/BehaviorComponent.h"
 
-BehaviorComponent::BehaviorComponent( BehaviorFunction behavior ) :
+BehaviorComponent::BehaviorComponent( GameObject& owner, BehaviorFunction behavior ) :
+	ownerId( owner.id ),
 	behavior( behavior ),
 	id( GenerateUniqueComponentID() )
 {
