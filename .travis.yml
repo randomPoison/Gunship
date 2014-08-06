@@ -6,6 +6,6 @@ before_install:
     - sudo mkdir ../build
     - cd ../build
 install:
-    - sudo apt-get install libogre1.9-dev
+    - sudo apt-get install libogre-dev
     - sudo apt-get install libsdl2-dev
 script: ../Gunship/cmake && make
