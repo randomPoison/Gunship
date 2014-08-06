@@ -12,6 +12,9 @@ before_install:
   # download sdl2
   - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - sudo tar -xvzf SDL2-2.0.3.tar.gz
+  
+  # clone Ogre1.9
+  - sudo hg clone https://bitbucket.org/sinbad/ogre
 
 install:
   # install g++4.8
@@ -22,8 +25,15 @@ install:
   # install boost1.53
   - sudo apt-get install -qq libboost1.53-dev
 
-  # install Ogre
-  - sudo apt-get install -qq libogre-dev
+  # build and install Ogre
+  - cd ogre
+  - sudo hg update v1-9-0
+  - sudo mkdir build
+  - cd build
+  - sudo cmake ..
+  - sudo make
+  - sudo make install
+  - cd ..
 
   # build and install SDL2
   - cd SDL2-2.0.3
