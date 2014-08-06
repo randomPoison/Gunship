@@ -33,7 +33,7 @@ void GameObject::AddMesh( const char* name, const char* mesh )
 
 Behavior GameObject::AddBehavior( BehaviorFunction behavior )
 {
-	scene->AddBehaviorComponent( *this, behavior );
+	return scene->AddBehaviorComponent( *this, behavior );
 }
 
 void GameObject::LookAt( float x, float y, float z )
