@@ -20,7 +20,7 @@ install:
   - sudo apt-get install libogre-dev
   
 # install SDL2
-  - cd SDL-2.0.3
+  - cd SDL2-2.0.3
   - ./configure && make
   - sudo make install
   - cd ..
