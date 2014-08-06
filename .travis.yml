@@ -5,7 +5,7 @@ compiler:
 
 before_install:
   - pwd
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update
   - cd ..
 
