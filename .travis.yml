@@ -1,11 +1,26 @@
 language: cpp
+
 compiler:
   - gcc
+
 before_install:
-    - sudo apt-get update
-    - sudo mkdir ../build
-    - cd ../build
+  - sudo apt-get update
+  - cd ..
+
+# build sdl2
+  - sudo mkdir sdl2
+  - cd sdl2
+  - wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
+  - tar -xvzf SDL2-2.0.3.tar.gz
+  - ./configure && make
+  - cd ..
+  
+# configure build directory
+  - sudo mkdir build
+  - cd build
+
 install:
-    - sudo apt-get install libogre-dev
-    - sudo apt-get install libsdl2-dev
+  - sudo apt-get install libogre-dev
+  - cd sdl2 && sudo make install && cd ..
+
 script: ../Gunship/cmake && make
