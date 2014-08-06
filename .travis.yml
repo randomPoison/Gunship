@@ -4,18 +4,14 @@ compiler:
   - gcc
 
 before_install:
-  - pwd
+  - cd ..
   - sudo add-apt-repository ppa:apokluda/boost1.53 -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update
-  - cd ..
 
   # download sdl2
   - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - sudo tar -xvzf SDL2-2.0.3.tar.gz
-  
-  # configure build directory
-  - sudo mkdir build
 
 install:
   # install g++4.8
@@ -24,10 +20,10 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 
   # install boost1.53
-  - sudo apt-get install libboost1.53-dev
+  - sudo apt-get install -qq libboost1.53-dev
 
   # install Ogre
-  - sudo apt-get install libogre-dev
+  - sudo apt-get install -qq libogre-dev
 
   # build and install SDL2
   - cd SDL2-2.0.3
@@ -35,7 +31,11 @@ install:
   - sudo make install
   - cd ..
 
-script: 
+before_script:
+  # configure build directory
+  - sudo mkdir build
   - cd build
+
+script:
   - sudo cmake ../Gunship
   - sudo make
