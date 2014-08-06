@@ -17,7 +17,7 @@ GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, c
 {
 }
 
-GameObject::GameObject( Scene& scene, component_id id, size_t index ) : ComponentLocator( &scene, id, index )
+GameObject::GameObject( Scene* scene, component_id id, size_t index ) : ComponentLocator( scene, id, index )
 {
 }
 

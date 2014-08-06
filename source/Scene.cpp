@@ -23,7 +23,7 @@ void Scene::Update()
 {
 	for ( BehaviorComponent& behavior : behaviorComponents )
 	{
-		GameObject obj( *this, behavior.ownerId, 0 );
+		GameObject obj( this, behavior.ownerId, 0 );
 		behavior.behavior( obj );
 	}
 }
@@ -31,7 +31,7 @@ void Scene::Update()
 GameObject Scene::AddGameObject( const char* name )
 {
 	gameObjects.emplace_back( this, sceneManager->getRootSceneNode()->createChildSceneNode(), name );
-	return GameObject( *this, gameObjects.back().id, gameObjects.size() - 1 );
+	return GameObject( this, gameObjects.back().id, gameObjects.size() - 1 );
 }
 
 Camera Scene::AddCameraComponent( GameObject& gameObject )
@@ -79,5 +79,12 @@ void Scene::SetGameObjectPosition( GameObject& gameObject, float x, float y, flo
 
 GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
-	return gameObjects.data() + gameObject.LastIndex();
+	for ( GameObjectComponent& component : gameObjects )
+	{
+		if ( component.id == gameObject.id )
+		{
+			return &component;
+		}
+	}
+	return nullptr;
 }
