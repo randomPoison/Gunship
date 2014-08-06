@@ -13,8 +13,9 @@ before_install:
   - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - sudo tar -xvzf SDL2-2.0.3.tar.gz
   
-  # clone Ogre1.9
+  # clone Ogre1.9 and install dependencies
   - sudo hg clone https://bitbucket.org/sinbad/ogre
+  - sudo apt-get install libxaw7-dev
 
 install:
   # install g++4.8
