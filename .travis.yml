@@ -6,21 +6,26 @@ compiler:
 before_install:
   - sudo apt-get update
   - cd ..
+  - pwd
 
 # build sdl2
-  - sudo mkdir sdl2
-  - cd sdl2
   - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - sudo tar -xvzf SDL2-2.0.3.tar.gz
-  - ./configure && make
   - cd ..
   
 # configure build directory
   - sudo mkdir build
-  - cd build
 
 install:
+# install Ogre
   - sudo apt-get install libogre-dev
-  - cd sdl2 && sudo make install && cd ..
+  
+# install SDL2
+  - cd SDL-2.0.3
+  - ./configure && make
+  - sudo make install
+  - cd ..
 
-script: ../Gunship/cmake && make
+script: 
+  - cd build
+  - cmake ../Gunship && make
