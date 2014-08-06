@@ -4,9 +4,9 @@ compiler:
   - gcc
 
 before_install:
+  - pwd
   - sudo apt-get update
   - cd ..
-  - pwd
 
 # download sdl2
   - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
@@ -27,4 +27,5 @@ install:
 
 script: 
   - cd build
-  - cmake ../Gunship && make
+  - sudo cmake ../Gunship
+  - sudo make
