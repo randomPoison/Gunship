@@ -10,8 +10,8 @@ before_install:
 # build sdl2
   - sudo mkdir sdl2
   - cd sdl2
-  - wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
-  - tar -xvzf SDL2-2.0.3.tar.gz
+  - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
+  - sudo tar -xvzf SDL2-2.0.3.tar.gz
   - ./configure && make
   - cd ..
   
