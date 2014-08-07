@@ -34,7 +34,7 @@ install:
   - sudo cmake ..
   - sudo make
   - sudo make install
-  - cd ..
+  - cd ../..
 
   # build and install SDL2
   - cd SDL2-2.0.3
