@@ -12,7 +12,7 @@ install:
   # configure Gunship solution
   - mkdir build
   - cd build
-  - cmake ../Gunship
+  - cmake ../Gunship -DBOOST_ROOT:PATH=C:/OgreSDK_vc11_v1-9-0/boost
   - dir
   
 environment:
