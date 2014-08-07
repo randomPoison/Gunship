@@ -1,0 +1,4 @@
+init;
+  - ps: dir
+  - ps: cd ..
+  - ps: dir
