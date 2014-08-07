@@ -1,9 +1,8 @@
-init:
+install:
   - dir
   - cd ..
   - dir
-  
-install:
+
   # download SDL2 SDK
   - appveyor DownloadFile http://libsdl.org/release/SDL2-devel-2.0.3-VC.zip
   - dir
