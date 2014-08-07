@@ -13,7 +13,7 @@ install:
   - mkdir build
   - cd build
   - cmake ../Gunship -DBOOST_ROOT:PATH=C:/OgreSDK_vc11_v1-9-0/boost
-  - dir
+  - type CMakeCache.txt
   
 environment:
   SDL2: C:\SDL2-2.0.3
