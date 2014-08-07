@@ -5,6 +5,7 @@ install:
 
   # download SDL2 SDK
   - appveyor DownloadFile http://libsdl.org/release/SDL2-devel-2.0.3-VC.zip
+  - 7z SDL2-devel-2.0.3-VC.zip -oC:\
   - dir
   
 build_script:
@@ -13,3 +14,5 @@ build_script:
   - cmake ../Gunship
   - dir
   
+environment:
+  SDL2: C:\SDL2-2.0.3
