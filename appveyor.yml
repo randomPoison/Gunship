@@ -9,7 +9,7 @@ install:
   - appveyor DownloadFile http://iweb.dl.sourceforge.net/project/ogre/ogre/1.9/1.9/OgreSDK_vc11_v1-9-0.exe
   - OgreSDK_vc11_v1-9-0.exe -oC:\ -y
   
-build_script:
+  # configure Gunship solution
   - mkdir build
   - cd build
   - cmake ../Gunship
