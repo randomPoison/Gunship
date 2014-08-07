@@ -1,4 +1,6 @@
+[![Build Status](https://travis-ci.org/excaliburHisSheath/Gunship.svg?branch=master)](https://travis-ci.org/excaliburHisSheath/Gunship)
 [![Stories in Ready](https://badge.waffle.io/excaliburhissheath/gunship.png?label=ready&title=Ready)](https://waffle.io/excaliburhissheath/gunship)
+
 Gunship Engine/Editor
 =====================
 
