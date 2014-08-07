@@ -4,7 +4,7 @@ install:
   # download SDL2 SDK
   - appveyor DownloadFile http://libsdl.org/release/SDL2-devel-2.0.3-VC.zip
   - dir
-  - 7z SDL2-devel-2.0.3-VC.zip -oC:\
+  - 7z x SDL2-devel-2.0.3-VC.zip -oC:\
   
 build_script:
   - mkdir build
