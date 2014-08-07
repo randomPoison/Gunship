@@ -7,3 +7,9 @@ install:
   - appveyor DownloadFile http://libsdl.org/release/SDL2-devel-2.0.3-VC.zip
   - dir
   
+build:
+  - mkdir build
+  - cd build
+  - cmake ../Gunship
+  - dir
+  
