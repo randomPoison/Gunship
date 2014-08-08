@@ -1,5 +1,8 @@
-[![Build Status](https://travis-ci.org/excaliburHisSheath/Gunship.svg?branch=master)](https://travis-ci.org/excaliburHisSheath/Gunship)
 [![Stories in Ready](https://badge.waffle.io/excaliburhissheath/gunship.png?label=ready&title=Ready)](https://waffle.io/excaliburhissheath/gunship)
+
+[![Linux Build Status](https://travis-ci.org/excaliburHisSheath/Gunship.svg?branch=master)](https://travis-ci.org/excaliburHisSheath/Gunship)
+
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/v1jtjl6r1vthcke7)](https://ci.appveyor.com/project/excaliburHisSheath/gunship)
 
 Gunship Engine/Editor
 =====================
