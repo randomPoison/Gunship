@@ -12,8 +12,7 @@ install:
   # configure Gunship solution
   - mkdir build
   - cd build
-  - cmake ../Gunship -DBOOST_ROOT:PATH=C:/OgreSDK_vc11_v1-9-0/boost
-  - type CMakeCache.txt
+  - cmake ../Gunship -DBoost_INCLUDE_DIR:PATH=C:/OgreSDK_vc11_v1-9-0/boost -DBoost_LIBRARY_DIR:PATH=C:/OgreSDK_vc11_v1-9-0/boost/lib -DBoost_THREAD_LIBRARY_DEBUG:FILEPATH=C:/OgreSDK_vc11_v1-9-0/boost/lib/libboost_thread-vc110-mt-gd-1_55.lib -DBoost_THREAD_LIBRARY_RELEASE:FILEPATH=C:/OgreSDK_vc11_v1-9-0/boost/lib/libboost_thread-vc110-mt-1_55.lib
   
 environment:
   SDL2: C:\SDL2-2.0.3
