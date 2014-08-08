@@ -27,11 +27,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(SDL2_BUILDING_LIBRARY true)
 
 find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR})
 list(APPEND LIBS ${SDL2_LIBRARY})
 
 find_package(OGRE REQUIRED)
-include_directories(${OGRE_INCLUDE_DIRS})
 list(APPEND LIBS ${OGRE_LIBRARIES})
 
 add_definitions(-DOGRE_PLUGIN_DIR_REL="${OGRE_PLUGIN_DIR_REL}")
@@ -39,9 +37,11 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 
 # The project's include directories
 file(GLOB PROJECT_INCLUDE_DIRS
-	include)
+	include
+	${SDL2_INCLUDE_DIR}
+	${OGRE_INCLUDE_DIRS})
 include_directories(${PROJECT_INCLUDE_DIRS})
-set(GUNSHIP_INCLUDES ${PROJECT_INCLUDES_DIRS})
+set(GUNSHIP_INCLUDES ${PROJECT_INCLUDE_DIRS})
 
 # The project's sources
 file(GLOB PROJECT_SOURCES

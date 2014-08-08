@@ -18,11 +18,16 @@ find_package (GUNSHIP REQUIRED)
 
 # add gunship as external project
 add_subdirectory (${GUNSHIP_ROOT_DIR} ${CMAKE_BINARY_DIR}/Gunship)
+get_directory_property(GUNSHIP_INCLUDES
+	DIRECTORY ${GUNSHIP_ROOT_DIR}
+	DEFINITION GUNSHIP_INCLUDES)
+message("gunship includes: " ${GUNSHIP_INCLUDES})
 
 # The project's include directories
 file(GLOB PROJECT_INCLUDES
 	include
-	${GUNSHIP_ROOT_DIR}/include)
+	${GUNSHIP_ROOT_DIR}/include
+	${GUNSHIP_INCLUDES})
 include_directories(${PROJECT_INCLUDES})
 
 # The project's sources

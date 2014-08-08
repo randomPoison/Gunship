@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include <SDL.h>
 #include <SDL_syswm.h>
-#include <iostream>
 
 #include <OgreRoot.h>
 #include <OgreManualObject.h>
@@ -233,25 +234,41 @@ void Gunship::Start()
 {
 	SDL_ShowWindow( window );
 
+	SDL_Event event;
+
 	// enter main loop
-	while( true )
+	bool gameRunning = true;
+	while ( gameRunning )
 	{
-		UpdateComponents();
-
-		root->renderOneFrame();
-		SDL_GL_SwapWindow( window );
-
-		SDL_Event event;
-		if( SDL_PollEvent( &event ) )
+		input = Input();
+		while ( SDL_PollEvent( &event ) )
 		{
 			if ( event.type == SDL_QUIT )
 			{
+				gameRunning = false;
 				break;
 			}
+			else if ( event.type == SDL_KEYDOWN || event.type == SDL_KEYUP )
+			{
+				input.keyEvents.push_back( event.key );
+			}
+		}
+		if ( !gameRunning )
+		{
+			continue;
+		}
+
+		if ( input.KeyPressed( SDLK_q ) )
+		{
+			std::cout << "q key pressed" << std::endl;
 		}
 
 		// update stuffs
 		currentScene->Update();
+
+		// render stuffs
+		root->renderOneFrame();
+		SDL_GL_SwapWindow( window );
 	}
 }
 
@@ -266,11 +283,6 @@ bool Gunship::ShutDown()
 	SDL_Quit();
 
 	return true;
-}
-
-void Gunship::UpdateComponents()
-{
-	// TODO someday there will be something here
 }
 
 Scene* Gunship::CurrentScene()

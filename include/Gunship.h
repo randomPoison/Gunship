@@ -3,11 +3,16 @@
 #include <vector>
 #include <functional>
 
+#include <SDL_events.h>
+#include <SDL_keyboard.h>
+#include <SDL_keycode.h>
+
 #include "components/Component.h"
 #include "components/CameraComponent.h"
 #include "components/BehaviorComponent.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "Input.h"
 
 // forward declarations because reasons
 namespace Ogre {
@@ -24,9 +29,8 @@ private:
 	Ogre::Root* root;
 	Ogre::RenderWindow* renderWindow;
 
-	void UpdateComponents();
-
 	Scene* currentScene;
+	Input input;
 
 public:
 	// default constructor
