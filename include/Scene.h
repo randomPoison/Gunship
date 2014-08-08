@@ -8,19 +8,12 @@ namespace Ogre {
 	class SceneManager;
 };
 
-class GameObjectComponent;
-class GameObject;
-class CameraComponent;
-class Camera;
-class BehaviorComponent;
-class Behavior;
-
 class Scene
 {
 public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-	void Update();
+	void Update( const Input& input );
 
 	GameObject AddGameObject( const char* name = "Game Object" );
 	Camera AddCameraComponent( GameObject& gameObject );

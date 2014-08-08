@@ -2,7 +2,7 @@
 
 #include "Input.h"
 
-bool Input::KeyPressed( SDL_Keycode key )
+bool Input::KeyPressed( SDL_Keycode key ) const
 {
 	for ( SDL_KeyboardEvent event : keyEvents )
 	{

@@ -7,12 +7,12 @@
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
 
+#include "Input.h"
 #include "components/Component.h"
 #include "components/CameraComponent.h"
 #include "components/BehaviorComponent.h"
 #include "GameObject.h"
 #include "Scene.h"
-#include "Input.h"
 
 // forward declarations because reasons
 namespace Ogre {

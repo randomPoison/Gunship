@@ -5,10 +5,7 @@
 #include <OgreViewport.h>
 #include <OgreEntity.h>
 
-#include "components/Component.h"
-#include "components/CameraComponent.h"
-#include "components/BehaviorComponent.h"
-#include "GameObject.h"
+#include "Gunship.h"
 
 #include "Scene.h"
 
@@ -19,12 +16,12 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 	sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 }
 
-void Scene::Update()
+void Scene::Update( const Input& input )
 {
 	for ( BehaviorComponent& behavior : behaviorComponents )
 	{
 		GameObject obj( this, behavior.ownerId, 0 );
-		behavior.behavior( obj );
+		behavior.behavior( obj, input );
 	}
 }
 

@@ -2,10 +2,7 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 
-#include "components/Component.h"
-#include "components/CameraComponent.h"
-#include "components/BehaviorComponent.h"
-#include "Scene.h"
+#include "Gunship.h"
 
 #include "GameObject.h"
 

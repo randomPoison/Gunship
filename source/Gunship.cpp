@@ -241,6 +241,7 @@ void Gunship::Start()
 	while ( gameRunning )
 	{
 		input = Input();
+		input.keyEvents.empty();
 		while ( SDL_PollEvent( &event ) )
 		{
 			if ( event.type == SDL_QUIT )
@@ -264,7 +265,7 @@ void Gunship::Start()
 		}
 
 		// update stuffs
-		currentScene->Update();
+		currentScene->Update( input );
 
 		// render stuffs
 		root->renderOneFrame();

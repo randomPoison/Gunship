@@ -13,12 +13,28 @@ int main( int argc, char* argv[] )
 		return 1;
 	}
 
+	float playerSpeed = 0.3f;
 	Scene* scene = engine.CurrentScene();
 	GameObject player = scene->AddGameObject( "Player" );
 	player.SetPosition( -10.0f, 0.0f, 0.0f );
-	player.AddBehavior( []( GameObject& gameObject )
+	player.AddBehavior( [ playerSpeed ]( GameObject& gameObject, const Input& input )
 	{
-		gameObject.Translate( 0.001f, 0.0f, 0.0f );
+		if ( input.KeyPressed( SDLK_w ) )
+		{
+			gameObject.Translate( 0.0f, playerSpeed, 0.0f );
+		}
+		if ( input.KeyPressed( SDLK_a ) )
+		{
+			gameObject.Translate( -playerSpeed, 0.0f, 0.0f );
+		}
+		if ( input.KeyPressed( SDLK_s ) )
+		{
+			gameObject.Translate( 0.0f, -playerSpeed, 0.0f );
+		}
+		if ( input.KeyPressed( SDLK_d ) )
+		{
+			gameObject.Translate( playerSpeed, 0.0f, 0.0f );
+		}
 	} );
 	player.AddMesh( "playerMesh", "ColourCube");
 
@@ -26,7 +42,7 @@ int main( int argc, char* argv[] )
 	camera.AddCamera();
 	camera.SetPosition( 0.0f, 0.0f, 10.0f );
 	camera.LookAt( 0.0f, 0.0f, 0.0f );
-	camera.AddBehavior( [ &player ]( GameObject& gameObject )
+	camera.AddBehavior( [ &player ]( GameObject& gameObject, const Input& input )
 	{
 		gameObject.LookAt( player );
 	} );

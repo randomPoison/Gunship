@@ -7,6 +7,6 @@ class Input
 public:
 	std::vector< SDL_KeyboardEvent > keyEvents;
 
-	bool KeyPressed( SDL_Keycode key );
-	bool KeyUp( SDL_Keycode key );
+	bool KeyPressed( SDL_Keycode key ) const;
+	bool KeyUp( SDL_Keycode key ) const;
 };
