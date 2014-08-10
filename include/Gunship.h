@@ -23,15 +23,6 @@ struct SDL_Window;
 
 class Gunship
 {
-private:
-	// Variables and stuffs
-	SDL_Window* window;
-	Ogre::Root* root;
-	Ogre::RenderWindow* renderWindow;
-
-	Scene* currentScene;
-	Input input;
-
 public:
 	// default constructor
 	Gunship();
@@ -49,4 +40,15 @@ public:
 	Scene* CurrentScene();
 	Scene* ResetCurrentScene();
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
+
+private:
+	// Variables and stuffs
+	SDL_Window* window;
+	Ogre::Root* root;
+	Ogre::RenderWindow* renderWindow;
+
+	Scene* currentScene;
+	Input input;
+
+	SDL_Joystick* controller;
 };

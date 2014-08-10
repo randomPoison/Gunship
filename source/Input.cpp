@@ -14,3 +14,9 @@ bool Input::KeyPressed( SDL_Keycode key ) const
 
 	return false;
 }
+
+void Input::Reset()
+{
+	keyEvents.empty();
+	joyAxisEvents.empty();
+}

@@ -159,7 +159,8 @@ Gunship::~Gunship()
 
 bool Gunship::InitSystems()
 {
-	SDL_Init( SDL_INIT_VIDEO );
+	SDL_Init( SDL_INIT_VIDEO |
+			  SDL_INIT_JOYSTICK );
 
 	// Create an application window with the following settings:
 	window = SDL_CreateWindow( 
@@ -227,6 +228,17 @@ bool Gunship::InitSystems()
 	// initialize primitive meshes
 	createColourCube();
 
+	// initialize joysticks and whatnot
+	if ( SDL_NumJoysticks() > 0 )
+	{
+		controller = SDL_JoystickOpen( 0 );
+		if ( controller == nullptr )
+		{
+			printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -241,17 +253,24 @@ void Gunship::Start()
 	while ( gameRunning )
 	{
 		input = Input();
-		input.keyEvents.empty();
+		input.Reset();
 		while ( SDL_PollEvent( &event ) )
 		{
-			if ( event.type == SDL_QUIT )
+			switch ( event.type )
 			{
+			case SDL_QUIT:
 				gameRunning = false;
 				break;
-			}
-			else if ( event.type == SDL_KEYDOWN || event.type == SDL_KEYUP )
-			{
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
 				input.keyEvents.push_back( event.key );
+				break;
+			case SDL_JOYAXISMOTION:
+				std::cout << "joy axis motion" << std::endl;
+				input.joyAxisEvents.push_back( event.jaxis );
+				std::cout << "joystick: " << (int)event.jaxis.which << "\taxis: " << (int)event.jaxis.axis << "\tvalue: " << (int)event.jaxis.value << std::endl;
+
+				break;
 			}
 		}
 		if ( !gameRunning )
