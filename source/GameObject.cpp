@@ -54,7 +54,21 @@ void GameObject::SetPosition( float x, float y, float z )
 	scene->SetGameObjectPosition( *this, x, y, z );
 }
 
+void GameObject::SetScale( float x, float y, float z )
+{
+	scene->FindComponent( *this )->node->scale( Ogre::Vector3( x, y, z ) );
+}
+
 size_t GameObject::LastIndex() const
 {
 	return index;
+}
+
+void GameObject::AddChild( GameObject& gameObject )
+{
+	Ogre::Node* thisNode = scene->FindComponent( *this )->node;
+	Ogre::Node* otherNode = scene->FindComponent( gameObject )->node;
+
+	otherNode->getParent()->removeChild( otherNode );
+	thisNode->addChild( otherNode );
 }

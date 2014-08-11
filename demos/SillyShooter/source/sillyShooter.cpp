@@ -13,9 +13,11 @@ int main( int argc, char* argv[] )
 		return 1;
 	}
 
-	float playerSpeed = 0.05f;
 	Scene* scene = engine.CurrentScene();
+
+	float playerSpeed = 0.05f;
 	GameObject player = scene->AddGameObject( "Player" );
+	player.AddMesh( "playerMesh", "ColourCube");
 	player.SetPosition( 0.0f, 0.0f, 0.0f );
 	player.AddBehavior( [ playerSpeed ]( GameObject& gameObject, const Input& input )
 	{
@@ -38,7 +40,12 @@ int main( int argc, char* argv[] )
 
 		gameObject.Translate( input.AxisValue( 0, 0 ) * playerSpeed, input.AxisValue( 0, 1 ) * -playerSpeed, 0.0f );
 	} );
-	player.AddMesh( "playerMesh", "ColourCube");
+
+	GameObject target = scene->AddGameObject( "Target" );
+	target.AddMesh( "targetMesh", "ColourCube" );
+	player.AddChild( target );
+	target.SetPosition( 0.0f, 2.0f, 0.0f );
+	target.SetScale( 0.25f, 0.25f, 0.25f );
 
 	GameObject camera = scene->AddGameObject( "Camera" );
 	camera.AddCamera();

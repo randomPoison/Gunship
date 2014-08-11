@@ -38,6 +38,9 @@ public:
 	void LookAt( GameObject& target );
 	void Translate( float x, float y, float z );
 	void SetPosition( float x, float y, float z );
+	void SetScale( float x, float y, float z );
+
+	void AddChild( GameObject& gameObject );
 
 	size_t LastIndex() const;
 };
