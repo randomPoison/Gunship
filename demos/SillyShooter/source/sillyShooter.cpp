@@ -16,7 +16,7 @@ int main( int argc, char* argv[] )
 	float playerSpeed = 0.3f;
 	Scene* scene = engine.CurrentScene();
 	GameObject player = scene->AddGameObject( "Player" );
-	player.SetPosition( -10.0f, 0.0f, 0.0f );
+	player.SetPosition( 0.0f, 0.0f, 0.0f );
 	player.AddBehavior( [ playerSpeed ]( GameObject& gameObject, const Input& input )
 	{
 		if ( input.KeyPressed( SDLK_w ) )
@@ -35,6 +35,8 @@ int main( int argc, char* argv[] )
 		{
 			gameObject.Translate( playerSpeed, 0.0f, 0.0f );
 		}
+
+		gameObject.Translate( input.AxisMotion( 0, 0 ) * playerSpeed, input.AxisMotion( 0, 1 ) * -playerSpeed, 0.0f );
 	} );
 	player.AddMesh( "playerMesh", "ColourCube");
 

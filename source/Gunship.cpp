@@ -159,8 +159,7 @@ Gunship::~Gunship()
 
 bool Gunship::InitSystems()
 {
-	SDL_Init( SDL_INIT_VIDEO |
-			  SDL_INIT_JOYSTICK );
+	SDL_Init( SDL_INIT_EVERYTHING );
 
 	// Create an application window with the following settings:
 	window = SDL_CreateWindow( 
@@ -266,10 +265,7 @@ void Gunship::Start()
 				input.keyEvents.push_back( event.key );
 				break;
 			case SDL_JOYAXISMOTION:
-				std::cout << "joy axis motion" << std::endl;
 				input.joyAxisEvents.push_back( event.jaxis );
-				std::cout << "joystick: " << (int)event.jaxis.which << "\taxis: " << (int)event.jaxis.axis << "\tvalue: " << (int)event.jaxis.value << std::endl;
-
 				break;
 			}
 		}

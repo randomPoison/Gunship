@@ -6,6 +6,7 @@
 #include <SDL_events.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
+#include <SDL_joystick.h>
 
 #include "Input.h"
 #include "components/Component.h"

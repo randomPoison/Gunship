@@ -10,7 +10,8 @@ public:
 
 	bool KeyPressed( SDL_Keycode key ) const;
 	bool KeyUp( SDL_Keycode key ) const;
-	Sint16 AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const;
+
+	float AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const;
 
 	void Reset();
 };
