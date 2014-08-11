@@ -50,6 +50,4 @@ private:
 
 	Scene* currentScene;
 	Input input;
-
-	SDL_Joystick* controller;
 };

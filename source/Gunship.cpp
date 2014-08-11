@@ -230,12 +230,14 @@ bool Gunship::InitSystems()
 	// initialize joysticks and whatnot
 	if ( SDL_NumJoysticks() > 0 )
 	{
-		controller = SDL_JoystickOpen( 0 );
+		printf( "num joysticks: %d\n", SDL_NumJoysticks() );
+		SDL_Joystick* controller = SDL_JoystickOpen( 0 );
 		if ( controller == nullptr )
 		{
 			printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
 			return false;
 		}
+		input.joysticks.push_back( controller );
 	}
 
 	return true;
@@ -251,7 +253,6 @@ void Gunship::Start()
 	bool gameRunning = true;
 	while ( gameRunning )
 	{
-		input = Input();
 		input.Reset();
 		while ( SDL_PollEvent( &event ) )
 		{

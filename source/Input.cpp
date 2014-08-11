@@ -30,8 +30,14 @@ float Input::AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const
 	return 0.0f;
 }
 
+float Input::AxisValue( int joystick, Uint8 axis ) const
+{
+	float axisValue = SDL_JoystickGetAxis( joysticks[joystick], axis ) / AXIS_MAX;
+	return ( abs( axisValue ) > 0.3f ) ? axisValue : 0.0f;
+}
+
 void Input::Reset()
 {
-	keyEvents.empty();
-	joyAxisEvents.empty();
+	keyEvents.clear();
+	joyAxisEvents.clear();
 }
