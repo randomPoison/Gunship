@@ -15,11 +15,14 @@ int main( int argc, char* argv[] )
 
 	Scene* scene = engine.CurrentScene();
 
-	float playerSpeed = 0.05f;
 	GameObject player = scene->AddGameObject( "Player" );
+	GameObject target = scene->AddGameObject( "Target" );
+	GameObject camera = scene->AddGameObject( "Camera" );
+
 	player.AddMesh( "playerMesh", "ColourCube");
 	player.SetPosition( 0.0f, 0.0f, 0.0f );
-	player.AddBehavior( [ playerSpeed ]( GameObject& gameObject, const Input& input )
+	float playerSpeed = 0.05f;
+	player.AddBehavior( [ &playerSpeed, &target ]( GameObject& gameObject, const Input& input )
 	{
 		if ( input.KeyPressed( SDLK_w ) )
 		{
@@ -39,15 +42,20 @@ int main( int argc, char* argv[] )
 		}
 
 		gameObject.Translate( input.AxisValue( 0, 0 ) * playerSpeed, input.AxisValue( 0, 1 ) * -playerSpeed, 0.0f );
+
+		gameObject.LookAt( target );
 	} );
 
-	GameObject target = scene->AddGameObject( "Target" );
 	target.AddMesh( "targetMesh", "ColourCube" );
-	player.AddChild( target );
 	target.SetPosition( 0.0f, 2.0f, 0.0f );
 	target.SetScale( 0.25f, 0.25f, 0.25f );
+	float offset = 2.0f;
+	target.AddBehavior( [ &player, &offset ]( GameObject& gameObject, const Input& input )
+	{
+		Ogre::Vector3 pos = player.Position();
+		gameObject.SetPosition( pos.x + input.AxisValue( 0, 2 ) * offset, pos.y + -input.AxisValue( 0, 3 ) * offset, pos.z + 0.0f );
+	} );
 
-	GameObject camera = scene->AddGameObject( "Camera" );
 	camera.AddCamera();
 	camera.SetPosition( 0.0f, 0.0f, 10.0f );
 	camera.LookAt( 0.0f, 0.0f, 0.0f );

@@ -59,6 +59,11 @@ void GameObject::SetScale( float x, float y, float z )
 	scene->FindComponent( *this )->node->scale( Ogre::Vector3( x, y, z ) );
 }
 
+Ogre::Vector3 GameObject::Position()
+{
+	return scene->FindComponent( *this )->node->getPosition();
+}
+
 size_t GameObject::LastIndex() const
 {
 	return index;

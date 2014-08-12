@@ -6,6 +6,7 @@
 namespace Ogre
 {
 	class SceneNode;
+	class Vector3;
 }
 
 class Scene;
@@ -39,6 +40,8 @@ public:
 	void Translate( float x, float y, float z );
 	void SetPosition( float x, float y, float z );
 	void SetScale( float x, float y, float z );
+
+	Ogre::Vector3 Position();
 
 	void AddChild( GameObject& gameObject );
 

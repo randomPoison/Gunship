@@ -8,6 +8,8 @@
 #include <SDL_keycode.h>
 #include <SDL_joystick.h>
 
+#include <OgreVector3.h>
+
 #include "Input.h"
 #include "components/Component.h"
 #include "components/CameraComponent.h"
