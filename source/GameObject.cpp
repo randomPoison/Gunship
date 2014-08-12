@@ -51,7 +51,7 @@ void GameObject::Translate( float x, float y, float z )
 
 void GameObject::SetPosition( float x, float y, float z )
 {
-	scene->SetGameObjectPosition( *this, x, y, z );
+	scene->FindComponent( *this )->node->setPosition( x, y, z );
 }
 
 void GameObject::SetScale( float x, float y, float z )
@@ -61,7 +61,8 @@ void GameObject::SetScale( float x, float y, float z )
 
 Ogre::Vector3 GameObject::Position()
 {
-	return scene->FindComponent( *this )->node->getPosition();
+	Ogre::SceneNode* node = scene->FindComponent( *this )->node;
+	return node->_getDerivedPosition();
 }
 
 size_t GameObject::LastIndex() const

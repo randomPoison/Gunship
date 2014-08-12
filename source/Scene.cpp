@@ -68,12 +68,6 @@ void Scene::TranslateGameObject( GameObject& gameObject, float x, float y, float
 	obj->node->translate( x, y, z );
 }
 
-void Scene::SetGameObjectPosition( GameObject& gameObject, float x, float y, float z )
-{
-	GameObjectComponent* component = FindComponent( gameObject );
-	component->node->setPosition( x, y, z );
-}
-
 GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
 	for ( GameObjectComponent& component : gameObjects )

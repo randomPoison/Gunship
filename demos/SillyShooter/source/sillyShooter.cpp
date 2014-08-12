@@ -18,6 +18,7 @@ int main( int argc, char* argv[] )
 	GameObject player = scene->AddGameObject( "Player" );
 	GameObject target = scene->AddGameObject( "Target" );
 	GameObject camera = scene->AddGameObject( "Camera" );
+	GameObject cameraAnchor = scene->AddGameObject( "CameraAnchor" );
 
 	player.AddMesh( "playerMesh", "ColourCube");
 	player.SetPosition( 0.0f, 0.0f, 0.0f );
@@ -56,12 +57,16 @@ int main( int argc, char* argv[] )
 		gameObject.SetPosition( pos.x + input.AxisValue( 0, 2 ) * offset, pos.y + -input.AxisValue( 0, 3 ) * offset, pos.z + 0.0f );
 	} );
 
+	player.AddChild( cameraAnchor );
+	cameraAnchor.SetPosition( 0.0f, 40.0f, 0.0f );
+
 	camera.AddCamera();
-	camera.SetPosition( 0.0f, 0.0f, 10.0f );
-	camera.LookAt( 0.0f, 0.0f, 0.0f );
-	camera.AddBehavior( [ &player ]( GameObject& gameObject, const Input& input )
+	camera.LookAt( player );
+	camera.AddBehavior( [ &cameraAnchor, &player ]( GameObject& gameObject, const Input& input )
 	{
-		gameObject.LookAt( player );
+		Ogre::Vector3 offset = cameraAnchor.Position() - gameObject.Position();
+		Ogre::Vector3 pos = gameObject.Position() + ( offset * 0.01f );
+		gameObject.SetPosition( pos.x, pos.y, pos.z );
 	} );
 
 	GameObject manager = scene->AddGameObject( "Manager" );
