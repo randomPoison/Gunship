@@ -42,7 +42,10 @@ int main( int argc, char* argv[] )
 			gameObject.Translate( playerSpeed, 0.0f, 0.0f );
 		}
 
-		gameObject.Translate( input.AxisValue( 0, 0 ) * playerSpeed, input.AxisValue( 0, 1 ) * -playerSpeed, 0.0f );
+		float xTrans = input.AxisValue( 0, 0 );
+		float yTrans = input.AxisValue( 0, 1 );
+
+		gameObject.Translate( xTrans * playerSpeed, yTrans * -playerSpeed, 0.0f );
 
 		gameObject.LookAt( target );
 	} );

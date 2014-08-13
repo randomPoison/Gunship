@@ -59,5 +59,5 @@ float Input::AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const
 float Input::AxisValue( int joystick, Uint8 axis ) const
 {
 	float axisValue = SDL_JoystickGetAxis( joysticks[joystick], axis ) / AXIS_MAX;
-	return ( abs( axisValue ) > 0.1f ) ? axisValue : 0.0f;
+	return ( fabs( axisValue ) > 0.17f ) ? axisValue : 0.0f;
 }

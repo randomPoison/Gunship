@@ -15,7 +15,7 @@ public:
 	bool KeyDown( SDL_Keycode key ) const;
 
 	float AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const;
-	float AxisValue( SDL_JoystickID joystick, Uint8 axis ) const;
+	float AxisValue( int joystick, Uint8 axis ) const;
 
 private:
 	std::vector< SDL_Keycode > downKeys;

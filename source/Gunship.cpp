@@ -271,7 +271,7 @@ void Gunship::Start()
 				int numAxes = SDL_JoystickNumAxes( joystick );
 				for ( int axis = 0; axis < numAxes; axis++ )
 				{
-					printf( "Axis %d:\t%d\n", axis, SDL_JoystickGetAxis( joystick, axis ) );
+					printf( "Axis %d:\t%f\n", axis, SDL_JoystickGetAxis( joystick, axis ) );
 				}
 				std::cout << std::endl;
 			}
