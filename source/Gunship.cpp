@@ -258,12 +258,26 @@ void Gunship::Start()
 			continue;
 		}
 
-		if ( input.KeyPressed( SDLK_q ) )
+		// debug output
+		if ( input.KeyPressed( SDLK_BACKQUOTE ) )
 		{
-			std::cout << "q key pressed" << std::endl;
+			std::cout << "Gunship Debugging Info:" << std::endl;
+			std::cout << "-----------------------" << std::endl;
+
+			// print out state of controllers
+			for ( SDL_Joystick* joystick : input.joysticks )
+			{
+				printf( "Joystick:\t%s\n", SDL_JoystickName( joystick ) );
+				int numAxes = SDL_JoystickNumAxes( joystick );
+				for ( int axis = 0; axis < numAxes; axis++ )
+				{
+					printf( "Axis %d:\t%d\n", axis, SDL_JoystickGetAxis( joystick, axis ) );
+				}
+				std::cout << std::endl;
+			}
 		}
 
-		// update stuffs
+		// update stuff
 		currentScene->Update( input );
 
 		// render stuffs
