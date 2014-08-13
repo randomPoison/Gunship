@@ -247,31 +247,14 @@ void Gunship::Start()
 {
 	SDL_ShowWindow( window );
 
-	SDL_Event event;
-
 	// enter main loop
 	bool gameRunning = true;
 	while ( gameRunning )
 	{
-		input.Reset();
-		while ( SDL_PollEvent( &event ) )
+		input.ConsumeInput();
+		if ( input.exit )
 		{
-			switch ( event.type )
-			{
-			case SDL_QUIT:
-				gameRunning = false;
-				break;
-			case SDL_KEYDOWN:
-			case SDL_KEYUP:
-				input.keyEvents.push_back( event.key );
-				break;
-			case SDL_JOYAXISMOTION:
-				input.joyAxisEvents.push_back( event.jaxis );
-				break;
-			}
-		}
-		if ( !gameRunning )
-		{
+			gameRunning = false;
 			continue;
 		}
 

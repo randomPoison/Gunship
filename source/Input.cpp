@@ -1,20 +1,46 @@
+#include <iostream>
+
 #include "Gunship.h"
 
 #include "Input.h"
 
 static const float AXIS_MAX = 32768.0f;
 
-bool Input::KeyPressed( SDL_Keycode key ) const
+void Input::ConsumeInput()
 {
-	for ( SDL_KeyboardEvent event : keyEvents )
+	keyDownEvents.clear();
+	keyUpEvents.clear();
+	joyAxisEvents.clear();
+
+	SDL_Event event;
+	while ( SDL_PollEvent( &event ) )
 	{
-		if ( event.type = SDL_KEYDOWN && event.keysym.sym == key )
+		switch ( event.type )
 		{
-			return true;
+		case SDL_QUIT:
+			exit = true;
+			break;
+		case SDL_KEYDOWN:
+			if ( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.sym ) == downKeys.end() )
+			{
+				downKeys.push_back( event.key.keysym.sym );
+				keyDownEvents.push_back( event.key.keysym.sym );
+			}
+			break;
+		case SDL_KEYUP:
+			downKeys.erase( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.sym ) );
+			keyUpEvents.push_back( event.key.keysym.sym );
+			break;
+		case SDL_JOYAXISMOTION:
+			joyAxisEvents.push_back( event.jaxis );
+			break;
 		}
 	}
+}
 
-	return false;
+bool Input::KeyPressed( SDL_Keycode key ) const
+{
+	return std::find( keyDownEvents.begin(), keyDownEvents.end(), key ) != keyDownEvents.end();
 }
 
 float Input::AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const
@@ -33,11 +59,5 @@ float Input::AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const
 float Input::AxisValue( int joystick, Uint8 axis ) const
 {
 	float axisValue = SDL_JoystickGetAxis( joysticks[joystick], axis ) / AXIS_MAX;
-	return ( abs( axisValue ) > 0.3f ) ? axisValue : 0.0f;
-}
-
-void Input::Reset()
-{
-	keyEvents.clear();
-	joyAxisEvents.clear();
+	return ( abs( axisValue ) > 0.1f ) ? axisValue : 0.0f;
 }
