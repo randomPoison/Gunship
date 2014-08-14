@@ -3,10 +3,6 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 
-#include <OgreRoot.h>
-#include <OgreManualObject.h>
-#include <OgreRenderWindow.h>
-
 // temporary includes for createColourCube()
 #include <OgreMeshManager.h>
 #include <OgreHardwareBufferManager.h>

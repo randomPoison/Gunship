@@ -3,13 +3,16 @@
 #include <vector>
 #include <functional>
 
-#include <SDL2/SDL_events.h>
-#include <SDL2/SDL_keyboard.h>
-#include <SDL2/SDL_keycode.h>
-#include <SDL2/SDL_joystick.h>
-#include <SDL2/SDL_gamecontroller.h>
+#include <SDL_events.h>
+#include <SDL_keyboard.h>
+#include <SDL_keycode.h>
+#include <SDL_joystick.h>
+#include <SDL_gamecontroller.h>
 
-#include <OGRE/OgreVector3.h>
+#include <OgreRoot.h>
+#include <OgreManualObject.h>
+#include <OgreRenderWindow.h>
+#include <OgreVector3.h>
 
 #include "Input.h"
 #include "components/Component.h"
