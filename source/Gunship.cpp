@@ -231,13 +231,16 @@ bool Gunship::InitSystems()
 	if ( SDL_NumJoysticks() > 0 )
 	{
 		printf( "num joysticks: %d\n", SDL_NumJoysticks() );
-		SDL_Joystick* controller = SDL_JoystickOpen( 0 );
+		SDL_GameController* controller = SDL_GameControllerOpen( 0 );
+
+		std::cout << "joystick is controller: " << ( SDL_IsGameController( 0 ) ? "true" : "false" ) << std::endl;
+
 		if ( controller == nullptr )
 		{
 			printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
 			return false;
 		}
-		input.joysticks.push_back( controller );
+		input.controllers.push_back( controller );
 	}
 
 	return true;
@@ -265,14 +268,15 @@ void Gunship::Start()
 			std::cout << "-----------------------" << std::endl;
 
 			// print out state of controllers
-			for ( SDL_Joystick* joystick : input.joysticks )
+			for ( SDL_GameController* controller : input.controllers )
 			{
-				printf( "Joystick:\t%s\n", SDL_JoystickName( joystick ) );
-				int numAxes = SDL_JoystickNumAxes( joystick );
-				for ( int axis = 0; axis < numAxes; axis++ )
-				{
-					printf( "Axis %d:\t%f\n", axis, SDL_JoystickGetAxis( joystick, axis ) );
-				}
+				printf( "Controller:\t%s\n", SDL_GameControllerName( controller ) );
+				printf( "\tLeft X:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTX ) );
+				printf( "\tLeft Y:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTY ) );
+				printf( "\tRight X:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTX ) );
+				printf( "\tRight Y:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTY ) );
+				printf( "\tLeft Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT ) );
+				printf( "\tRight Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
 				std::cout << std::endl;
 			}
 		}

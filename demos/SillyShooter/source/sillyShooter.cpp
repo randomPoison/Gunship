@@ -42,8 +42,8 @@ int main( int argc, char* argv[] )
 			gameObject.Translate( playerSpeed, 0.0f, 0.0f );
 		}
 
-		float xTrans = input.AxisValue( 0, 0 );
-		float yTrans = input.AxisValue( 0, 1 );
+		float xTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_LEFTX );
+		float yTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_LEFTY );
 
 		gameObject.Translate( xTrans * playerSpeed, yTrans * -playerSpeed, 0.0f );
 
@@ -57,7 +57,9 @@ int main( int argc, char* argv[] )
 	target.AddBehavior( [ &player, &offset ]( GameObject& gameObject, const Input& input )
 	{
 		Ogre::Vector3 pos = player.Position();
-		gameObject.SetPosition( pos.x + input.AxisValue( 0, 2 ) * offset, pos.y + -input.AxisValue( 0, 3 ) * offset, pos.z + 0.0f );
+		float xTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTX );
+		float yTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTY );
+		gameObject.SetPosition( pos.x + xTrans * offset, pos.y + -yTrans * offset, pos.z + 0.0f );
 	} );
 
 	player.AddChild( cameraAnchor );

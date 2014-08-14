@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "Gunship.h"
 
@@ -43,21 +44,13 @@ bool Input::KeyPressed( SDL_Keycode key ) const
 	return std::find( keyDownEvents.begin(), keyDownEvents.end(), key ) != keyDownEvents.end();
 }
 
-float Input::AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const
+float Input::AxisValue( int controller, SDL_GameControllerAxis axis ) const
 {
-	for ( SDL_JoyAxisEvent event : joyAxisEvents )
-	{
-		if ( event.which == joystick && event.axis == axis )
-		{
-			return (float)event.value / AXIS_MAX;
-		}
-	}
-
-	return 0.0f;
+	return AxisValue( controllers[controller], axis );
 }
 
-float Input::AxisValue( int joystick, Uint8 axis ) const
+float Input::AxisValue( SDL_GameController* controller, SDL_GameControllerAxis axis ) const
 {
-	float axisValue = SDL_JoystickGetAxis( joysticks[joystick], axis ) / AXIS_MAX;
-	return ( fabs( axisValue ) > 0.17f ) ? axisValue : 0.0f;
+	float axisValue = SDL_GameControllerGetAxis( controller, axis ) / AXIS_MAX;
+	return ( std::abs( axisValue ) > 0.17f ) ? axisValue : 0.0f;
 }

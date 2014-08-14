@@ -14,12 +14,13 @@ public:
 	bool KeyUp( SDL_Keycode key ) const;
 	bool KeyDown( SDL_Keycode key ) const;
 
-	float AxisMotion( SDL_JoystickID joystick, Uint8 axis ) const;
-	float AxisValue( int joystick, Uint8 axis ) const;
+	float AxisMotion( Uint8 controller, Uint8 axis ) const;
+	float AxisValue( int controller, SDL_GameControllerAxis axis ) const;
+	float AxisValue( SDL_GameController*, SDL_GameControllerAxis axis ) const;
 
 private:
 	std::vector< SDL_Keycode > downKeys;
-	std::vector< SDL_Joystick* > joysticks;
+	std::vector< SDL_GameController* > controllers;
 
 	std::vector< SDL_Keycode > keyDownEvents;
 	std::vector< SDL_Keycode > keyUpEvents;
