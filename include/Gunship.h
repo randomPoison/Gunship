@@ -3,6 +3,8 @@
 #include <vector>
 #include <functional>
 
+#include <SDL.h>
+#include <SDL_syswm.h>
 #include <SDL_events.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
@@ -12,6 +14,11 @@
 #include <OgreRoot.h>
 #include <OgreManualObject.h>
 #include <OgreRenderWindow.h>
+#include <OgreSceneManager.h>
+#include <OgreSceneNode.h>
+#include <OgreCamera.h>
+#include <OgreViewport.h>
+#include <OgreEntity.h>
 #include <OgreVector3.h>
 
 #include "Input.h"

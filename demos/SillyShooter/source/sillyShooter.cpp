@@ -74,7 +74,7 @@ int main( int argc, char* argv[] )
 		gameObject.SetPosition( pos.x, pos.y, pos.z );
 	} );
 
-	GameObject manager = scene->AddGameObject( "Manager" );
+	//GameObject manager = scene->AddGameObject( "Manager" );
 
 	engine.Start();
 	engine.ShutDown();

@@ -1,8 +1,5 @@
 #include <iostream>
 
-#include <SDL.h>
-#include <SDL_syswm.h>
-
 // temporary includes for createColourCube()
 #include <OgreMeshManager.h>
 #include <OgreHardwareBufferManager.h>
@@ -175,7 +172,7 @@ bool Gunship::InitSystems()
 		return 1;
 	}
 
-	SDL_GLContext glContext = SDL_GL_CreateContext( window );
+	SDL_GL_CreateContext( window );
 
 	root = new Ogre::Root( "", "", "" );
 

@@ -28,7 +28,7 @@ file(GLOB PROJECT_INCLUDES
 	include
 	${GUNSHIP_ROOT_DIR}/include
 	${GUNSHIP_INCLUDES})
-include_directories(${PROJECT_INCLUDES})
+include_directories(SYSTEM ${PROJECT_INCLUDES})
 
 # The project's sources
 file(GLOB PROJECT_SOURCES
@@ -40,5 +40,5 @@ add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME} gunship)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)

@@ -2,7 +2,6 @@
 #include <cmath>
 
 #include "Gunship.h"
-
 #include "Input.h"
 
 static const float AXIS_MAX = 32768.0f;

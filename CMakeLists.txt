@@ -40,7 +40,7 @@ file(GLOB PROJECT_INCLUDE_DIRS
 	include
 	${SDL2_INCLUDE_DIR}
 	${OGRE_INCLUDE_DIRS})
-include_directories(${PROJECT_INCLUDE_DIRS})
+include_directories(SYSTEM ${PROJECT_INCLUDE_DIRS})
 set(GUNSHIP_INCLUDES ${PROJECT_INCLUDE_DIRS})
 
 # The project's sources
@@ -67,6 +67,6 @@ add_library(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter -v")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 

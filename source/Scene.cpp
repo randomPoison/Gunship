@@ -1,12 +1,4 @@
-#include <OgreRoot.h>
-#include <OgreManualObject.h>
-#include <OgreRenderWindow.h>
-#include <OgreCamera.h>
-#include <OgreViewport.h>
-#include <OgreEntity.h>
-
 #include "Gunship.h"
-
 #include "Scene.h"
 
 Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), renderWindow( render )

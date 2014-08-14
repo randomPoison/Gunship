@@ -1,16 +1,11 @@
-#include <OgreSceneManager.h>
-#include <OgreSceneNode.h>
-#include <OgreVector3.h>
-
 #include "Gunship.h"
-
 #include "GameObject.h"
 
 GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name ) :
 	scene( scene ),
+	node( node ),
 	name( name ),
-	id( GenerateUniqueComponentID() ),
-	node( node )
+	id( GenerateUniqueComponentID() )
 {
 }
 

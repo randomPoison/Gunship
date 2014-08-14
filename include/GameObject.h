@@ -2,13 +2,6 @@
 
 #include <string>
 
-// forward declarations
-namespace Ogre
-{
-	class SceneNode;
-	class Vector3;
-}
-
 class Scene;
 class Camera;
 
@@ -16,8 +9,6 @@ class GameObjectComponent
 {
 public:
 	GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name = "Game Object" );
-
-	Camera cameraComponent;
 
 	Scene* scene;
 	Ogre::SceneNode* node;

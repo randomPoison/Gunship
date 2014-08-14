@@ -1,12 +1,5 @@
 #pragma once
 
-// forward declarations
-namespace Ogre
-{
-	class Camera;
-	class Viewport;
-}
-
 class GameObject;
 
 class CameraComponent

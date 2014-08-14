@@ -1,5 +1,4 @@
 #include "Gunship.h"
-
 #include "components/Component.h"
 
 component_id GenerateUniqueComponentID()

@@ -1,12 +1,10 @@
-#include <OgreCamera.h>
-#include <OgreViewport.h>
-
 #include "Gunship.h"
+#include "components/CameraComponent.h"
 
 CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view ) :
+	id( GenerateUniqueComponentID() ),
 	camera( cam ),
-	viewport( view ),
-	id( GenerateUniqueComponentID() )
+	viewport( view )
 {
 }
 
