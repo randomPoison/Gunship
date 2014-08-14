@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
 
 # Set project name
-set (PROJECT_NAME "SillyShooter")
+set (PROJECT_NAME "Spectacle")
 
 project (${PROJECT_NAME} CXX C)
 
@@ -36,8 +36,8 @@ file(GLOB PROJECT_SOURCES
 	include/*.h)
 
 # configure executable
-add_executable (${PROJECT_NAME} ${PROJECT_SOURCES})
-target_link_libraries(${PROJECT_NAME} gunship)
+add_executable (${PROJECT_NAME}Main ${PROJECT_SOURCES})
+target_link_libraries(${PROJECT_NAME}Main gunship)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")

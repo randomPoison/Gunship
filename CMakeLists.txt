@@ -67,6 +67,6 @@ add_library(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter -v")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
