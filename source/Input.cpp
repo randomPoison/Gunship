@@ -6,6 +6,10 @@
 
 static const float AXIS_MAX = 32768.0f;
 
+Input::Input() : exit( false )
+{
+}
+
 void Input::ConsumeInput()
 {
 	keyDownEvents.clear();

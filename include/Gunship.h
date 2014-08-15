@@ -3,7 +3,6 @@
 #include <vector>
 #include <functional>
 
-#include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_events.h>
 #include <SDL_keyboard.h>

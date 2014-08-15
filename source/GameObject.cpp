@@ -42,13 +42,13 @@ void GameObject::LookAt( GameObject& target )
 void GameObject::Translate( float x, float y, float z )
 {
 	Ogre::SceneNode* node = scene->FindComponent( *this )->node;
-	node->translate( x, y, z, Ogre::Node::TS_LOCAL );
+	node->translate( x, y, z );
 }
 
 void GameObject::Translate( Ogre::Vector3 translation )
 {
 	Ogre::SceneNode* node = scene->FindComponent( *this )->node;
-	node->translate( translation, Ogre::Node::TS_LOCAL );
+	node->translate( translation );
 }
 
 void GameObject::SetPosition( float x, float y, float z )

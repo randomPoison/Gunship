@@ -7,6 +7,8 @@
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 
+#include <SDL.h>
+
 #include "Gunship.h"
 
 void createColourCube()

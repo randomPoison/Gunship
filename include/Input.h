@@ -5,7 +5,9 @@
 class Input
 {
 public:
-	bool exit = false;
+	Input();
+
+	bool exit;
 
 	void ConsumeInput();
 
