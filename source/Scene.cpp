@@ -54,12 +54,6 @@ void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const
 	owner->node->attachObject( cubeEntity );
 }
 
-void Scene::TranslateGameObject( GameObject& gameObject, float x, float y, float z )
-{
-	GameObjectComponent* obj = FindComponent( gameObject );
-	obj->node->translate( x, y, z );
-}
-
 GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
 	for ( GameObjectComponent& component : gameObjects )

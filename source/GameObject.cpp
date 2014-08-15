@@ -36,12 +36,19 @@ void GameObject::LookAt( float x, float y, float z )
 void GameObject::LookAt( GameObject& target )
 {
 	GameObjectComponent* targetComponent = scene->FindComponent( target );
-	scene->FindComponent( *this )->node->lookAt( targetComponent->node->getPosition(), Ogre::Node::TS_WORLD );
+	scene->FindComponent( *this )->node->lookAt( targetComponent->node->_getDerivedPosition(), Ogre::Node::TS_WORLD );
 }
 
 void GameObject::Translate( float x, float y, float z )
 {
-	scene->TranslateGameObject( *this, x, y, z );
+	Ogre::SceneNode* node = scene->FindComponent( *this )->node;
+	node->translate( x, y, z, Ogre::Node::TS_LOCAL );
+}
+
+void GameObject::Translate( Ogre::Vector3 translation )
+{
+	Ogre::SceneNode* node = scene->FindComponent( *this )->node;
+	node->translate( translation, Ogre::Node::TS_LOCAL );
 }
 
 void GameObject::SetPosition( float x, float y, float z )

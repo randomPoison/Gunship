@@ -14,7 +14,6 @@ public:
 	Behavior AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior );
 
 	void AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh );
-	void TranslateGameObject( GameObject& gameObject, float x, float y, float z );
 	void SetGameObjectLook( GameObject& gameObject, float x, float y, float z );
 
 	GameObjectComponent* FindComponent( GameObject& gameObject );
