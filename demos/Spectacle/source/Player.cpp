@@ -5,7 +5,7 @@ void MakePlayer( GameObject& player, GameObject& target )
 	player.AddMesh( "playerMesh", "ColourCube" );
 	player.SetPosition( 0.0f, 0.0f, 0.0f );
 	player.AddBehavior(
-			[ &target ]( GameObject& gameObject, const Input& input )
+			[ &target ]( GameObject& gameObject, Scene& scene, const Input& input )
 			{
 				static float playerSpeed = 0.05f;
 
@@ -32,6 +32,15 @@ void MakePlayer( GameObject& player, GameObject& target )
 				gameObject.Translate( xTrans * playerSpeed, yTrans * -playerSpeed, 0.0f );
 
 				gameObject.LookAt( target );
+
+				xTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTX );
+				yTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTY );
+				Ogre::Vector2 bulletDir( xTrans, yTrans );
+
+				if ( bulletDir.length() > 0.9f )
+				{
+					MakeBullet( scene.AddGameObject( "Bullet" ), gameObject.Position(), Ogre::Vector3( xTrans, -yTrans, 0.0f ) );
+				}
 			} );
 
 	target.AddMesh( "targetMesh", "ColourCube" );
@@ -39,7 +48,7 @@ void MakePlayer( GameObject& player, GameObject& target )
 	target.SetScale( 0.25f, 0.25f, 0.25f );
 
 	target.AddBehavior(
-			[ &player ]( GameObject& gameObject, const Input& input )
+			[ &player ]( GameObject& gameObject, Scene& scene, const Input& input )
 			{
 				static float offset = 2.0f;
 

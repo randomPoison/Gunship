@@ -1,6 +1,11 @@
 #include "Gunship.h"
 #include "Scene.h"
 
+static std::string MeshID( const char* name, GameObjectComponent* owner )
+{
+	return std::string( name ) + std::to_string( owner->id );
+}
+
 Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), renderWindow( render )
 {
 	sceneManager = root->createSceneManager( Ogre::ST_GENERIC );
@@ -10,10 +15,14 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 
 void Scene::Update( const Input& input )
 {
-	for ( BehaviorComponent& behavior : behaviorComponents )
+	// cache original number of components
+	// in case new ones are added during frame
+	size_t numBehaviors = behaviorComponents.size();
+	for ( size_t index = 0; index < numBehaviors; index++ )
 	{
+		BehaviorComponent& behavior = behaviorComponents[index];
 		GameObject obj( this, behavior.ownerId, 0 );
-		behavior.behavior( obj, input );
+		behavior.behavior( obj, *this ,input );
 	}
 }
 
@@ -49,7 +58,7 @@ Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction b
 void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh )
 {
 	GameObjectComponent* owner = FindComponent( gameObject );
-	Ogre::Entity* cubeEntity = sceneManager->createEntity( name, mesh );
+	Ogre::Entity* cubeEntity = sceneManager->createEntity( MeshID( name, owner ).c_str(), mesh );
 	cubeEntity->setMaterialName( "Test/ColourTest" );
 	owner->node->attachObject( cubeEntity );
 }

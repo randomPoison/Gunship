@@ -28,6 +28,7 @@ public:
 	void Translate( float x, float y, float z );
 	void Translate( Ogre::Vector3 translation );
 	void SetPosition( float x, float y, float z );
+	void SetPosition( Ogre::Vector3 pos );
 	void SetScale( float x, float y, float z );
 
 	Ogre::Vector3 Position();

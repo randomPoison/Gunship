@@ -4,7 +4,7 @@
 
 class GameObject;
 
-typedef std::function< void( GameObject&, const Input& ) > BehaviorFunction;
+typedef std::function< void( GameObject&, Scene&, const Input& ) > BehaviorFunction;
 
 class BehaviorComponent
 {
