@@ -182,17 +182,12 @@ bool Gunship::InitSystems()
 	// This is only happening because I can't find the debug plugins for Ogre on my system.
 	// Either they don't come with default universe install, or I'm too unfamiliar
 	// with linux development to find them (and cmake isn't doing it for me).
-#ifdef WIN32
-
-#ifdef _DEBUG
-	root->loadPlugin ( OGRE_PLUGIN_DIR_DBG + std::string( "/RenderSystem_GL_d" ) );
+#if defined(_DEBUG) && defined(WIN32)
+	root->loadPlugin( OGRE_PLUGIN_DIR_DBG + std::string( "/RenderSystem_GL_d" ) );
 #else
-	root->loadPlugin ( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
+	root->loadPlugin( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
 #endif
 
-#else
-	root->loadPlugin ( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
-#endif
 	root->setRenderSystem( root->getRenderSystemByName( "OpenGL Rendering Subsystem" ) );
 
 	root->initialise( false );
