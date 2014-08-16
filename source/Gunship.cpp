@@ -1,15 +1,15 @@
 #include <iostream>
 
+#include <SDL.h>
+
+#include "Gunship.h"
+
 // temporary includes for createColourCube()
 #include <OgreMeshManager.h>
 #include <OgreHardwareBufferManager.h>
 #include <OgreSubMesh.h>
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
-
-#include <SDL.h>
-
-#include "Gunship.h"
 
 void createColourCube()
 {
@@ -183,7 +183,13 @@ bool Gunship::InitSystems()
 	// Either they don't come with default universe install, or I'm too unfamiliar
 	// with linux development to find them (and cmake isn't doing it for me).
 #ifdef WIN32
+
+#ifdef _DEBUG
 	root->loadPlugin ( OGRE_PLUGIN_DIR_DBG + std::string( "/RenderSystem_GL_d" ) );
+#else
+	root->loadPlugin ( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
+#endif
+
 #else
 	root->loadPlugin ( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
 #endif
@@ -245,6 +251,10 @@ void Gunship::Start()
 {
 	SDL_ShowWindow( window );
 
+	// initialize debugging info
+	static Uint32 startTime = SDL_GetTicks();
+	static Uint32 elapsedFrames = 0;
+
 	// enter main loop
 	bool gameRunning = true;
 	while ( gameRunning )
@@ -274,6 +284,12 @@ void Gunship::Start()
 				printf( "\tRight Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
 				std::cout << std::endl;
 			}
+
+			Uint32 ticks = SDL_GetTicks();
+			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
+			printf( "FPS: %f\n", fps );
+			startTime = ticks;
+			elapsedFrames = 0;
 		}
 
 		// update stuff
@@ -282,6 +298,9 @@ void Gunship::Start()
 		// render stuffs
 		root->renderOneFrame();
 		SDL_GL_SwapWindow( window );
+
+		// update debug info
+		elapsedFrames++;
 	}
 }
 
