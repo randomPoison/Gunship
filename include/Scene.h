@@ -18,6 +18,7 @@ public:
 
 	GameObjectComponent* FindComponent( GameObject& gameObject );
 	CameraComponent* FindComponent( Camera& camera );
+	GameObjectComponent* FindGameObject( component_id id );
 
 private:
 	std::vector< GameObjectComponent > gameObjects;

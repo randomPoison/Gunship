@@ -23,5 +23,5 @@ private:
 class Behavior final : ComponentLocator
 {
 public:
-	Behavior( Scene& scene, component_id id, size_t index = 0 );
+	Behavior( Scene& scene, component_id id );
 };

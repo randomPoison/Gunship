@@ -17,7 +17,7 @@ public:
 class GameObject final : public ComponentLocator
 {
 public:
-	GameObject( Scene* scene = nullptr, component_id id = 0, size_t index = 0 );
+	GameObject( Scene* scene = nullptr, Ogre::SceneNode* node = nullptr, component_id id = 0 );
 
 	Camera AddCamera();
 	void AddMesh( const char* name, const char* mesh );
@@ -35,5 +35,6 @@ public:
 
 	void AddChild( GameObject& gameObject );
 
-	size_t LastIndex() const;
+private:
+	Ogre::SceneNode* node;
 };

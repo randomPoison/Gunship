@@ -21,7 +21,7 @@ void Scene::Update( const Input& input )
 	for ( size_t index = 0; index < numBehaviors; index++ )
 	{
 		BehaviorComponent& behavior = behaviorComponents[index];
-		GameObject obj( this, behavior.ownerId, 0 );
+		GameObject obj( this, FindGameObject( behavior.ownerId )->node, behavior.ownerId );
 		behavior.behavior( obj, *this ,input );
 	}
 }
@@ -29,7 +29,7 @@ void Scene::Update( const Input& input )
 GameObject Scene::AddGameObject( const char* name )
 {
 	gameObjects.emplace_back( this, sceneManager->getRootSceneNode()->createChildSceneNode(), name );
-	return GameObject( this, gameObjects.back().id, gameObjects.size() - 1 );
+	return GameObject( this, gameObjects.back().node, gameObjects.back().id );
 }
 
 Camera Scene::AddCameraComponent( GameObject& gameObject )
@@ -46,13 +46,13 @@ Camera Scene::AddCameraComponent( GameObject& gameObject )
 
 	// create camera component
 	cameraComponents.emplace_back( camera, viewport );
-	return Camera( this, cameraComponents.back().id, cameraComponents.size() - 1 );
+	return Camera( this, cameraComponents.back().id );
 }
 
 Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior )
 {
 	behaviorComponents.emplace_back( gameObject, behavior );
-	return Behavior( *this, behaviorComponents.back().id, behaviorComponents.size() - 1 );
+	return Behavior( *this, behaviorComponents.back().id );
 }
 
 void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh )
@@ -68,6 +68,18 @@ GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 	for ( GameObjectComponent& component : gameObjects )
 	{
 		if ( component.id == gameObject.id )
+		{
+			return &component;
+		}
+	}
+	return nullptr;
+}
+
+GameObjectComponent* Scene::FindGameObject( component_id id )
+{
+	for ( GameObjectComponent& component : gameObjects )
+	{
+		if ( component.id == id )
 		{
 			return &component;
 		}
