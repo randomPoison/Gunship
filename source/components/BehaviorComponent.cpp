@@ -8,6 +8,6 @@ BehaviorComponent::BehaviorComponent( GameObject& owner, BehaviorFunction behavi
 {
 }
 
-Behavior::Behavior( Scene& scene, component_id id ) : ComponentLocator( &scene, id )
+Behavior::Behavior( Scene& scene, component_id id, size_t index ) : ComponentLocator( &scene, id, index )
 {
 }

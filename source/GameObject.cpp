@@ -9,8 +9,8 @@ GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, c
 {
 }
 
-GameObject::GameObject( Scene* scene, Ogre::SceneNode* node, component_id id ) :
-	ComponentLocator( scene, id ),
+GameObject::GameObject( Scene* scene, Ogre::SceneNode* node, component_id id, size_t index ) :
+	ComponentLocator( scene, id, index ),
 	node( node )
 {
 }
@@ -69,6 +69,11 @@ void GameObject::SetScale( float x, float y, float z )
 Ogre::Vector3 GameObject::Position()
 {
 	return node->_getDerivedPosition();
+}
+
+size_t GameObject::LastIndex() const
+{
+	return index;
 }
 
 void GameObject::AddChild( GameObject& gameObject )

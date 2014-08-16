@@ -7,8 +7,9 @@ component_id GenerateUniqueComponentID()
 	return nextID++;
 }
 
-ComponentLocator::ComponentLocator( Scene* scene, component_id id ) :
+ComponentLocator::ComponentLocator( Scene* scene, component_id id, size_t index ) :
 	scene( scene ),
-	id( id )
+	id( id ),
+	index( index )
 {
 }
