@@ -20,20 +20,17 @@
 #include <OgreEntity.h>
 #include <OgreVector3.h>
 
+#include "GunshipTypes.h"
 #include "Input.h"
 #include "components/Component.h"
+#include "GameObject.h"
 #include "components/CameraComponent.h"
 #include "components/BehaviorComponent.h"
-#include "GameObject.h"
 #include "Scene.h"
 
-// forward declarations because reasons
-namespace Ogre {
-	class Root;
-	class RenderWindow;
-};
-struct SDL_Window;
-
+/**
+ * \brief A class representing an instance of the Gunship engine.
+*/
 class Gunship
 {
 public:

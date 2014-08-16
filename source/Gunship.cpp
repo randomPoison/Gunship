@@ -287,9 +287,13 @@ void Gunship::Start()
 
 			Uint32 ticks = SDL_GetTicks();
 			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
-			printf( "FPS: %f\n", fps );
+			printf( "FPS: %f\n\n", fps );
 			startTime = ticks;
 			elapsedFrames = 0;
+
+			printf( "Game Objects:\t%d\n", currentScene->gameObjects.size() );
+			printf( "Behaviors:\t%d\n", currentScene->behaviorComponents.size() );
+			printf( "Cameras:\t%d\n", currentScene->cameraComponents.size() );
 		}
 
 		// update stuff

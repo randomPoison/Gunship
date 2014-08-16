@@ -4,8 +4,6 @@
 
 class GameObject;
 
-typedef std::function< void( GameObject&, Scene&, const Input& ) > BehaviorFunction;
-
 class BehaviorComponent
 {
 public:
@@ -15,7 +13,7 @@ public:
 
 private:
 	component_id id;
-	component_id ownerId;
+	GameObject owner;
 
 	friend class Scene;
 };

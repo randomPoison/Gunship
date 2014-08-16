@@ -6,8 +6,6 @@
 
 class Scene;
 
-typedef size_t component_id;
-
 component_id GenerateUniqueComponentID();
 
 class ComponentLocator

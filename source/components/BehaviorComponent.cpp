@@ -4,7 +4,7 @@
 BehaviorComponent::BehaviorComponent( GameObject& owner, BehaviorFunction behavior ) :
 	behavior( behavior ),
 	id( GenerateUniqueComponentID() ),
-	ownerId( owner.id )
+	owner( owner )
 {
 }
 

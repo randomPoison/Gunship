@@ -2,6 +2,9 @@
 
 #include <string>
 
+class Camera;
+class Behavior;
+
 class GameObjectComponent
 {
 public:

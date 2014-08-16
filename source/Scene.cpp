@@ -21,7 +21,7 @@ void Scene::Update( const Input& input )
 	for ( size_t index = 0; index < numBehaviors; index++ )
 	{
 		BehaviorComponent& behavior = behaviorComponents[index];
-		GameObject obj( this, FindGameObject( behavior.ownerId )->node, behavior.ownerId, 0 );
+		GameObject obj( this, FindComponent( behavior.owner )->node, behavior.owner.id, 0 );
 		behavior.behavior( obj, *this ,input );
 	}
 }
@@ -65,21 +65,12 @@ void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const
 
 GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
-	for ( GameObjectComponent& component : gameObjects )
+	// game objects can only ever be moved backwards,
+	// so start at last known index and search back.
+	for ( size_t index = gameObject.index; index >= 0; index-- )
 	{
-		if ( component.id == gameObject.id )
-		{
-			return &component;
-		}
-	}
-	return nullptr;
-}
-
-GameObjectComponent* Scene::FindGameObject( component_id id )
-{
-	for ( GameObjectComponent& component : gameObjects )
-	{
-		if ( component.id == id )
+		GameObjectComponent& component = gameObjects[index];
+		if ( component.id = gameObject.id )
 		{
 			return &component;
 		}

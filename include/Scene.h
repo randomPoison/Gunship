@@ -18,7 +18,6 @@ public:
 
 	GameObjectComponent* FindComponent( GameObject& gameObject );
 	CameraComponent* FindComponent( Camera& camera );
-	GameObjectComponent* FindGameObject( component_id id );
 
 private:
 	std::vector< GameObjectComponent > gameObjects;
@@ -28,4 +27,6 @@ private:
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
 	Ogre::RenderWindow* renderWindow;
+
+	friend class Gunship;
 };
