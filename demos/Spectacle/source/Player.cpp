@@ -1,5 +1,7 @@
 #include "Spectacle.h"
 
+static const float BULLET_DELAY = 10.0f;
+
 void MakePlayer( GameObject& player, GameObject& target )
 {
 	player.AddMesh( "playerMesh", "ColourCube" );
@@ -7,6 +9,7 @@ void MakePlayer( GameObject& player, GameObject& target )
 	player.AddBehavior(
 			[ &target ]( GameObject& gameObject, Scene& scene, const Input& input )
 			{
+				static float cooldown = 0.0f;
 				static float playerSpeed = 0.05f;
 
 				if ( input.KeyPressed( SDLK_w ) )
@@ -37,9 +40,11 @@ void MakePlayer( GameObject& player, GameObject& target )
 				yTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTY );
 				Ogre::Vector2 bulletDir( xTrans, yTrans );
 
-				if ( bulletDir.length() > 0.9f )
+				cooldown -= 1.0f;
+				if ( cooldown < 0.0f && bulletDir.length() > 0.9f )
 				{
 					MakeBullet( scene.AddGameObject( "Bullet" ), gameObject.Position(), Ogre::Vector3( xTrans, -yTrans, 0.0f ) );
+					cooldown = BULLET_DELAY;
 				}
 			} );
 
