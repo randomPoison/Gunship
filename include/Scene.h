@@ -7,8 +7,6 @@ class Scene
 public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-	void Update( const Input& input );
-
 	GameObject AddGameObject( const char* name = "Game Object" );
 	Camera AddCameraComponent( GameObject& gameObject );
 	Behavior AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior );
@@ -27,6 +25,8 @@ private:
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
 	Ogre::RenderWindow* renderWindow;
+
+	void Update( const Input& input, float delta );
 
 	friend class Gunship;
 };

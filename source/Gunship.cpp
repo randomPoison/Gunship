@@ -247,8 +247,9 @@ void Gunship::Start()
 	SDL_ShowWindow( window );
 
 	// initialize debugging info
-	static Uint32 startTime = SDL_GetTicks();
-	static Uint32 elapsedFrames = 0;
+	Uint32 startTime = SDL_GetTicks();
+	Uint32 lastTime = startTime;
+	Uint32 elapsedFrames = 0;
 
 	// enter main loop
 	bool gameRunning = true;
@@ -292,7 +293,10 @@ void Gunship::Start()
 		}
 
 		// update stuff
-		currentScene->Update( input );
+		float currentTime = SDL_GetTicks();
+		float elapsedTime = ( currentTime - lastTime ) * 0.001f;
+		currentScene->Update( input, elapsedTime );
+		lastTime = currentTime;
 
 		// render stuffs
 		root->renderOneFrame();

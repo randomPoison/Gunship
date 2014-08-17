@@ -13,7 +13,7 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 	sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 }
 
-void Scene::Update( const Input& input )
+void Scene::Update( const Input& input, float delta )
 {
 	// cache original number of components
 	// in case new ones are added during frame
@@ -22,7 +22,7 @@ void Scene::Update( const Input& input )
 	{
 		BehaviorComponent& behavior = behaviorComponents[index];
 		GameObject obj( this, FindComponent( behavior.owner )->node, behavior.owner.id, 0 );
-		behavior.behavior( obj, *this ,input );
+		behavior.behavior( obj, *this, input, delta );
 	}
 }
 
