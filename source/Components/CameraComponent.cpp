@@ -1,5 +1,5 @@
 #include "Gunship.h"
-#include "components/CameraComponent.h"
+#include "Components/CameraComponent.h"
 
 CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view ) :
 	id( GenerateUniqueComponentID() ),

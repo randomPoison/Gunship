@@ -67,10 +67,10 @@ GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
 	// game objects can only ever be moved backwards,
 	// so start at last known index and search back.
-	for ( size_t index = gameObject.index; index >= 0; index-- )
+	for ( int index = gameObject.index; index >= 0; index-- )
 	{
 		GameObjectComponent& component = gameObjects[index];
-		if ( component.id = gameObject.id )
+		if ( component.id == gameObject.id )
 		{
 			return &component;
 		}

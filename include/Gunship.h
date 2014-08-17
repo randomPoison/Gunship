@@ -22,10 +22,10 @@
 
 #include "GunshipTypes.h"
 #include "Input.h"
-#include "components/Component.h"
+#include "Components/Component.h"
 #include "GameObject.h"
-#include "components/CameraComponent.h"
-#include "components/BehaviorComponent.h"
+#include "Components/CameraComponent.h"
+#include "Components/BehaviorComponent.h"
 #include "Scene.h"
 
 /**

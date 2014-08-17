@@ -53,11 +53,11 @@ file(GLOB PROJECT_INCLUDES
 source_group("include" FILES ${PROJECT_INCLUDES})
 
 file(GLOB COMPONENT_SOURCES
-	source/components/*.cpp)
+	source/Components/*.cpp)
 source_group("source\\components" FILES ${COMPONENT_SOURCES})
 
 file(GLOB COMPONENT_INCLUDES
-	include/components/*.h)
+	include/Components/*.h)
 source_group("include\\components" FILES ${COMPONENT_INCLUDES})
 
 # Now compile the library

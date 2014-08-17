@@ -1,6 +1,6 @@
 #include "Spectacle.h"
 
-static const float BULLET_SPEED = 20.0f;
+static const float BULLET_SPEED = 50.0f;
 
 void MakeBullet( GameObject bullet, Ogre::Vector3 start, Ogre::Vector3 dir )
 {

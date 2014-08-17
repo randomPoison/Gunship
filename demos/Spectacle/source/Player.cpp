@@ -1,6 +1,6 @@
 #include "Spectacle.h"
 
-static const float BULLET_DELAY = 0.0f;
+static const float BULLET_DELAY = 0.1f;
 static const float PLAYER_BASE_SPEED = 10.0f;
 
 void MakePlayer( GameObject& player, GameObject& target )

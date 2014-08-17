@@ -287,9 +287,9 @@ void Gunship::Start()
 			startTime = ticks;
 			elapsedFrames = 0;
 
-			printf( "Game Objects:\t%d\n", currentScene->gameObjects.size() );
-			printf( "Behaviors:\t%d\n", currentScene->behaviorComponents.size() );
-			printf( "Cameras:\t%d\n", currentScene->cameraComponents.size() );
+			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
+			printf( "Behaviors:\t%lu\n", currentScene->behaviorComponents.size() );
+			printf( "Cameras:\t%lu\n", currentScene->cameraComponents.size() );
 		}
 
 		// update stuff
