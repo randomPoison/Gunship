@@ -2,7 +2,7 @@
 
 static const float BULLET_SPEED = 0.5f;
 
-void MakeBullet( GameObject& bullet, Ogre::Vector3 start, Ogre::Vector3 dir )
+void MakeBullet( GameObject bullet, Ogre::Vector3 start, Ogre::Vector3 dir )
 {
 	bullet.SetPosition( start );
 	bullet.AddMesh( "BulletMesh", "ColourCube" );
