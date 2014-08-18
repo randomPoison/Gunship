@@ -19,14 +19,38 @@ public:
 	GameObjectComponent* FindComponent( GameObject& gameObject );
 	CameraComponent* FindComponent( Camera& camera );
 
+	/**
+	 * \brief Marks a game object for destruction.
+	 *
+	 * \param gameObject the GameObject to be marked for destruction.
+	 *
+	 * \returns True if the GameObject was marked, false if it had already been marked.
+	 */
+	bool MarkForDestroy( GameObject gameObject );
+
+	/**
+	 * \brief Marks a behavior for destruction.
+	 *
+	 * \param behavior the Behavior to be marked for destruction.
+	 *
+	 * \returns True if the Behavior was marked, false if it had already been marked.
+	 */
+	bool MarkForDestroy( Behavior behavior );
+
 private:
 	std::vector< GameObjectComponent > gameObjects;
 	std::vector< CameraComponent > cameraComponents;
 	std::vector< BehaviorComponent > behaviorComponents;
 
+	std::vector< GameObject > gameObjectsToDestroy;
+	std::vector< Camera > camerasToDestroy;
+	std::vector< Behavior > behaviorsToDestroy;
+
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
 	Ogre::RenderWindow* renderWindow;
+
+	void DestroyMarkedComponents();
 
 	friend class Gunship;
 };

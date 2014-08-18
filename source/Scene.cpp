@@ -21,9 +21,11 @@ void Scene::Update( const Input& input )
 	for ( size_t index = 0; index < numBehaviors; index++ )
 	{
 		BehaviorComponent& behavior = behaviorComponents[index];
-		GameObject obj( this, FindComponent( behavior.owner )->node, behavior.owner.id, 0 );
-		behavior.behavior( obj, *this ,input );
+		behavior.behavior( behavior.owner, *this ,input );
 	}
+
+	// remove any game objects that need to be destroyed
+	DestroyMarkedComponents();
 }
 
 GameObject Scene::AddGameObject( const char* name )
@@ -52,6 +54,7 @@ Camera Scene::AddCameraComponent( GameObject& gameObject )
 Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior )
 {
 	behaviorComponents.emplace_back( gameObject, behavior );
+	FindComponent( gameObject )->numBehaviors++;
 	return Behavior( *this, behaviorComponents.back().id, behaviorComponents.size() - 1 );
 }
 
@@ -67,13 +70,83 @@ GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
 	// game objects can only ever be moved backwards,
 	// so start at last known index and search back.
-	for ( size_t index = gameObject.index; index >= 0; index-- )
+	for ( size_t index = ( gameObject.index < gameObjects.size() ) ? gameObject.index : gameObjects.size() - 1; index >= 0; index-- )
 	{
 		GameObjectComponent& component = gameObjects[index];
 		if ( component.id = gameObject.id )
 		{
+			// update cached index
+			gameObject.index = index;
 			return &component;
 		}
 	}
 	return nullptr;
+}
+
+bool Scene::MarkForDestroy( GameObject gameObject )
+{
+	if ( std::find( gameObjectsToDestroy.begin(), gameObjectsToDestroy.end(), gameObject ) == gameObjectsToDestroy.end() )
+	{
+		gameObjectsToDestroy.push_back( gameObject );
+		return true;
+	}
+	return false;
+}
+
+bool Scene::MarkForDestroy( Behavior behavior )
+{
+	if ( std::find( behaviorsToDestroy.begin(), behaviorsToDestroy.end(), behavior ) == behaviorsToDestroy.end() )
+	{
+		behaviorsToDestroy.push_back( behavior );
+		return true;
+	}
+	return false;
+}
+
+void Scene::DestroyMarkedComponents()
+{
+	// DESTROY GAME OBJECTS
+	for ( GameObject& gameObject : gameObjectsToDestroy )
+	{
+		GameObjectComponent* component = FindComponent( gameObject );
+
+		// track down the behaviors the components owns
+		// and mark them for destruction
+		for ( size_t count = 0; count < component->numBehaviors; count++ )
+		{
+			for ( size_t behaviorIndex = 0; behaviorIndex < behaviorComponents.size(); behaviorIndex++ )
+			{
+				if ( behaviorComponents[behaviorIndex].owner.id == gameObject.id )
+				{
+					MarkForDestroy( Behavior( *this, behaviorComponents[behaviorIndex].id, behaviorIndex ) );
+				}
+			}
+		}
+
+		// find the component's index
+		int gameObjectIndex = ( gameObject.index < gameObjects.size() ) ? gameObject.index : gameObjects.size() - 1;
+		for ( ; gameObjectIndex >= 0 && gameObjects[gameObjectIndex].id != gameObject.id; gameObjectIndex-- );
+
+		// handle destruction of component's resources
+		component->node->getParent()->removeChild( component->node );
+
+		// remove component by swapping it with last live component
+		gameObjects[gameObjectIndex] = gameObjects.back();
+		gameObjects.pop_back();
+	}
+	gameObjectsToDestroy.clear();
+
+	// DESTROY BEHAVIORS
+	for ( Behavior& behavior : behaviorsToDestroy )
+	{
+		// find the component's index
+		// using the same method as Scene::FindComponent()
+		int behaviorIndex = ( behavior.index < behaviorComponents.size() ) ? behavior.index : behaviorComponents.size() - 1;
+		for ( ; behaviorIndex >= 0 && behaviorComponents[behaviorIndex].id != behavior.id; behaviorIndex-- );
+
+		// destroy component by swapping it with last live component
+		behaviorComponents[behaviorIndex] = behaviorComponents.back();
+		behaviorComponents.pop_back();
+	}
+	behaviorsToDestroy.clear();
 }

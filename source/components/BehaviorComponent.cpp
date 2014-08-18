@@ -11,3 +11,13 @@ BehaviorComponent::BehaviorComponent( GameObject& owner, BehaviorFunction behavi
 Behavior::Behavior( Scene& scene, component_id id, size_t index ) : ComponentLocator( &scene, id, index )
 {
 }
+
+void Behavior::Destroy()
+{
+	scene->MarkForDestroy( *this );
+}
+
+bool operator==( const Behavior& first, const Behavior& second )
+{
+	return first.id == second.id;
+}

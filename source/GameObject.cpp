@@ -5,7 +5,8 @@ GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, c
 	scene( scene ),
 	node( node ),
 	name( name ),
-	id( GenerateUniqueComponentID() )
+	id( GenerateUniqueComponentID() ),
+	numBehaviors( 0 )
 {
 }
 
@@ -66,6 +67,14 @@ void GameObject::SetScale( float x, float y, float z )
 	node->scale( Ogre::Vector3( x, y, z ) );
 }
 
+void GameObject::AddChild( GameObject& gameObject )
+{
+	Ogre::Node* otherNode = scene->FindComponent( gameObject )->node;
+
+	otherNode->getParent()->removeChild( otherNode );
+	node->addChild( otherNode );
+}
+
 Ogre::Vector3 GameObject::Position()
 {
 	return node->_getDerivedPosition();
@@ -76,10 +85,12 @@ size_t GameObject::LastIndex() const
 	return index;
 }
 
-void GameObject::AddChild( GameObject& gameObject )
+void GameObject::Destroy()
 {
-	Ogre::Node* otherNode = scene->FindComponent( gameObject )->node;
+	scene->MarkForDestroy( *this );
+}
 
-	otherNode->getParent()->removeChild( otherNode );
-	node->addChild( otherNode );
+bool operator==( const GameObject& first, const GameObject& second )
+{
+	return first.id == second.id;
 }

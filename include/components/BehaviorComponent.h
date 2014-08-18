@@ -18,8 +18,12 @@ private:
 	friend class Scene;
 };
 
-class Behavior final : ComponentLocator
+class Behavior final : public ComponentLocator
 {
 public:
 	Behavior( Scene& scene, component_id id, size_t index = 0 );
+
+	void Destroy() override;
 };
+
+bool operator==( const Behavior& first, const Behavior& second );

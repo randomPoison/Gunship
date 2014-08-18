@@ -15,6 +15,8 @@ public:
 
 	std::string name;
 	component_id id;
+
+	size_t numBehaviors;
 };
 
 class GameObject final : public ComponentLocator
@@ -34,12 +36,14 @@ public:
 	void SetPosition( Ogre::Vector3 pos );
 	void SetScale( float x, float y, float z );
 
-	Ogre::Vector3 Position();
-
 	void AddChild( GameObject& gameObject );
+	void Destroy() override;
 
+	Ogre::Vector3 Position();
 	size_t LastIndex() const;
 
 private:
 	Ogre::SceneNode* node;
 };
+
+bool operator==( const GameObject& first, const GameObject& second );
