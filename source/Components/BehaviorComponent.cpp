@@ -1,5 +1,5 @@
 #include "Gunship.h"
-#include "components/BehaviorComponent.h"
+#include "Components/BehaviorComponent.h"
 
 BehaviorComponent::BehaviorComponent( GameObject& owner, BehaviorFunction behavior ) :
 	behavior( behavior ),

@@ -13,7 +13,7 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 	sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 }
 
-void Scene::Update( const Input& input )
+void Scene::Update( const Input& input, float delta )
 {
 	// cache original number of components
 	// in case new ones are added during frame
@@ -21,7 +21,7 @@ void Scene::Update( const Input& input )
 	for ( size_t index = 0; index < numBehaviors; index++ )
 	{
 		BehaviorComponent& behavior = behaviorComponents[index];
-		behavior.behavior( behavior.owner, *this ,input );
+		behavior.behavior( behavior.owner, *this ,input, delta );
 	}
 
 	// remove any game objects that need to be destroyed
@@ -70,10 +70,10 @@ GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
 {
 	// game objects can only ever be moved backwards,
 	// so start at last known index and search back.
-	for ( size_t index = ( gameObject.index < gameObjects.size() ) ? gameObject.index : gameObjects.size() - 1; index >= 0; index-- )
+	for ( int index = ( gameObject.index < gameObjects.size() ) ? gameObject.index : gameObjects.size() - 1; index >= 0; index-- )
 	{
 		GameObjectComponent& component = gameObjects[index];
-		if ( component.id = gameObject.id )
+		if ( component.id == gameObject.id )
 		{
 			// update cached index
 			gameObject.index = index;

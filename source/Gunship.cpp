@@ -247,8 +247,9 @@ void Gunship::Start()
 	SDL_ShowWindow( window );
 
 	// initialize debugging info
-	static Uint32 startTime = SDL_GetTicks();
-	static Uint32 elapsedFrames = 0;
+	Uint32 startTime = SDL_GetTicks();
+	Uint32 lastTime = startTime;
+	Uint32 elapsedFrames = 0;
 
 	// enter main loop
 	bool gameRunning = true;
@@ -286,13 +287,16 @@ void Gunship::Start()
 			startTime = ticks;
 			elapsedFrames = 0;
 
-			printf( "Game Objects:\t%d\n", currentScene->gameObjects.size() );
-			printf( "Behaviors:\t%d\n", currentScene->behaviorComponents.size() );
-			printf( "Cameras:\t%d\n", currentScene->cameraComponents.size() );
+			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
+			printf( "Behaviors:\t%lu\n", currentScene->behaviorComponents.size() );
+			printf( "Cameras:\t%lu\n", currentScene->cameraComponents.size() );
 		}
 
 		// update stuff
-		currentScene->Update( input );
+		Uint32 currentTime = SDL_GetTicks();
+		float elapsedTime = ( currentTime - lastTime ) * 0.001f;
+		currentScene->Update( input, elapsedTime );
+		lastTime = currentTime;
 
 		// render stuffs
 		root->renderOneFrame();

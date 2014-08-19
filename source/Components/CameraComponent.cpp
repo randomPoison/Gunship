@@ -1,5 +1,5 @@
 #include "Gunship.h"
-#include "components/CameraComponent.h"
+#include "Components/CameraComponent.h"
 
 CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view ) :
 	id( GenerateUniqueComponentID() ),
@@ -9,5 +9,9 @@ CameraComponent::CameraComponent( Ogre::Camera* cam, Ogre::Viewport* view ) :
 }
 
 Camera::Camera( Scene* scene, component_id id, size_t index ) : ComponentLocator( scene, id, index )
+{
+}
+
+void Camera::Destroy()
 {
 }
