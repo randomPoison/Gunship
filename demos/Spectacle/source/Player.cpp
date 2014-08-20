@@ -8,38 +8,16 @@ void MakePlayer( GameObject& player, GameObject& target )
 	player.AddMesh( "playerMesh", "ColourCube" );
 	player.SetPosition( 0.0f, 0.0f, 0.0f );
 	player.AddBehavior(
-		[ &target ]( GameObject& gameObject, Scene& scene, const Input& input, float delta )
+		[ &target ]( GameObject& player, Scene& scene, const Input& input, float delta )
 		{
 			static float cooldown = 0.0f;
-			static float playerSpeed = PLAYER_BASE_SPEED * delta;
-
-			std::cout << delta << std::endl;
-
-			if ( input.KeyPressed( SDLK_w ) )
-			{
-				gameObject.Translate( 0.0f, playerSpeed, 0.0f );
-			}
-			if ( input.KeyPressed( SDLK_a ) )
-			{
-				gameObject.Translate( -playerSpeed, 0.0f, 0.0f );
-			}
-			if ( input.KeyPressed( SDLK_s ) )
-			{
-				gameObject.Translate( 0.0f, -playerSpeed, 0.0f );
-			}
-			if ( input.KeyPressed( SDLK_d ) )
-			{
-				gameObject.Translate( playerSpeed, 0.0f, 0.0f );
-			}
 
 			float xTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_LEFTX );
 			float yTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_LEFTY );
-
 			Ogre::Vector3 dir( xTrans, -yTrans, 0.0f );
 
-			gameObject.Translate( dir * playerSpeed );
-
-			gameObject.LookAt( target );
+			player.Translate( dir * PLAYER_BASE_SPEED * delta );
+			player.LookAt( target );
 
 			xTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTX );
 			yTrans = input.AxisValue( 0, SDL_CONTROLLER_AXIS_RIGHTY );
@@ -48,7 +26,7 @@ void MakePlayer( GameObject& player, GameObject& target )
 			cooldown -= delta;
 			if ( cooldown < 0.0f && bulletDir.length() > 0.9f )
 			{
-				MakeBullet( scene.AddGameObject( "Bullet" ), gameObject.Position(), Ogre::Vector3( xTrans, -yTrans, 0.0f ) );
+				MakeBullet( scene.AddGameObject( "Bullet" ), player.Position(), Ogre::Vector3( xTrans, -yTrans, 0.0f ) );
 				cooldown = BULLET_DELAY;
 			}
 		} );

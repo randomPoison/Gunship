@@ -161,8 +161,8 @@ bool Gunship::InitSystems()
 		"Gunship",								// window title
 		SDL_WINDOWPOS_UNDEFINED,				// initial x position
 		SDL_WINDOWPOS_UNDEFINED,				// initial y position
-		640,									// width, in pixels
-		480,									// height, in pixels
+		800,									// width, in pixels
+		600,									// height, in pixels
 		SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN	// flags
 	);
 
@@ -262,6 +262,11 @@ void Gunship::Start()
 			continue;
 		}
 
+		// update delta time
+		Uint32 currentTime = SDL_GetTicks();
+		float elapsedTime = ( currentTime - lastTime ) * 0.001f;
+		lastTime = currentTime;
+
 		// debug output
 		if ( input.KeyPressed( SDLK_BACKQUOTE ) )
 		{
@@ -283,7 +288,8 @@ void Gunship::Start()
 
 			Uint32 ticks = SDL_GetTicks();
 			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
-			printf( "FPS: %f\n\n", fps );
+			printf( "FPS: %.2f\n", fps );
+			printf( "delta: %f\n\n", elapsedTime );
 			startTime = ticks;
 			elapsedFrames = 0;
 
@@ -292,11 +298,7 @@ void Gunship::Start()
 			printf( "Cameras:\t%lu\n", currentScene->cameraComponents.size() );
 		}
 
-		// update stuff
-		Uint32 currentTime = SDL_GetTicks();
-		float elapsedTime = ( currentTime - lastTime ) * 0.001f;
 		currentScene->Update( input, elapsedTime );
-		lastTime = currentTime;
 
 		// render stuffs
 		root->renderOneFrame();
