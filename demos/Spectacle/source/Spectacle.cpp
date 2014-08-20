@@ -21,7 +21,7 @@ int main( int argc, char* argv[] )
 	MakePlayer( player, target );
 	MakeCamera( camera, cameraAnchor, player );
 
-	//GameObject manager = scene->AddGameObject( "Manager" );
+	MakeEnemy( scene->AddGameObject(), player, Ogre::Vector3( 10.0f, 10.0f, 0.0f ) );
 
 	engine.Start();
 	engine.ShutDown();
