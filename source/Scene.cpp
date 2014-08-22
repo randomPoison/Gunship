@@ -47,7 +47,7 @@ Camera Scene::AddCameraComponent( GameObject& gameObject )
 	camera->setNearClipDistance( 5 );
 
 	// create camera component
-	cameraComponents.emplace_back( camera, viewport );
+	cameraComponents.emplace_back( gameObject, camera, viewport );
 	return Camera( this, cameraComponents.back().id, cameraComponents.size() - 1 );
 }
 

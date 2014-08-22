@@ -1,24 +1,5 @@
 #pragma once
 
-#include <string>
-
-class Camera;
-class Behavior;
-
-class GameObjectComponent
-{
-public:
-	GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name = "Game Object" );
-
-	Scene* scene;
-	Ogre::SceneNode* node;
-
-	std::string name;
-	component_id id;
-
-	size_t numBehaviors;
-};
-
 class GameObject final : public ComponentLocator
 {
 public:
@@ -45,5 +26,3 @@ public:
 private:
 	Ogre::SceneNode* node;
 };
-
-bool operator==( const GameObject& first, const GameObject& second );

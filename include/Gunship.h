@@ -21,12 +21,21 @@
 #include <OgreVector3.h>
 
 #include "GunshipTypes.h"
-#include "Input.h"
+
+// component locators
+#include "Components/ComponentLocator.h"
+#include "Components/Camera.h"
+#include "Components/Behavior.h"
+#include "Components/GameObject.h"
+
+// components
 #include "Components/Component.h"
-#include "GameObject.h"
 #include "Components/CameraComponent.h"
 #include "Components/BehaviorComponent.h"
+#include "Components/GameObjectComponent.h"
+
 #include "Scene.h"
+#include "Input.h"
 
 /**
  * \brief A class representing an instance of the Gunship engine.

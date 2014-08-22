@@ -1,15 +1,19 @@
 #include "Gunship.h"
 #include "Components/Component.h"
 
-component_id GenerateUniqueComponentID()
+Component::Component( GameObject& owner ) :
+	owner( owner ),
+	id( GenerateUniqueComponentID() )
+{
+}
+
+component_id Component::GenerateUniqueComponentID()
 {
 	static component_id nextID = 1;
 	return nextID++;
 }
 
-ComponentLocator::ComponentLocator( Scene* scene, component_id id, size_t index ) :
-	scene( scene ),
-	id( id ),
-	index( index )
+bool operator==( const Component& first, const Component& second )
 {
+	return first.id == second.id;
 }

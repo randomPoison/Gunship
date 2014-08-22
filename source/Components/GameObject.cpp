@@ -1,14 +1,5 @@
 #include "Gunship.h"
-#include "GameObject.h"
-
-GameObjectComponent::GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name ) :
-	scene( scene ),
-	node( node ),
-	name( name ),
-	id( GenerateUniqueComponentID() ),
-	numBehaviors( 0 )
-{
-}
+#include "Components/GameObject.h"
 
 GameObject::GameObject( Scene* scene, Ogre::SceneNode* node, component_id id, size_t index ) :
 	ComponentLocator( scene, id, index ),
@@ -88,9 +79,4 @@ size_t GameObject::LastIndex() const
 void GameObject::Destroy()
 {
 	scene->MarkForDestroy( *this );
-}
-
-bool operator==( const GameObject& first, const GameObject& second )
-{
-	return first.id == second.id;
 }
