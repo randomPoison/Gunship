@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <utility>
 
 class Scene
 {
@@ -39,16 +40,21 @@ private:
 	std::vector< GameObjectComponent > gameObjects;
 	std::vector< CameraComponent > cameraComponents;
 	std::vector< BehaviorComponent > behaviorComponents;
+	std::vector< ColliderComponent > colliders;
 
 	std::vector< GameObject > gameObjectsToDestroy;
 	std::vector< Camera > camerasToDestroy;
 	std::vector< Behavior > behaviorsToDestroy;
+	std::vector< ColliderComponent > collidersToDestroy;
+
+	std::vector< std::pair< Collider, Collider > > collisions;
 
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
 	Ogre::RenderWindow* renderWindow;
 
 	void Update( const Input& input, float delta );
+	void RunCollisions();
 	void DestroyMarkedComponents();
 
 	friend class Gunship;

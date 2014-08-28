@@ -1,5 +1,5 @@
 #include "Gunship.h"
-#include "Components\ComponentLocator.h"
+#include "Components/ComponentLocator.h"
 
 ComponentLocator::ComponentLocator( Scene* scene, component_id id, size_t index ) :
 	scene( scene ),

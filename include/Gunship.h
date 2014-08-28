@@ -26,12 +26,14 @@
 #include "Components/ComponentLocator.h"
 #include "Components/Camera.h"
 #include "Components/Behavior.h"
+#include "Components/Collider.h"
 #include "Components/GameObject.h"
 
 // components
 #include "Components/Component.h"
 #include "Components/CameraComponent.h"
 #include "Components/BehaviorComponent.h"
+#include "Components/ColliderComponent.h"
 #include "Components/GameObjectComponent.h"
 
 #include "Scene.h"
