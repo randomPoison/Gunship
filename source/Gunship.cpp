@@ -286,6 +286,8 @@ void Gunship::Start()
 				std::cout << std::endl;
 			}
 
+			printf( "num collisions:\t%d\n\n", currentScene->collisions.size() );
+
 			Uint32 ticks = SDL_GetTicks();
 			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
 			printf( "FPS: %.2f\n", fps );

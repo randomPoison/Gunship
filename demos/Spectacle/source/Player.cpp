@@ -6,6 +6,7 @@ static const float PLAYER_BASE_SPEED = 10.0f;
 void MakePlayer( GameObject& player, GameObject& target )
 {
 	player.AddMesh( "playerMesh", "ColourCube" );
+	player.AddCollider( 1.0f );
 	player.SetPosition( 0.0f, 0.0f, 0.0f );
 	player.AddBehavior(
 		[ &target ]( GameObject& player, Scene& scene, const Input& input, float delta )

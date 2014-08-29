@@ -15,6 +15,8 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 
 void Scene::Update( const Input& input, float delta )
 {
+	RunCollisions();
+
 	// cache original number of components
 	// in case new ones are added during frame
 	size_t numBehaviors = behaviorComponents.size();
@@ -26,6 +28,24 @@ void Scene::Update( const Input& input, float delta )
 
 	// remove any game objects that need to be destroyed
 	DestroyMarkedComponents();
+}
+
+void Scene::RunCollisions()
+{
+	// clear previous collision list
+	collisions.clear();
+
+	// run collisions
+	for ( int first = 0; first < (int)colliders.size() - 1; first++ )
+	{
+		for ( int second = first + 1; second < colliders.size(); second++ )
+		{
+			if ( ColliderComponent::Collide( colliders[first], colliders[second] ) )
+			{
+				collisions.emplace_back( std::make_pair( Collider( *this, colliders[first].id, first ), Collider( *this, colliders[second].id, second ) ) );
+			}
+		}
+	}
 }
 
 GameObject Scene::AddGameObject( const char* name )
@@ -56,6 +76,12 @@ Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction b
 	behaviorComponents.emplace_back( gameObject, behavior );
 	FindComponent( gameObject )->numBehaviors++;
 	return Behavior( *this, behaviorComponents.back().id, behaviorComponents.size() - 1 );
+}
+
+Collider Scene::AddColliderComponent( GameObject& gameObject, float radius )
+{
+	colliders.emplace_back( gameObject, radius );
+	return Collider( *this, colliders.back().id, colliders.size() - 1 );
 }
 
 void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh )

@@ -22,6 +22,11 @@ Behavior GameObject::AddBehavior( BehaviorFunction behavior )
 	return scene->AddBehaviorComponent( *this, behavior );
 }
 
+Collider GameObject::AddCollider( float radius )
+{
+	return scene->AddColliderComponent( *this, radius );
+}
+
 void GameObject::LookAt( float x, float y, float z )
 {
 	node->lookAt( Ogre::Vector3( x, y , z ), Ogre::Node::TS_WORLD );

@@ -6,6 +6,7 @@ void MakeEnemy( GameObject enemy, GameObject& player, Ogre::Vector3 start )
 {
 	enemy.AddMesh( "EnemyMesh", "ColourCube" );
 	enemy.SetPosition( start );
+	enemy.AddCollider( 1.0f );
 	float cooldown = 0.0f;
 	enemy.AddBehavior( [ &player, cooldown ]( GameObject& enemy, Scene& scene, const Input& input, float delta ) mutable
 		{

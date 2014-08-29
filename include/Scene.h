@@ -11,6 +11,7 @@ public:
 	GameObject AddGameObject( const char* name = "Game Object" );
 	Camera AddCameraComponent( GameObject& gameObject );
 	Behavior AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior );
+	Collider AddColliderComponent( GameObject& gameObject, float radius );
 
 	void AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh );
 	void SetGameObjectLook( GameObject& gameObject, float x, float y, float z );
@@ -58,4 +59,5 @@ private:
 	void DestroyMarkedComponents();
 
 	friend class Gunship;
+	friend class ComponentLocator;
 };

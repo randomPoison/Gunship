@@ -8,6 +8,8 @@ public:
 	Camera AddCamera();
 	void AddMesh( const char* name, const char* mesh );
 	Behavior AddBehavior( BehaviorFunction behavior );
+	Collider AddCollider( float radius );
+	void AddChild( GameObject& gameObject );
 
 	void LookAt( float x, float y, float z );
 	void LookAt( GameObject& target );
@@ -17,10 +19,10 @@ public:
 	void SetPosition( Ogre::Vector3 pos );
 	void SetScale( float x, float y, float z );
 
-	void AddChild( GameObject& gameObject );
 	void Destroy() override;
 
 	Ogre::Vector3 Position();
+	std::vector<Collider> Collisions();
 	size_t LastIndex() const;
 
 private:
