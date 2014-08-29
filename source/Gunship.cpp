@@ -286,18 +286,22 @@ void Gunship::Start()
 				std::cout << std::endl;
 			}
 
-			printf( "num collisions:\t%d\n\n", currentScene->collisions.size() );
+			printf( "num collisions:\t%d\n", currentScene->collisions.size() );
+			std::cout << std::endl;
 
 			Uint32 ticks = SDL_GetTicks();
 			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
 			printf( "FPS: %.2f\n", fps );
 			printf( "delta: %f\n\n", elapsedTime );
+			std::cout << std::endl;
 			startTime = ticks;
 			elapsedFrames = 0;
 
 			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
 			printf( "Behaviors:\t%lu\n", currentScene->behaviorComponents.size() );
 			printf( "Cameras:\t%lu\n", currentScene->cameraComponents.size() );
+			printf( "Colliders:\tlu\n", currentScene->colliders.size() );
+			std::cout << std::endl;
 		}
 
 		currentScene->Update( input, elapsedTime );

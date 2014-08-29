@@ -8,6 +8,7 @@ void MakeBullet( GameObject bullet, Ogre::Vector3 start, Ogre::Vector3 dir )
 	bullet.SetPosition( start );
 	bullet.AddMesh( "BulletMesh", "ColourCube" );
 	bullet.SetScale( 0.5f, 0.5f, 0.5f );
+	bullet.AddCollider( 0.5f );
 	float life = 0.0f;
 	dir.normalise();
 	bullet.AddBehavior(

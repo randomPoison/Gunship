@@ -37,6 +37,15 @@ public:
 	 */
 	bool MarkForDestroy( Behavior behavior );
 
+	/**
+	 * \brief Marks a collider for destruction.
+	 *
+	 * \param collider the Collider to be marked for destruction.
+	 *
+	 * \returns True if the Collider was marked, false if it had already been marked.
+	 */
+	bool MarkForDestroy( Collider collider );
+
 private:
 	std::vector< GameObjectComponent > gameObjects;
 	std::vector< CameraComponent > cameraComponents;
@@ -46,7 +55,7 @@ private:
 	std::vector< GameObject > gameObjectsToDestroy;
 	std::vector< Camera > camerasToDestroy;
 	std::vector< Behavior > behaviorsToDestroy;
-	std::vector< ColliderComponent > collidersToDestroy;
+	std::vector< Collider > collidersToDestroy;
 
 	std::vector< std::pair< Collider, Collider > > collisions;
 

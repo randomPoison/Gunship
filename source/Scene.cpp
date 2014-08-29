@@ -129,29 +129,48 @@ bool Scene::MarkForDestroy( Behavior behavior )
 	return false;
 }
 
+bool Scene::MarkForDestroy( Collider collider )
+{
+	if ( std::find( collidersToDestroy.begin(), collidersToDestroy.end(), collider ) == collidersToDestroy.end() )
+	{
+		collidersToDestroy.push_back( collider );
+		return true;
+	}
+	return false;
+}
+
 void Scene::DestroyMarkedComponents()
 {
+	// ====================
 	// DESTROY GAME OBJECTS
+	// ====================
 	for ( GameObject& gameObject : gameObjectsToDestroy )
 	{
 		GameObjectComponent* component = FindComponent( gameObject );
 
-		// track down the behaviors the components owns
-		// and mark them for destruction
-		for ( size_t count = 0; count < component->numBehaviors; count++ )
+		// track down the behaviors the component owns
+		for ( size_t behaviorIndex = 0, count = 0; behaviorIndex < behaviorComponents.size() && count < component->numBehaviors; behaviorIndex++ )
 		{
-			for ( size_t behaviorIndex = 0; behaviorIndex < behaviorComponents.size(); behaviorIndex++ )
+			if ( behaviorComponents[behaviorIndex].owner.id == gameObject.id )
 			{
-				if ( behaviorComponents[behaviorIndex].owner.id == gameObject.id )
-				{
-					MarkForDestroy( Behavior( *this, behaviorComponents[behaviorIndex].id, behaviorIndex ) );
-				}
+				MarkForDestroy( Behavior( *this, behaviorComponents[behaviorIndex].id, behaviorIndex ) );
+				count++;
 			}
 		}
 
-		// find the component's index
-		int gameObjectIndex = ( gameObject.index < gameObjects.size() ) ? gameObject.index : gameObjects.size() - 1;
-		for ( ; gameObjectIndex >= 0 && gameObjects[gameObjectIndex].id != gameObject.id; gameObjectIndex-- );
+		// track down the colliders the component owns
+		for ( size_t colliderIndex = 0; colliderIndex < colliders.size(); colliderIndex++ )
+		{
+			if ( colliders[colliderIndex].owner.id == gameObject.id )
+			{
+				MarkForDestroy( Collider( *this, colliders[colliderIndex].id, colliderIndex ) );
+				break;
+			}
+		}
+
+		// retrieve the component's index from the locator,
+		// the value will be accurate because we called FindComponent() earlier.
+		int gameObjectIndex = gameObject.index;
 
 		// handle destruction of component's resources
 		component->node->getParent()->removeChild( component->node );
@@ -162,7 +181,9 @@ void Scene::DestroyMarkedComponents()
 	}
 	gameObjectsToDestroy.clear();
 
+	// =================
 	// DESTROY BEHAVIORS
+	// =================
 	for ( Behavior& behavior : behaviorsToDestroy )
 	{
 		// find the component's index
@@ -175,4 +196,20 @@ void Scene::DestroyMarkedComponents()
 		behaviorComponents.pop_back();
 	}
 	behaviorsToDestroy.clear();
+
+	// =================
+	// DESTROY COLLIDERS
+	// =================
+	for ( Collider& collider : collidersToDestroy )
+	{
+		// find the component's index
+		// using the same method as Scene::FindComponent()
+		int colliderIndex = ( collider.index < colliders.size() ) ? collider.index : colliders.size() - 1;
+		for ( ; colliderIndex >= 0 && colliders[colliderIndex].id != collider.id; colliderIndex-- );
+
+		// destroy component by swapping it with the last live component
+		colliders[colliderIndex] = colliders.back();
+		colliders.pop_back();
+	}
+	collidersToDestroy.clear();
 }
