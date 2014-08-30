@@ -2,8 +2,8 @@
 
 struct Component
 {
-	component_id id;
 	GameObject owner;
+	component_id id;
 
 	Component( GameObject& owner );
 
