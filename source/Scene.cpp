@@ -36,9 +36,10 @@ void Scene::RunCollisions()
 	collisions.clear();
 
 	// run collisions
+	// integer index necessary for the case where colliders.size() is 0
 	for ( int first = 0; first < (int)colliders.size() - 1; first++ )
 	{
-		for ( int second = first + 1; second < colliders.size(); second++ )
+		for ( unsigned second = first + 1; second < colliders.size(); second++ )
 		{
 			if ( ColliderComponent::Collide( colliders[first], colliders[second] ) )
 			{
