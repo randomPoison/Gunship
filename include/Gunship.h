@@ -67,6 +67,7 @@ public:
 private:
 	// SDL variables
 	SDL_Window* window;
+	SDL_RWops* startupScript;
 
 	// Ogre variables
 	Ogre::Root* root;

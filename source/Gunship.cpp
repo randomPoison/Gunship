@@ -167,7 +167,7 @@ bool Gunship::InitSystems()
 	);
 
 	// Check that the window was successfully made
-	if( window == NULL )
+	if( window == nullptr )
 	{
 		// In the event that the window could not be made...
 		std::cout << "Could not create window: " << SDL_GetError() << std::endl;
@@ -242,6 +242,14 @@ bool Gunship::InitSystems()
 	// initialize v8
 	isolate = v8::Isolate::New();
 
+	// load startup script
+	startupScript = SDL_RWFromFile( "startup.js", "r" );
+	if ( startupScript == nullptr )
+	{
+		printf( "Startup script not found! SDL Error: %s\n", SDL_GetError() );
+		return false;
+	}
+
 	return true;
 }
 
@@ -251,29 +259,22 @@ void Gunship::Start()
 
 	// perform further v8 setup
 	v8::Isolate::Scope isolate_scope(isolate);
-
-	// Create a stack-allocated handle scope.
 	v8::HandleScope handle_scope(isolate);
-
-	// Create a new context.
 	v8::Local< v8::Context > context = v8::Context::New(isolate);
-
-	// Enter the context for compiling and running the hello world script.
 	v8::Context::Scope context_scope(context);
 
-	// v8 test
-	// create a string containing the javascript source code
-	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, "'Hello' + ', World!'" );
+	// load startup script
+	char script[256];
+	memset( script, 0, sizeof(script) );
+	SDL_RWread( startupScript, script, sizeof(script), 1 );
+	printf( "startup script:\n\t%s\n", script );
 
-	// compile the source code
-	v8::Local< v8::Script > script = v8::Script::Compile( source );
-
-	// run the script to get the result
-	v8::Local< v8::Value > result = script->Run();
-
-	// convert the result to a UTF8 string and print it
+	// run startup script
+	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, script );
+	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
+	v8::Local< v8::Value > result = v8script->Run();
 	v8::String::Utf8Value utf8( result );
-	printf( "%s\n", *utf8 );
+	printf( "script result:\n\t%s\n", *utf8 );
 
 	// initialize debugging info
 	Uint32 startTime = SDL_GetTicks();
@@ -348,6 +349,9 @@ bool Gunship::ShutDown()
 {
 	delete root;
 
+	// close open RWops
+	SDL_RWclose( startupScript );
+
 	// Close and destroy the window
 	SDL_DestroyWindow( window ); 
 
@@ -380,8 +384,13 @@ Scene* Gunship::ResetCurrentScene( std::function< void( Scene& ) > init )
 int main( int argc, char* argv[] )
 {
 	Gunship gunship;
-	gunship.InitSystems();
-	gunship.Start();
+
+	// initialize and run the engine
+	if ( gunship.InitSystems() )
+	{
+		gunship.Start();
+		gunship.ShutDown();
+	}
 
 	return 0;
 }
