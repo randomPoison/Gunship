@@ -286,7 +286,7 @@ void Gunship::Start()
 				std::cout << std::endl;
 			}
 
-			printf( "num collisions:\t%d\n", currentScene->collisions.size() );
+			printf( "num collisions:\t%lu\n", currentScene->collisions.size() );
 			std::cout << std::endl;
 
 			Uint32 ticks = SDL_GetTicks();
@@ -300,7 +300,7 @@ void Gunship::Start()
 			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
 			printf( "Behaviors:\t%lu\n", currentScene->behaviorComponents.size() );
 			printf( "Cameras:\t%lu\n", currentScene->cameraComponents.size() );
-			printf( "Colliders:\tlu\n", currentScene->colliders.size() );
+			printf( "Colliders:\t%lu\n", currentScene->colliders.size() );
 			std::cout << std::endl;
 		}
 
