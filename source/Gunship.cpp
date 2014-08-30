@@ -239,12 +239,41 @@ bool Gunship::InitSystems()
 		input.controllers.push_back( controller );
 	}
 
+	// initialize v8
+	isolate = v8::Isolate::New();
+
 	return true;
 }
 
 void Gunship::Start()
 {
 	SDL_ShowWindow( window );
+
+	// perform further v8 setup
+	v8::Isolate::Scope isolate_scope(isolate);
+
+	// Create a stack-allocated handle scope.
+	v8::HandleScope handle_scope(isolate);
+
+	// Create a new context.
+	v8::Local< v8::Context > context = v8::Context::New(isolate);
+
+	// Enter the context for compiling and running the hello world script.
+	v8::Context::Scope context_scope(context);
+
+	// v8 test
+	// create a string containing the javascript source code
+	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, "'Hello' + ', World!'" );
+
+	// compile the source code
+	v8::Local< v8::Script > script = v8::Script::Compile( source );
+
+	// run the script to get the result
+	v8::Local< v8::Value > result = script->Run();
+
+	// convert the result to a UTF8 string and print it
+	v8::String::Utf8Value utf8( result );
+	printf( "%s\n", *utf8 );
 
 	// initialize debugging info
 	Uint32 startTime = SDL_GetTicks();
@@ -350,31 +379,9 @@ Scene* Gunship::ResetCurrentScene( std::function< void( Scene& ) > init )
 
 int main( int argc, char* argv[] )
 {
-	// create a new Isolate
-	v8::Isolate* isolate = v8::Isolate::New();
-	v8::Isolate::Scope isolate_scope( isolate );
-
-	// create a stack-allocated handle scope
-	v8::HandleScope handle_scope( isolate );
-
-	// create a new context
-	v8::Local< v8::Context > context = v8::Context::New( isolate );
-
-	// enter the context for compiling and running the hello world script
-	v8::Context::Scope context_scope( context );
-
-	// create a string containing the javascript source code
-	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, "'Hello' + ', World!'" );
-
-	// compile the source code
-	v8::Local< v8::Script > script = v8::Script::Compile( source );
-
-	// run the script to get the result
-	v8::Local< v8::Value > result = script->Run();
-
-	// convert the result to a UTF8 string and print it
-	v8::String::Utf8Value utf8( result );
-	printf( "%s\n", *utf8 );
+	Gunship gunship;
+	gunship.InitSystems();
+	gunship.Start();
 
 	return 0;
 }

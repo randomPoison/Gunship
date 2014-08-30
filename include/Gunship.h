@@ -65,11 +65,17 @@ public:
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
 
 private:
-	// Variables and stuffs
+	// SDL variables
 	SDL_Window* window;
+
+	// Ogre variables
 	Ogre::Root* root;
 	Ogre::RenderWindow* renderWindow;
 
+	// v8 variables
+	v8::Isolate* isolate;
+
+	// Gunship variables
 	Scene* currentScene;
 	Input input;
 };
