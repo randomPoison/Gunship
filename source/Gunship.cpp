@@ -277,8 +277,10 @@ bool Gunship::InitializeV8()
 	gameObject->SetClassName( v8::String::NewFromUtf8( isolate, "GameObject" ) );
 	v8::Local< v8::ObjectTemplate > gameObjectInstance = gameObject->InstanceTemplate();
 	v8::Local< v8::ObjectTemplate > gameObjectPrototype = gameObject->PrototypeTemplate();
+	gameObjectPrototype->Set( isolate, "AddCamera", v8::FunctionTemplate::New( isolate, GameObjectComponent::AddCameraComponent ) );
 	gameObjectInstance->Set( isolate, "id", v8::Integer::New( isolate, 0 ) );
 	gameObjectInstance->Set( isolate, "index", v8::Integer::New( isolate, 0 ) );
+	gameObjectInstance->Set( isolate, "hasCamera", v8::Boolean::New( isolate, false ) );
 	gameObjectInstance->SetInternalFieldCount( 1 );
 
 	gunship->Set( isolate, "GameObject", gameObject );

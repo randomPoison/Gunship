@@ -6,23 +6,19 @@
 class Scene
 {
 public:
-	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
-
-	// javascript helper functions
-	ComponentInfo AddGameObject();
-	ComponentInfo AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
-
-private:
 	std::vector< GameObjectComponent > gameObjects;
 
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;
 	Ogre::RenderWindow* renderWindow;
 
-	void Update( const Input& input, float delta );
-	void RunCollisions();
-	void DestroyMarkedComponents();
+	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-	friend class Gunship;
-	friend class ComponentLocator;
+	void Update( const Input& input, float delta );
+
+	// javascript helper functions
+	ComponentInfo AddGameObject();
+	void AddCameraComponent( ComponentInfo& gameObject );
+
+	GameObjectComponent* FindGameObject( ComponentInfo& gameObjectInfo );
 };

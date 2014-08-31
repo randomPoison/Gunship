@@ -24,3 +24,21 @@ void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackI
 	}
 
 }
+
+void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	v8::Isolate* isolate = v8::Isolate::GetCurrent();
+	v8::Isolate::Scope isolateScope( isolate );
+	v8::HandleScope handleScope( isolate );
+
+	v8::Local< v8::Object > gameObject = args.Holder();
+	ComponentInfo info{ gameObject->Get( v8::String::NewFromUtf8( isolate, "id" ) )->IntegerValue(),
+						gameObject->Get( v8::String::NewFromUtf8( isolate, "index" ) )->IntegerValue() };
+
+	if ( !gameObject->Get( v8::String::NewFromUtf8( isolate, "hasCamera" ) )->BooleanValue() )
+	{
+		printf( "Adding camera to gameobject %d\n", info.id );
+		Gunship::globalInstace->currentScene->AddCameraComponent( info );
+		gameObject->Set( v8::String::NewFromUtf8( isolate, "hasCamera" ), v8::Boolean::New( isolate, true ) );
+	}
+}
