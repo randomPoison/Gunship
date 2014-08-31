@@ -18,11 +18,17 @@ void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackI
 	{
 		ComponentInfo info = Gunship::globalInstace->currentScene->AddGameObject();
 		v8::Local< v8::Object > gameObject = args.Holder();
+
+		v8::Local< v8::Object > gunshipObject = gameObject->Get( v8::String::NewFromUtf8( isolate, "gunship" ) )->ToObject();
+		v8::Local< v8::External > wrap = v8::Local< v8::External >::Cast( gunshipObject->GetInternalField( 0 ) );
+		Gunship* gunship = static_cast< Gunship* >( wrap->Value() );
+		int secret = gunship->secretValue;
+		printf( "the secret value is %d\n", secret );
+
 		gameObject->Set( v8::String::NewFromUtf8( isolate, "id" ), v8::Integer::NewFromUnsigned( isolate, info.id ) );
 		gameObject->Set( v8::String::NewFromUtf8( isolate, "index" ), v8::Integer::NewFromUnsigned( isolate, info.index ) );
 		args.GetReturnValue().Set( gameObject );
 	}
-
 }
 
 void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args )

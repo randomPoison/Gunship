@@ -145,7 +145,7 @@ void createColourCube()
 // initialize static global instance
 Gunship* Gunship::globalInstace = nullptr;
 
-Gunship::Gunship() : currentScene( nullptr )
+Gunship::Gunship() : currentScene( nullptr ), secretValue( 9 )
 {
 	Gunship::globalInstace = this;
 }
@@ -267,48 +267,33 @@ bool Gunship::InitializeV8()
 	v8::Isolate::Scope isolateScope( isolate );
 	v8::HandleScope handleScope( isolate );
 
-	v8::Local< v8::ObjectTemplate > global = v8::ObjectTemplate::New();
+	v8::Local< v8::ObjectTemplate > _global = v8::ObjectTemplate::New();
 
 	// make gunship object
-	v8::Local< v8::ObjectTemplate > gunship = v8::ObjectTemplate::New();
+	v8::Local< v8::ObjectTemplate > _gunship = v8::ObjectTemplate::New();
+	_gunship->SetInternalFieldCount( 1 );
 
 	// make game object template
-	v8::Local< v8::FunctionTemplate > gameObject = v8::FunctionTemplate::New( isolate, GameObjectComponent::CreateGameObjectComponent );
-	gameObject->SetClassName( v8::String::NewFromUtf8( isolate, "GameObject" ) );
-	v8::Local< v8::ObjectTemplate > gameObjectInstance = gameObject->InstanceTemplate();
-	v8::Local< v8::ObjectTemplate > gameObjectPrototype = gameObject->PrototypeTemplate();
-	gameObjectPrototype->Set( isolate, "AddCamera", v8::FunctionTemplate::New( isolate, GameObjectComponent::AddCameraComponent ) );
-	gameObjectInstance->Set( isolate, "id", v8::Integer::New( isolate, 0 ) );
-	gameObjectInstance->Set( isolate, "index", v8::Integer::New( isolate, 0 ) );
-	gameObjectInstance->Set( isolate, "hasCamera", v8::Boolean::New( isolate, false ) );
-	gameObjectInstance->SetInternalFieldCount( 1 );
+	v8::Local< v8::FunctionTemplate > _gameObject = v8::FunctionTemplate::New( isolate, GameObjectComponent::CreateGameObjectComponent );
+	_gameObject->SetClassName( v8::String::NewFromUtf8( isolate, "GameObject" ) );
+	v8::Local< v8::ObjectTemplate > _gameObjectInstance = _gameObject->InstanceTemplate();
+	v8::Local< v8::ObjectTemplate > _gameObjectPrototype = _gameObject->PrototypeTemplate();
+	_gameObjectPrototype->Set( isolate, "AddCamera", v8::FunctionTemplate::New( isolate, GameObjectComponent::AddCameraComponent ) );
+	_gameObjectInstance->Set( isolate, "id", v8::Integer::New( isolate, 0 ) );
+	_gameObjectInstance->Set( isolate, "index", v8::Integer::New( isolate, 0 ) );
+	_gameObjectInstance->Set( isolate, "hasCamera", v8::Boolean::New( isolate, false ) );
 
-	gunship->Set( isolate, "GameObject", gameObject );
-	global->Set( isolate, "Gunship", gunship );
+	_gunship->Set( isolate, "GameObject", _gameObject );
+	_global->Set( isolate, "Gunship", _gunship );
 
-	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr, global );
+	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr, _global );
 	_context.Reset( isolate, context );
 	v8::Context::Scope contextScope( context );
 
-	// open startup script
-	startupScript = SDL_RWFromFile( "startup.js", "r" );
-	if ( startupScript == nullptr )
-	{
-		printf( "Startup script not found! SDL Error: %s\n", SDL_GetError() );
-		return false;
-	}
-
-	// read startup script
-	memset( sampleScript, 0, sizeof(sampleScript) );
-	SDL_RWread( startupScript, sampleScript, sizeof(sampleScript), 1 );
-	SDL_RWclose( startupScript );
-
-	// run startup script
-	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, sampleScript );
-	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
-	v8::Local< v8::Value > result = v8script->Run();
-	v8::String::Utf8Value utf8( result );
-	printf( "script result:\n%s\n", *utf8 );
+	// give global instance pointers to gunship objects and whatnot
+	v8::Local< v8::Object > global = context->Global();
+	v8::Local< v8::Object > gunship = global->Get( v8::String::NewFromUtf8( isolate, "Gunship") )->ToObject();
+	gunship->SetInternalField( 0, v8::External::New( isolate, this ) );
 
 	return true;
 }
@@ -322,6 +307,26 @@ void Gunship::Start()
 	v8::HandleScope handleScope( isolate );
 	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, _context );
 	v8::Context::Scope contextScope( context );
+
+	// open startup script
+	startupScript = SDL_RWFromFile( "startup.js", "r" );
+	if ( startupScript == nullptr )
+	{
+		printf( "Startup script not found! SDL Error: %s\n", SDL_GetError() );
+		return;
+	}
+
+	// read startup script
+	memset( sampleScript, 0, sizeof(sampleScript) );
+	SDL_RWread( startupScript, sampleScript, sizeof(sampleScript), 1 );
+	SDL_RWclose( startupScript );
+
+	// run startup script
+	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, sampleScript );
+	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
+	v8::Local< v8::Value > result = v8script->Run();
+	v8::String::Utf8Value utf8( result );
+	printf( "script result:\n%s\n", *utf8 );
 
 	// initialize debugging info
 	Uint32 startTime = SDL_GetTicks();

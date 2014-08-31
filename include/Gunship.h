@@ -49,6 +49,8 @@ public:
 	Scene* currentScene;
 	Input input;
 
+	int secretValue;
+
 	// v8 variables
 	v8::Isolate* isolate;
 	v8::Persistent< v8::Context > _context;
