@@ -8,56 +8,12 @@ class Scene
 public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-	GameObject AddGameObject( const char* name = "Game Object" );
-	Camera AddCameraComponent( GameObject& gameObject );
-	Behavior AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior );
-	Collider AddColliderComponent( GameObject& gameObject, float radius );
-
-	void AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh );
-	void SetGameObjectLook( GameObject& gameObject, float x, float y, float z );
-
-	GameObjectComponent* FindComponent( GameObject& gameObject );
-	CameraComponent* FindComponent( Camera& camera );
-
-	/**
-	 * \brief Marks a game object for destruction.
-	 *
-	 * \param gameObject the GameObject to be marked for destruction.
-	 *
-	 * \returns True if the GameObject was marked, false if it had already been marked.
-	 */
-	bool MarkForDestroy( GameObject gameObject );
-
-	/**
-	 * \brief Marks a behavior for destruction.
-	 *
-	 * \param behavior the Behavior to be marked for destruction.
-	 *
-	 * \returns True if the Behavior was marked, false if it had already been marked.
-	 */
-	bool MarkForDestroy( Behavior behavior );
-
-	/**
-	 * \brief Marks a collider for destruction.
-	 *
-	 * \param collider the Collider to be marked for destruction.
-	 *
-	 * \returns True if the Collider was marked, false if it had already been marked.
-	 */
-	bool MarkForDestroy( Collider collider );
+	// javascript helper functions
+	void AddGameObject( const v8::FunctionCallbackInfo< v8::Value >& args );
+	void AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 
 private:
 	std::vector< GameObjectComponent > gameObjects;
-	std::vector< CameraComponent > cameraComponents;
-	std::vector< BehaviorComponent > behaviorComponents;
-	std::vector< ColliderComponent > colliders;
-
-	std::vector< GameObject > gameObjectsToDestroy;
-	std::vector< Camera > camerasToDestroy;
-	std::vector< Behavior > behaviorsToDestroy;
-	std::vector< Collider > collidersToDestroy;
-
-	std::vector< std::pair< Collider, Collider > > collisions;
 
 	Ogre::Root* root;
 	Ogre::SceneManager* sceneManager;

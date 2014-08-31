@@ -2,10 +2,9 @@
 
 struct Component
 {
-	GameObject owner;
 	component_id id;
 
-	Component( GameObject& owner );
+	Component();
 
 	static component_id GenerateUniqueComponentID();
 };

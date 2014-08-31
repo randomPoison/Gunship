@@ -244,11 +244,6 @@ bool Gunship::InitSystems()
 	return true;
 }
 
-void doWork( const v8::FunctionCallbackInfo< v8::Value >& args )
-{
-	printf( "DOING WORK FOR REALSIESqwwwwwwwwwwwwwwwzxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxsx\n" );
-}
-
 bool Gunship::InitializeV8()
 {
 	// create v8 Isolate
@@ -259,8 +254,19 @@ bool Gunship::InitializeV8()
 	v8::HandleScope handleScope( isolate );
 
 	v8::Local< v8::ObjectTemplate > global = v8::ObjectTemplate::New();
+
+	// make gunship object
 	v8::Local< v8::ObjectTemplate > gunship = v8::ObjectTemplate::New();
-	gunship->Set( isolate, "doWork", v8::FunctionTemplate::New( isolate, doWork ) );
+
+	// make game object template
+	v8::Local< v8::FunctionTemplate > gameObject = v8::FunctionTemplate::New( isolate );
+	gameObject->SetClassName( v8::String::NewFromUtf8( isolate, "GameObject" ) );
+	v8::Local< v8::ObjectTemplate > gameObjectInstance = gameObject->InstanceTemplate();
+	v8::Local< v8::ObjectTemplate > gameObjectPrototype = gameObject->PrototypeTemplate();
+	gameObjectInstance->Set( isolate, "id", v8::Integer::New( isolate, 0 ) );
+	gameObjectInstance->Set( isolate, "index", v8::Integer::New( isolate, 0 ) );
+
+	gunship->Set( isolate, "GameObject", gameObject );
 	global->Set( isolate, "Gunship", gunship );
 
 	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr, global );
@@ -285,7 +291,7 @@ bool Gunship::InitializeV8()
 	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
 	v8::Local< v8::Value > result = v8script->Run();
 	v8::String::Utf8Value utf8( result );
-	printf( "script result:\n\t%s\n", *utf8 );
+	printf( "script result:\n%s\n", *utf8 );
 
 	return true;
 }
@@ -299,14 +305,6 @@ void Gunship::Start()
 	v8::HandleScope handleScope( isolate );
 	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, _context );
 	v8::Context::Scope contextScope( context );
-
-	// rerun sample script to confirm that context has persisted
-	printf("re-running startup from Start()\n");
-	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, sampleScript );
-	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
-	v8::Local< v8::Value > result = v8script->Run();
-	v8::String::Utf8Value utf8( result );
-	printf( "script result:\n\t%s\n", *utf8 );
 
 	// initialize debugging info
 	Uint32 startTime = SDL_GetTicks();
@@ -348,9 +346,6 @@ void Gunship::Start()
 				std::cout << std::endl;
 			}
 
-			printf( "num collisions:\t%lu\n", currentScene->collisions.size() );
-			std::cout << std::endl;
-
 			Uint32 ticks = SDL_GetTicks();
 			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
 			printf( "FPS: %.2f\n", fps );
@@ -360,9 +355,6 @@ void Gunship::Start()
 			elapsedFrames = 0;
 
 			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
-			printf( "Behaviors:\t%lu\n", currentScene->behaviorComponents.size() );
-			printf( "Cameras:\t%lu\n", currentScene->cameraComponents.size() );
-			printf( "Colliders:\t%lu\n", currentScene->colliders.size() );
 			std::cout << std::endl;
 		}
 

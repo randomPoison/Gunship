@@ -4,13 +4,12 @@
 
 struct GameObjectComponent
 {
-	GameObjectComponent( Scene* scene, Ogre::SceneNode* node, const char* name = "Game Object" );
-
 	component_id id;
 	std::string name;
 
-	Scene* scene;
 	Ogre::SceneNode* node;
 
-	size_t numBehaviors;
+	GameObjectComponent( Ogre::SceneNode* node, const char* name = "Game Object" );
+
+	void CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 };
