@@ -239,16 +239,53 @@ bool Gunship::InitSystems()
 		input.controllers.push_back( controller );
 	}
 
-	// initialize v8
+	InitializeV8();
+
+	return true;
+}
+
+void doWork( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	printf( "DOING WORK FOR REALSIESqwwwwwwwwwwwwwwwzxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxsx\n" );
+}
+
+bool Gunship::InitializeV8()
+{
+	// create v8 Isolate
 	isolate = v8::Isolate::New();
 
-	// load startup script
+	// create local scope
+	v8::Isolate::Scope isolateScope( isolate );
+	v8::HandleScope handleScope( isolate );
+
+	v8::Local< v8::ObjectTemplate > global = v8::ObjectTemplate::New();
+	v8::Local< v8::ObjectTemplate > gunship = v8::ObjectTemplate::New();
+	gunship->Set( isolate, "doWork", v8::FunctionTemplate::New( isolate, doWork ) );
+	global->Set( isolate, "Gunship", gunship );
+
+	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr, global );
+	_context.Reset( isolate, context );
+	v8::Context::Scope contextScope( context );
+
+	// open startup script
 	startupScript = SDL_RWFromFile( "startup.js", "r" );
 	if ( startupScript == nullptr )
 	{
 		printf( "Startup script not found! SDL Error: %s\n", SDL_GetError() );
 		return false;
 	}
+
+	// read startup script
+	memset( sampleScript, 0, sizeof(sampleScript) );
+	SDL_RWread( startupScript, sampleScript, sizeof(sampleScript), 1 );
+	SDL_RWclose( startupScript );
+
+	// run startup script
+	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, sampleScript );
+	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
+	v8::Local< v8::Value > result = v8script->Run();
+	v8::String::Utf8Value utf8( result );
+	printf( "script result:\n\t%s\n", *utf8 );
 
 	return true;
 }
@@ -257,20 +294,15 @@ void Gunship::Start()
 {
 	SDL_ShowWindow( window );
 
-	// perform further v8 setup
-	v8::Isolate::Scope isolate_scope(isolate);
-	v8::HandleScope handle_scope(isolate);
-	v8::Local< v8::Context > context = v8::Context::New(isolate);
-	v8::Context::Scope context_scope(context);
+	// create scope for v8
+	v8::Isolate::Scope isolateScope( isolate );
+	v8::HandleScope handleScope( isolate );
+	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, _context );
+	v8::Context::Scope contextScope( context );
 
-	// load startup script
-	char script[256];
-	memset( script, 0, sizeof(script) );
-	SDL_RWread( startupScript, script, sizeof(script), 1 );
-	printf( "startup script:\n\t%s\n", script );
-
-	// run startup script
-	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, script );
+	// rerun sample script to confirm that context has persisted
+	printf("re-running startup from Start()\n");
+	v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, sampleScript );
 	v8::Local< v8::Script > v8script = v8::Script::Compile( source );
 	v8::Local< v8::Value > result = v8script->Run();
 	v8::String::Utf8Value utf8( result );
@@ -347,13 +379,11 @@ void Gunship::Start()
 
 bool Gunship::ShutDown()
 {
+	// destroy Ogre object
 	delete root;
 
-	// close open RWops
-	SDL_RWclose( startupScript );
-
 	// Close and destroy the window
-	SDL_DestroyWindow( window ); 
+	SDL_DestroyWindow( window );
 
 	// Clean up
 	SDL_Quit();

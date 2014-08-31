@@ -47,6 +47,23 @@
 class Gunship
 {
 public:
+	// SDL variables
+	SDL_Window* window;
+	SDL_RWops* startupScript;
+	char sampleScript[256];
+
+	// Ogre variables
+	Ogre::Root* root;
+	Ogre::RenderWindow* renderWindow;
+
+	// Gunship variables
+	Scene* currentScene;
+	Input input;
+
+	// v8 variables
+	v8::Isolate* isolate;
+	v8::Persistent< v8::Context > _context;
+
 	// default constructor
 	Gunship();
 
@@ -54,29 +71,14 @@ public:
 
 	// initialization and shutdown functions
 	bool InitSystems();
-	bool Configure();
-	void Start();
+	bool InitializeV8();
 
+	void Start();
 	bool ShutDown();
 
 	// other functions
 	Scene* CurrentScene();
 	Scene* ResetCurrentScene();
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
-
-private:
-	// SDL variables
-	SDL_Window* window;
-	SDL_RWops* startupScript;
-
-	// Ogre variables
-	Ogre::Root* root;
-	Ogre::RenderWindow* renderWindow;
-
-	// v8 variables
-	v8::Isolate* isolate;
-
-	// Gunship variables
-	Scene* currentScene;
-	Input input;
 };
+
