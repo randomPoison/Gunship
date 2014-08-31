@@ -145,7 +145,7 @@ void createColourCube()
 // initialize static global instance
 Gunship* Gunship::globalInstace = nullptr;
 
-Gunship::Gunship() : currentScene( nullptr ), secretValue( 9 )
+Gunship::Gunship() : currentScene( nullptr )
 {
 	Gunship::globalInstace = this;
 }

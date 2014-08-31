@@ -49,16 +49,14 @@ public:
 	Scene* currentScene;
 	Input input;
 
-	int secretValue;
-
 	// v8 variables
-	v8::Isolate* isolate;
-	v8::Persistent< v8::Context > _context;
 
 	/**
 	 * \brief Hacky static singleton to resolve scope issues with v8. Needs to be fixed ASAP.
 	 */
 	static Gunship* globalInstace; //< \TODO use a less shitty workaround
+	v8::Isolate* isolate;
+	v8::Persistent< v8::Context > _context;
 
 	// default constructor
 	Gunship();
