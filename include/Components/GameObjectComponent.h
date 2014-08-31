@@ -11,5 +11,5 @@ struct GameObjectComponent
 
 	GameObjectComponent( Ogre::SceneNode* node, const char* name = "Game Object" );
 
-	void CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
+	static void CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 };

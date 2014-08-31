@@ -9,8 +9,8 @@ public:
 	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
 	// javascript helper functions
-	void AddGameObject( const v8::FunctionCallbackInfo< v8::Value >& args );
-	void AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
+	ComponentInfo AddGameObject();
+	ComponentInfo AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 
 private:
 	std::vector< GameObjectComponent > gameObjects;

@@ -23,12 +23,12 @@
 #include <OgreVector3.h>
 
 #include "GunshipTypes.h"
+#include "Input.h"
 
 #include "Components/Component.h"
 #include "Components/GameObjectComponent.h"
 
 #include "Scene.h"
-#include "Input.h"
 
 /**
  * \brief A class representing an instance of the Gunship engine.
@@ -52,6 +52,11 @@ public:
 	// v8 variables
 	v8::Isolate* isolate;
 	v8::Persistent< v8::Context > _context;
+
+	/**
+	 * \brief Hacky static singleton to resolve scope issues with v8. Needs to be fixed ASAP.
+	 */
+	static Gunship* globalInstace; //< \TODO use a less shitty workaround
 
 	// default constructor
 	Gunship();

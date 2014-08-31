@@ -142,7 +142,13 @@ void createColourCube()
 	material->getTechnique(0)->getPass(0)->setVertexColourTracking(TVC_AMBIENT);
 }
 
-Gunship::Gunship() : currentScene( nullptr ) { }
+// initialize static global instance
+Gunship* Gunship::globalInstace = nullptr;
+
+Gunship::Gunship() : currentScene( nullptr )
+{
+	Gunship::globalInstace = this;
+}
 
 Gunship::~Gunship()
 {
@@ -154,6 +160,9 @@ Gunship::~Gunship()
 
 bool Gunship::InitSystems()
 {
+	// ======================
+	// INITIALIZE SDL SYSTEMS
+	// ======================
 	SDL_Init( SDL_INIT_EVERYTHING );
 
 	// Create an application window with the following settings:
@@ -176,6 +185,9 @@ bool Gunship::InitSystems()
 
 	SDL_GL_CreateContext( window );
 
+	// =======================
+	// INITIALIZE OGRE SYSTEMS
+	// =======================
 	root = new Ogre::Root( "", "", "" );
 
 	// TODO: Unfuck this bit of fragmentation here.
@@ -217,7 +229,9 @@ bool Gunship::InitSystems()
 	renderWindow = root->createRenderWindow( "OGRE Window", 640, 480, false, &params );
 	renderWindow->setVisible( true );
 
-	// initialize the current scene
+	// ===============================
+	// INITIALIZE SCENE AND COMPONENTS
+	// ===============================
 	currentScene = new Scene( root, renderWindow );
 
 	// initialize primitive meshes
@@ -259,12 +273,13 @@ bool Gunship::InitializeV8()
 	v8::Local< v8::ObjectTemplate > gunship = v8::ObjectTemplate::New();
 
 	// make game object template
-	v8::Local< v8::FunctionTemplate > gameObject = v8::FunctionTemplate::New( isolate );
+	v8::Local< v8::FunctionTemplate > gameObject = v8::FunctionTemplate::New( isolate, GameObjectComponent::CreateGameObjectComponent );
 	gameObject->SetClassName( v8::String::NewFromUtf8( isolate, "GameObject" ) );
 	v8::Local< v8::ObjectTemplate > gameObjectInstance = gameObject->InstanceTemplate();
 	v8::Local< v8::ObjectTemplate > gameObjectPrototype = gameObject->PrototypeTemplate();
 	gameObjectInstance->Set( isolate, "id", v8::Integer::New( isolate, 0 ) );
 	gameObjectInstance->Set( isolate, "index", v8::Integer::New( isolate, 0 ) );
+	gameObjectInstance->SetInternalFieldCount( 1 );
 
 	gunship->Set( isolate, "GameObject", gameObject );
 	global->Set( isolate, "Gunship", gunship );
