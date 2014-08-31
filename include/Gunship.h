@@ -23,6 +23,7 @@
 #include <OgreVector3.h>
 
 #include "GunshipTypes.h"
+#include "Gunshipv8Helpers.h"
 #include "Input.h"
 
 #include "Components/Component.h"
@@ -50,11 +51,6 @@ public:
 	Input input;
 
 	// v8 variables
-
-	/**
-	 * \brief Hacky static singleton to resolve scope issues with v8. Needs to be fixed ASAP.
-	 */
-	static Gunship* globalInstace; //< \TODO use a less shitty workaround
 	v8::Isolate* isolate;
 	v8::Persistent< v8::Context > _context;
 

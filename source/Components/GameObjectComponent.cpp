@@ -10,9 +10,7 @@ GameObjectComponent::GameObjectComponent( Ogre::SceneNode* node, const char* nam
 
 void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
-	v8::Isolate* isolate = v8::Isolate::GetCurrent();
-	v8::Isolate::Scope isolateScope( isolate );
-	v8::HandleScope handleScope( isolate );
+	V8_ENTER_SCOPE();
 
 	if ( args.IsConstructCall() )
 	{
@@ -30,9 +28,7 @@ void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackI
 
 void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
-	v8::Isolate* isolate = v8::Isolate::GetCurrent();
-	v8::Isolate::Scope isolateScope( isolate );
-	v8::HandleScope handleScope( isolate );
+	V8_ENTER_SCOPE();
 
 	v8::Local< v8::Object > gameObject = args.Holder();
 	ComponentInfo info{ gameObject->Get( v8::String::NewFromUtf8( isolate, "id" ) )->IntegerValue(),

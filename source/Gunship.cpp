@@ -142,12 +142,8 @@ void createColourCube()
 	material->getTechnique(0)->getPass(0)->setVertexColourTracking(TVC_AMBIENT);
 }
 
-// initialize static global instance
-Gunship* Gunship::globalInstace = nullptr;
-
 Gunship::Gunship() : currentScene( nullptr )
 {
-	Gunship::globalInstace = this;
 }
 
 Gunship::~Gunship()
