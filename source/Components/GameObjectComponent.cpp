@@ -11,17 +11,14 @@ GameObjectComponent::GameObjectComponent( Ogre::SceneNode* node, const char* nam
 void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
 	V8_ENTER_SCOPE();
+	V8_CALLBACK_INIT(args);
 
 	if ( args.IsConstructCall() )
 	{
-		v8::Local< v8::Object > gameObject = args.Holder();
-		v8::Local< v8::Object > gunshipObject = gameObject->Get( v8::String::NewFromUtf8( isolate, "gunship" ) )->ToObject();
-		v8::Local< v8::External > wrap = v8::Local< v8::External >::Cast( gunshipObject->GetInternalField( 0 ) );
-		Gunship* gunship = static_cast< Gunship* >( wrap->Value() );
 		ComponentInfo info = gunship->currentScene->AddGameObject();
 
-		gameObject->Set( v8::String::NewFromUtf8( isolate, "id" ), v8::Integer::NewFromUnsigned( isolate, info.id ) );
-		gameObject->Set( v8::String::NewFromUtf8( isolate, "index" ), v8::Integer::NewFromUnsigned( isolate, info.index ) );
+		gameObject->Set( V8_STRING( isolate, "id" ), V8_UNSIGNED( isolate, info.id ) );
+		gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
 		args.GetReturnValue().Set( gameObject );
 	}
 }
@@ -29,18 +26,42 @@ void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackI
 void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
 	V8_ENTER_SCOPE();
+	V8_CALLBACK_INIT(args);
 
-	v8::Local< v8::Object > gameObject = args.Holder();
-	ComponentInfo info{ gameObject->Get( v8::String::NewFromUtf8( isolate, "id" ) )->IntegerValue(),
-						gameObject->Get( v8::String::NewFromUtf8( isolate, "index" ) )->IntegerValue() };
-	v8::Local< v8::Object > gunshipObject = gameObject->Get( v8::String::NewFromUtf8( isolate, "gunship" ) )->ToObject();
-	v8::Local< v8::External > wrap = v8::Local< v8::External >::Cast( gunshipObject->GetInternalField( 0 ) );
-	Gunship* gunship = static_cast< Gunship* >( wrap->Value() );
+	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
-	if ( !gameObject->Get( v8::String::NewFromUtf8( isolate, "hasCamera" ) )->BooleanValue() )
+	if ( !gameObject->Get( V8_STRING( isolate, "hasCamera" ) )->BooleanValue() )
 	{
-		printf( "Adding camera to gameobject %d\n", info.id );
 		gunship->currentScene->AddCameraComponent( info );
-		gameObject->Set( v8::String::NewFromUtf8( isolate, "hasCamera" ), v8::Boolean::New( isolate, true ) );
+		gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+		gameObject->Set( V8_STRING( isolate, "hasCamera" ), V8_BOOL( isolate, true ) );
 	}
 }
+
+
+void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_ENTER_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+
+	gunship->currentScene->AddMesh( info, "ColourCube" );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+}
+
+void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_ENTER_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+
+	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	component->node->setPosition( 0.0f, 0.0f, 10.0f );
+	component->node->lookAt( Ogre::Vector3( 0.0f, 0.0f, 0.0f ), Ogre::Node::TS_WORLD );
+}
+

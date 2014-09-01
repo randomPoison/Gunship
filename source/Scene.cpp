@@ -1,9 +1,9 @@
 #include "Gunship.h"
 #include "Scene.h"
 
-static std::string MeshID( const char* name, GameObjectComponent* owner )
+static inline std::string MeshID( const char* name, const GameObjectComponent& owner )
 {
-	return std::string( name ) + std::to_string( owner->id );
+	return std::string( name ) + std::to_string( owner.id );
 }
 
 Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), renderWindow( render )
@@ -33,6 +33,14 @@ void Scene::AddCameraComponent( ComponentInfo& gameObject )
 
 	// temporary values for testing purposes
 	camera->setNearClipDistance( 5 );
+}
+
+void Scene::AddMesh( ComponentInfo& gameObject, const char* mesh )
+{
+	GameObjectComponent* owner = FindGameObject( gameObject );
+	Ogre::Entity* cubeEntity = sceneManager->createEntity( MeshID( mesh, *owner ).c_str(), mesh );
+	cubeEntity->setMaterialName( "Test/ColourTest" );
+	owner->node->attachObject( cubeEntity );
 }
 
 GameObjectComponent* Scene::FindGameObject( ComponentInfo& gameObjectInfo )

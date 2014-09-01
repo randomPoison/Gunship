@@ -19,6 +19,7 @@ public:
 	// javascript helper functions
 	ComponentInfo AddGameObject();
 	void AddCameraComponent( ComponentInfo& gameObject );
+	void AddMesh( ComponentInfo& gameObject, const char* mesh );
 
 	GameObjectComponent* FindGameObject( ComponentInfo& gameObjectInfo );
 };
