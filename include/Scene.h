@@ -17,7 +17,7 @@ public:
 	void Update( const Input& input, float delta );
 
 	// javascript helper functions
-	ComponentInfo AddGameObject();
+	ComponentInfo AddGameObject( const char* name = "GameObject" );
 	void AddCameraComponent( ComponentInfo& gameObject );
 	void AddMesh( ComponentInfo& gameObject, const char* mesh );
 

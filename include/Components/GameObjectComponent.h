@@ -9,7 +9,7 @@ struct GameObjectComponent
 
 	Ogre::SceneNode* node;
 
-	GameObjectComponent( Ogre::SceneNode* node, const char* name = "Game Object" );
+	GameObjectComponent( Ogre::SceneNode* node, const char* name );
 
 	static void CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 	static void AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args );

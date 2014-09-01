@@ -17,9 +17,9 @@ void Scene::Update( const Input& input, float delta )
 {
 }
 
-ComponentInfo Scene::AddGameObject()
+ComponentInfo Scene::AddGameObject( const char* name )
 {
-	gameObjects.emplace_back( sceneManager->getRootSceneNode()->createChildSceneNode() );
+	gameObjects.emplace_back( sceneManager->getRootSceneNode()->createChildSceneNode(), name );
 	return ComponentInfo{ gameObjects.back().id, gameObjects.size() - 1 };
 }
 

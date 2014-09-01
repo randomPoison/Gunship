@@ -15,10 +15,22 @@ void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackI
 
 	if ( args.IsConstructCall() )
 	{
-		ComponentInfo info = gunship->currentScene->AddGameObject();
+		v8::String::Utf8Value name( args[0] );
+		ComponentInfo info;
+		if ( name.length() != 0 )
+		{
+			info = gunship->currentScene->AddGameObject( *name );
+		}
+		else
+		{
+			info = gunship->currentScene->AddGameObject();
+		}
+		GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
 
 		gameObject->Set( V8_STRING( isolate, "id" ), V8_UNSIGNED( isolate, info.id ) );
 		gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+		gameObject->Set( V8_STRING( isolate, "name" ), V8_STRING( isolate, component->name.c_str() ) );
+
 		args.GetReturnValue().Set( gameObject );
 	}
 }
@@ -61,7 +73,8 @@ void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value
 						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+
 	component->node->setPosition( 0.0f, 0.0f, 10.0f );
-	component->node->lookAt( Ogre::Vector3( 0.0f, 0.0f, 0.0f ), Ogre::Node::TS_WORLD );
 }
 

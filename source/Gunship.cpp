@@ -275,13 +275,16 @@ bool Gunship::InitializeV8()
 	v8::Local< v8::ObjectTemplate > _gameObjectInstance = _gameObject->InstanceTemplate();
 	v8::Local< v8::ObjectTemplate > _gameObjectPrototype = _gameObject->PrototypeTemplate();
 
+	// GAMEOBJECT PROTOTYPE
 	_gameObjectPrototype->Set( isolate, "AddCamera", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddCameraComponent ) );
 	_gameObjectPrototype->Set( isolate, "AddMesh", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddMesh ) );
 	_gameObjectPrototype->Set( isolate, "SetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPosition ) );
 
-	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, 0 ) );
-	_gameObjectInstance->Set( isolate, "index", V8_UNSIGNED( isolate, 0 ) );
+	// GAMEOBJECT INSTANCES
+	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );
+	_gameObjectInstance->Set( isolate, "index", V8_UNSIGNED( isolate, -1 ) );
 	_gameObjectInstance->Set( isolate, "hasCamera", V8_BOOL( isolate, false ) );
+	_gameObjectInstance->Set( isolate, "name", V8_STRING( isolate, "__BAD_GAMEOBJECT_NAME__" ) );
 
 	_gunship->Set( isolate, "GameObject", _gameObject );
 	_global->Set( isolate, "Gunship", _gunship );
