@@ -51,7 +51,6 @@ void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8
 	}
 }
 
-
 void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
 	V8_ENTER_SCOPE();
@@ -60,7 +59,8 @@ void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& 
 	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
 						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
-	gunship->currentScene->AddMesh( info, "ColourCube" );
+	v8::String::Utf8Value mesh( args[0] );
+	gunship->currentScene->AddMesh( info, *mesh );
 	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
 }
 
