@@ -75,6 +75,6 @@ void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
 	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
 
-	component->node->setPosition( 0.0f, 0.0f, 10.0f );
+	component->node->setPosition( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
 }
 
