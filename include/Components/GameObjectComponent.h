@@ -14,7 +14,7 @@ struct GameObjectComponent
 	static void CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 	static void AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args );
 	static void AddMesh( const v8::FunctionCallbackInfo< v8::Value >& args );
-	static void AddBehavior( const v8::FunctionCallbackInfo< v8::Value >& args );
 
 	static void SetPosition( const v8::FunctionCallbackInfo< v8::Value >& args );
+	static void Translate( const v8::FunctionCallbackInfo< v8::Value >& args );
 };

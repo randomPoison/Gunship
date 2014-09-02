@@ -40,7 +40,7 @@ void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
 						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
 	if ( !gameObject->Get( V8_STRING( isolate, "hasCamera" ) )->BooleanValue() )
@@ -56,7 +56,7 @@ void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& 
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
 						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
 	v8::String::Utf8Value mesh( args[0] );
@@ -69,7 +69,7 @@ void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
 						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
@@ -78,16 +78,16 @@ void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value
 	component->node->setPosition( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
 }
 
-void GameObjectComponent::AddBehavior( const v8::FunctionCallbackInfo< v8::Value >& args )
+void GameObjectComponent::Translate( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	if ( args[0]->IsFunction() )
-	{
-		v8::Local< v8::Function > function = v8::Local< v8::Function >::Cast( args[0] );
-		v8::Persistent< v8::Object, v8::CopyablePersistentTraits< v8::Object > > _gameObject( isolate, gameObject );
-		v8::Persistent< v8::Function, v8::CopyablePersistentTraits< v8::Function > > _function( isolate, function );
-		//gunship->currentScene->behaviors.push_back( BehaviorComponent(  ) )
-	}
+	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+
+	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+
+	component->node->translate( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
 }

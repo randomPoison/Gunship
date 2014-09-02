@@ -25,55 +25,57 @@ void createColourCube()
 
 	/// Define the vertices (8 vertices, each consisting of 2 groups of 3 floats
 	const size_t nVertices = 8;
-	const size_t vbufCount = 3*2*nVertices;
-	float vertices[vbufCount] = {
-		-1.0,1.0,-1.0,				//0 position
-		-sqrt13,sqrt13,-sqrt13,		//0 normal
-		1.0,1.0,-1.0,				//1 position
-		sqrt13,sqrt13,-sqrt13,		//1 normal
-		1.0,-1.0,-1.0,				//2 position
-		sqrt13,-sqrt13,-sqrt13,		//2 normal
-		-1.0,-1.0,-1.0,				//3 position
-		-sqrt13,-sqrt13,-sqrt13,	//3 normal
-		-1.0,1.0,1.0,				//4 position
-		-sqrt13,sqrt13,sqrt13,		//4 normal
-		1.0,1.0,1.0,				//5 position
-		sqrt13,sqrt13,sqrt13,		//5 normal
-		1.0,-1.0,1.0,				//6 position
-		sqrt13,-sqrt13,sqrt13,		//6 normal
-		-1.0,-1.0,1.0,				//7 position
-		-sqrt13,-sqrt13,sqrt13,		//7 normal
-	};
+	const size_t vbufCount = 3 * 2 * nVertices;
+	float vertices[vbufCount] =
+	{
+		-1.0, 1.0, -1.0,				//0 position
+		-sqrt13, sqrt13, -sqrt13,		//0 normal
+		1.0, 1.0, -1.0,				//1 position
+		sqrt13, sqrt13, -sqrt13,		//1 normal
+		1.0, -1.0, -1.0,				//2 position
+		sqrt13, -sqrt13, -sqrt13,		//2 normal
+		-1.0, -1.0, -1.0,				//3 position
+		-sqrt13, -sqrt13, -sqrt13,	//3 normal
+		-1.0, 1.0, 1.0,				//4 position
+		-sqrt13, sqrt13, sqrt13,		//4 normal
+		1.0, 1.0, 1.0,				//5 position
+		sqrt13, sqrt13, sqrt13,		//5 normal
+		1.0, -1.0, 1.0,				//6 position
+		sqrt13, -sqrt13, sqrt13,		//6 normal
+		-1.0, -1.0, 1.0,				//7 position
+		-sqrt13, -sqrt13, sqrt13,		//7 normal
+		};
 
 	RenderSystem* rs = Root::getSingleton().getRenderSystem();
 	RGBA colours[nVertices];
 	RGBA *pColour = colours;
 	// Use render system to convert colour value since colour packing varies
-	rs->convertColourValue(ColourValue(1.0,0.0,0.0), pColour++); //0 colour
-	rs->convertColourValue(ColourValue(1.0,1.0,0.0), pColour++); //1 colour
-	rs->convertColourValue(ColourValue(0.0,1.0,0.0), pColour++); //2 colour
-	rs->convertColourValue(ColourValue(0.0,0.0,0.0), pColour++); //3 colour
-	rs->convertColourValue(ColourValue(1.0,0.0,1.0), pColour++); //4 colour
-	rs->convertColourValue(ColourValue(1.0,1.0,1.0), pColour++); //5 colour
-	rs->convertColourValue(ColourValue(0.0,1.0,1.0), pColour++); //6 colour
-	rs->convertColourValue(ColourValue(0.0,0.0,1.0), pColour++); //7 colour
+	rs->convertColourValue( ColourValue( 1.0, 0.0, 0.0 ), pColour++ ); //0 colour
+	rs->convertColourValue( ColourValue( 1.0, 1.0, 0.0 ), pColour++ ); //1 colour
+	rs->convertColourValue( ColourValue( 0.0, 1.0, 0.0 ), pColour++ ); //2 colour
+	rs->convertColourValue( ColourValue( 0.0, 0.0, 0.0 ), pColour++ ); //3 colour
+	rs->convertColourValue( ColourValue( 1.0, 0.0, 1.0 ), pColour++ ); //4 colour
+	rs->convertColourValue( ColourValue( 1.0, 1.0, 1.0 ), pColour++ ); //5 colour
+	rs->convertColourValue( ColourValue( 0.0, 1.0, 1.0 ), pColour++ ); //6 colour
+	rs->convertColourValue( ColourValue( 0.0, 0.0, 1.0 ), pColour++ ); //7 colour
 
 	/// Define 12 triangles (two triangles per cube face)
 	/// The values in this table refer to vertices in the above table
 	const size_t ibufCount = 36;
-	unsigned short faces[ibufCount] = {
-		0,2,3,
-		0,1,2,
-		1,6,2,
-		1,5,6,
-		4,6,5,
-		4,7,6,
-		0,7,4,
-		0,3,7,
-		0,5,1,
-		0,4,5,
-		2,7,3,
-		2,6,7
+	unsigned short faces[ibufCount] =
+	{
+		0, 2, 3,
+		0, 1, 2,
+		1, 6, 2,
+		1, 5, 6,
+		4, 6, 5,
+		4, 7, 6,
+		0, 7, 4,
+		0, 3, 7,
+		0, 5, 1,
+		0, 4, 5,
+		2, 7, 3,
+		2, 6, 7
 	};
 
 	/// Create vertex data structure for 8 vertices shared between submeshes
@@ -84,45 +86,45 @@ void createColourCube()
 	VertexDeclaration* decl = msh->sharedVertexData->vertexDeclaration;
 	size_t offset = 0;
 	// 1st buffer
-	decl->addElement(0, offset, VET_FLOAT3, VES_POSITION);
-	offset += VertexElement::getTypeSize(VET_FLOAT3);
-	decl->addElement(0, offset, VET_FLOAT3, VES_NORMAL);
-	offset += VertexElement::getTypeSize(VET_FLOAT3);
+	decl->addElement( 0, offset, VET_FLOAT3, VES_POSITION );
+	offset += VertexElement::getTypeSize( VET_FLOAT3 );
+	decl->addElement( 0, offset, VET_FLOAT3, VES_NORMAL );
+	offset += VertexElement::getTypeSize( VET_FLOAT3 );
 	/// Allocate vertex buffer of the requested number of vertices (vertexCount) 
 	/// and bytes per vertex (offset)
-	HardwareVertexBufferSharedPtr vbuf = 
+	HardwareVertexBufferSharedPtr vbuf =
 		HardwareBufferManager::getSingleton().createVertexBuffer(
-		offset, msh->sharedVertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+			offset, msh->sharedVertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY );
 	/// Upload the vertex data to the card
-	vbuf->writeData(0, vbuf->getSizeInBytes(), vertices, true);
+	vbuf->writeData( 0, vbuf->getSizeInBytes(), vertices, true );
 
 	/// Set vertex buffer binding so buffer 0 is bound to our vertex buffer
-	VertexBufferBinding* bind = msh->sharedVertexData->vertexBufferBinding; 
-	bind->setBinding(0, vbuf);
+	VertexBufferBinding* bind = msh->sharedVertexData->vertexBufferBinding;
+	bind->setBinding( 0, vbuf );
 
 	// 2nd buffer
 	offset = 0;
-	decl->addElement(1, offset, VET_COLOUR, VES_DIFFUSE);
-	offset += VertexElement::getTypeSize(VET_COLOUR);
+	decl->addElement( 1, offset, VET_COLOUR, VES_DIFFUSE );
+	offset += VertexElement::getTypeSize( VET_COLOUR );
 	/// Allocate vertex buffer of the requested number of vertices (vertexCount) 
 	/// and bytes per vertex (offset)
 	vbuf = HardwareBufferManager::getSingleton().createVertexBuffer(
-		offset, msh->sharedVertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+		offset, msh->sharedVertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY );
 	/// Upload the vertex data to the card
-	vbuf->writeData(0, vbuf->getSizeInBytes(), colours, true);
+	vbuf->writeData( 0, vbuf->getSizeInBytes(), colours, true );
 
 	/// Set vertex buffer binding so buffer 1 is bound to our colour buffer
-	bind->setBinding(1, vbuf);
+	bind->setBinding( 1, vbuf );
 
 	/// Allocate index buffer of the requested number of vertices (ibufCount) 
 	HardwareIndexBufferSharedPtr ibuf = HardwareBufferManager::getSingleton().
 		createIndexBuffer(
-		HardwareIndexBuffer::IT_16BIT, 
-		ibufCount, 
-		HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+		HardwareIndexBuffer::IT_16BIT,
+		ibufCount,
+		HardwareBuffer::HBU_STATIC_WRITE_ONLY );
 
 	/// Upload the index data to the card
-	ibuf->writeData(0, ibuf->getSizeInBytes(), faces, true);
+	ibuf->writeData( 0, ibuf->getSizeInBytes(), faces, true );
 
 	/// Set parameters of the submesh
 	sub->useSharedVertices = true;
@@ -131,18 +133,44 @@ void createColourCube()
 	sub->indexData->indexStart = 0;
 
 	/// Set bounding information (for culling)
-	msh->_setBounds(AxisAlignedBox(-100,-100,-100,100,100,100));
-	msh->_setBoundingSphereRadius(Math::Sqrt(3*100*100));
+	msh->_setBounds( AxisAlignedBox( -100, -100, -100, 100, 100, 100 ) );
+	msh->_setBoundingSphereRadius( Math::Sqrt( 3 * 100 * 100 ) );
 
 	/// Notify -Mesh object that it has been loaded
 	msh->load();
 
 	MaterialPtr material = MaterialManager::getSingleton().create(
-		"Test/ColourTest", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-	material->getTechnique(0)->getPass(0)->setVertexColourTracking(TVC_AMBIENT);
+		"Test/ColourTest", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+	material->getTechnique( 0 )->getPass( 0 )->setVertexColourTracking( TVC_AMBIENT );
 }
 
-Gunship::Gunship() : currentScene( nullptr )
+// Blatantly stolen from the shell.cc example that comes with v8.
+// currently being used as a placeholder until I can be bothered to
+// add some better logging functionality.
+void Print( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	bool first = true;
+	for ( int i = 0; i < args.Length(); i++ )
+	{
+		v8::HandleScope handle_scope( args.GetIsolate() );
+		if ( first )
+		{
+			first = false;
+		}
+		else
+		{
+			printf( " " );
+		}
+		v8::String::Utf8Value str( args[i] );
+		const char* cstr = *str;
+		printf( "%s", cstr );
+	}
+	printf( "\n" );
+	fflush( stdout );
+}
+
+Gunship::Gunship() :
+	currentScene( nullptr )
 {
 }
 
@@ -283,13 +311,13 @@ bool Gunship::InitializeV8()
 	_gameObjectPrototype->Set( isolate, "AddCamera", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddCameraComponent ) );
 	_gameObjectPrototype->Set( isolate, "AddMesh", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddMesh ) );
 	_gameObjectPrototype->Set( isolate, "SetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPosition ) );
+	_gameObjectPrototype->Set( isolate, "Translate", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::Translate ) );
 
 	// GAMEOBJECT INSTANCES
 	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );
 	_gameObjectInstance->Set( isolate, "index", V8_UNSIGNED( isolate, -1 ) );
 	_gameObjectInstance->Set( isolate, "hasCamera", V8_BOOL( isolate, false ) );
-	_gameObjectInstance->Set( isolate, "name",
-		V8_STRING( isolate, "__BAD_GAMEOBJECT_NAME__" ) );
+	_gameObjectInstance->Set( isolate, "name", V8_STRING( isolate, "__BAD_GAMEOBJECT_NAME__" ) );
 
 	_gunship->Set( isolate, "GameObject", _gameObject );
 	_global->Set( isolate, "Gunship", _gunship );
@@ -303,8 +331,7 @@ bool Gunship::InitializeV8()
 
 	// give global instance pointers to gunship objects and whatnot
 	v8::Local< v8::Object > global = context->Global();
-	v8::Local< v8::Object > gunship = global->Get(
-		V8_STRING( isolate, "Gunship" ) )->ToObject();
+	v8::Local< v8::Object > gunship = global->Get( V8_STRING( isolate, "Gunship" ) )->ToObject();
 	gunship->SetInternalField( 0, v8::External::New( isolate, this ) );
 
 	// RUN STARTUP SCRIPT
@@ -312,8 +339,7 @@ bool Gunship::InitializeV8()
 	{
 		v8::TryCatch tryCatch;
 
-		v8::Local< v8::Script > script = v8::Script::Compile(
-			V8_STRING( isolate, startup.c_str() ) );
+		v8::Local< v8::Script > script = v8::Script::Compile( V8_STRING( isolate, startup.c_str() ) );
 		v8::Local< v8::Value > result = script->Run();
 		v8::String::Utf8Value utf8( result );
 
