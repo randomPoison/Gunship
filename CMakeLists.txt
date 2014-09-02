@@ -72,6 +72,10 @@ target_link_libraries(	${PROJECT_NAME}
 						${LIBS}
 						${V8_LINK_LIBRARIES} ${V8_LINK_LIBRARIES} rt pthread)
 
+add_custom_command(	TARGET ${PROJECT_NAME} PRE_BUILD
+					COMMAND ${CMAKE_COMMAND} -E copy_directory
+					${CMAKE_SOURCE_DIR}/js $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)

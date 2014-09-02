@@ -70,6 +70,7 @@ public:
 	Scene* ResetCurrentScene();
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
 
-	std::string LoadScript( const char* script );
+	static std::string LoadScript( const char* script );
+	static void ReportException( v8::Isolate* isolate, v8::TryCatch& tryCatch );
 };
 

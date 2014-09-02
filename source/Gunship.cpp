@@ -162,17 +162,17 @@ bool Gunship::InitSystems()
 	SDL_Init( SDL_INIT_EVERYTHING );
 
 	// Create an application window with the following settings:
-	window = SDL_CreateWindow( 
+	window = SDL_CreateWindow(
 		"Gunship",								// window title
 		SDL_WINDOWPOS_UNDEFINED,				// initial x position
 		SDL_WINDOWPOS_UNDEFINED,				// initial y position
 		800,									// width, in pixels
 		600,									// height, in pixels
 		SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN	// flags
-	);
+			);
 
 	// Check that the window was successfully made
-	if( window == nullptr )
+	if ( window == nullptr )
 	{
 		// In the event that the window could not be made...
 		std::cout << "Could not create window: " << SDL_GetError() << std::endl;
@@ -196,7 +196,8 @@ bool Gunship::InitSystems()
 	root->loadPlugin( OGRE_PLUGIN_DIR_REL + std::string( "/RenderSystem_GL" ) );
 #endif
 
-	root->setRenderSystem( root->getRenderSystemByName( "OpenGL Rendering Subsystem" ) );
+	root->setRenderSystem(
+		root->getRenderSystemByName( "OpenGL Rendering Subsystem" ) );
 
 	root->initialise( false );
 
@@ -219,10 +220,11 @@ bool Gunship::InitSystems()
 	params["externalGLContext"] = "True";
 	params["externalGLControl"] = "True";
 #else
-	params["currentGLContext"] = Ogre::String("True");
+	params["currentGLContext"] = Ogre::String( "True" );
 #endif
 
-	renderWindow = root->createRenderWindow( "OGRE Window", 640, 480, false, &params );
+	renderWindow = root->createRenderWindow( "OGRE Window", 640, 480, false,
+		&params );
 	renderWindow->setVisible( true );
 
 	// ===============================
@@ -239,11 +241,13 @@ bool Gunship::InitSystems()
 		printf( "num joysticks: %d\n", SDL_NumJoysticks() );
 		SDL_GameController* controller = SDL_GameControllerOpen( 0 );
 
-		std::cout << "joystick is controller: " << ( SDL_IsGameController( 0 ) ? "true" : "false" ) << std::endl;
+		std::cout << "joystick is controller: "
+			<< ( SDL_IsGameController( 0 ) ? "true" : "false" ) << std::endl;
 
 		if ( controller == nullptr )
 		{
-			printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
+			printf( "Warning: Unable to open game controller! SDL Error: %s\n",
+				SDL_GetError() );
 			return false;
 		}
 		input.controllers.push_back( controller );
@@ -279,64 +283,48 @@ bool Gunship::InitializeV8()
 	_gameObjectPrototype->Set( isolate, "AddCamera", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddCameraComponent ) );
 	_gameObjectPrototype->Set( isolate, "AddMesh", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddMesh ) );
 	_gameObjectPrototype->Set( isolate, "SetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPosition ) );
-	//_gameObjectPrototype->Set( isolate, "AddBehavior", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddBehavior ) );
 
 	// GAMEOBJECT INSTANCES
 	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );
 	_gameObjectInstance->Set( isolate, "index", V8_UNSIGNED( isolate, -1 ) );
 	_gameObjectInstance->Set( isolate, "hasCamera", V8_BOOL( isolate, false ) );
-	_gameObjectInstance->Set( isolate, "name", V8_STRING( isolate, "__BAD_GAMEOBJECT_NAME__" ) );
+	_gameObjectInstance->Set( isolate, "name",
+		V8_STRING( isolate, "__BAD_GAMEOBJECT_NAME__" ) );
 
 	_gunship->Set( isolate, "GameObject", _gameObject );
 	_global->Set( isolate, "Gunship", _gunship );
+	_global->Set( isolate, "print", V8_FUNCTION_TEMPLATE( isolate, Print ) );
 
-	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr, _global );
+	// CREATE CONTEXT
+	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr,
+		_global );
 	_context.Reset( isolate, context );
 	v8::Context::Scope contextScope( context );
 
 	// give global instance pointers to gunship objects and whatnot
 	v8::Local< v8::Object > global = context->Global();
-	v8::Local< v8::Object > gunship = global->Get( v8::String::NewFromUtf8( isolate, "Gunship") )->ToObject();
+	v8::Local< v8::Object > gunship = global->Get(
+		V8_STRING( isolate, "Gunship" ) )->ToObject();
 	gunship->SetInternalField( 0, v8::External::New( isolate, this ) );
 
-	return true;
-}
+	// RUN STARTUP SCRIPT
+	std::string startup = LoadScript( "startup.js" );
+	{
+		v8::TryCatch tryCatch;
 
-void ReportException(v8::Isolate* isolate, v8::TryCatch& try_catch) {
-	v8::HandleScope handle_scope(isolate);
-	v8::String::Utf8Value exception(try_catch.Exception());
-	const char* exception_string = *exception;
-	v8::Handle<v8::Message> message = try_catch.Message();
-	if (message.IsEmpty())
-	{
-		// V8 didn't provide any extra information about this error; just
-		// print the exception.
-		printf("%s\n", exception_string);
-	}
-	else
-	{
-		// Print (filename):(line number): (message).
-		v8::String::Utf8Value filename(message->GetScriptOrigin().ResourceName());
-		const char* filename_string = *filename;
-		int linenum = message->GetLineNumber();
-		printf("%s:%i: %s\n", filename_string, linenum, exception_string);
-		// Print line of source code.
-		v8::String::Utf8Value sourceline(message->GetSourceLine());
-		const char* sourceline_string = *sourceline;
-		printf("%s\n", sourceline_string);
-		// Print wavy underline (GetUnderline is deprecated).
-		int start = message->GetStartColumn();
-		for (int i = 0; i < start; i++)
+		v8::Local< v8::Script > script = v8::Script::Compile(
+			V8_STRING( isolate, startup.c_str() ) );
+		v8::Local< v8::Value > result = script->Run();
+		v8::String::Utf8Value utf8( result );
+
+		if ( tryCatch.HasCaught() )
 		{
-			printf(" ");
+			printf( "startup script failed:\n" );
+			ReportException( isolate, tryCatch );
 		}
-		int end = message->GetEndColumn();
-		for (int i = start; i < end; i++)
-		{
-			printf("^");
-		}
-		printf("\n");
 	}
+
+	return true;
 }
 
 void Gunship::Start()
@@ -346,22 +334,25 @@ void Gunship::Start()
 	// create scope for v8
 	v8::Isolate::Scope isolateScope( isolate );
 	v8::HandleScope handleScope( isolate );
-	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, _context );
+	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate,
+		_context );
 	v8::Context::Scope contextScope( context );
 
-	// open startup script
-	std::string sampleScript = LoadScript( "startup.js" );
-
-	// run startup script
+	// run game script
+	std::string gameScript = LoadScript( "game.js" );
 	{
 		v8::TryCatch tryCatch;
 
-		v8::Local< v8::String > source = v8::String::NewFromUtf8( isolate, sampleScript.c_str() );
-		v8::Local< v8::Script > v8script = v8::Script::Compile( source );
-		v8::Local< v8::Value > result = v8script->Run();
+		v8::Local< v8::Script > script = v8::Script::Compile(
+			V8_STRING( isolate, gameScript.c_str() ) );
+		v8::Local< v8::Value > result = script->Run();
 		v8::String::Utf8Value utf8( result );
-		printf( "script result:\n%s\n", *utf8 );
-		ReportException( isolate, tryCatch );
+
+		if ( tryCatch.HasCaught() )
+		{
+			printf( "game script has failed:\n" );
+			ReportException( isolate, tryCatch );
+		}
 	}
 
 	// initialize debugging info
@@ -394,18 +385,28 @@ void Gunship::Start()
 			// print out state of controllers
 			for ( SDL_GameController* controller : input.controllers )
 			{
-				printf( "Controller:\t%s\n", SDL_GameControllerName( controller ) );
-				printf( "\tLeft X:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTX ) );
-				printf( "\tLeft Y:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTY ) );
-				printf( "\tRight X:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTX ) );
-				printf( "\tRight Y:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTY ) );
-				printf( "\tLeft Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT ) );
-				printf( "\tRight Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
+				printf( "Controller:\t%s\n",
+					SDL_GameControllerName( controller ) );
+				printf( "\tLeft X:\t%f\n",
+					input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTX ) );
+				printf( "\tLeft Y:\t%f\n",
+					input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTY ) );
+				printf( "\tRight X:\t%f\n",
+					input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTX ) );
+				printf( "\tRight Y:\t%f\n",
+					input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTY ) );
+				printf( "\tLeft Trigger:\t%f\n",
+					input.AxisValue( controller,
+						SDL_CONTROLLER_AXIS_TRIGGERLEFT ) );
+				printf( "\tRight Trigger:\t%f\n",
+					input.AxisValue( controller,
+						SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
 				std::cout << std::endl;
 			}
 
 			Uint32 ticks = SDL_GetTicks();
-			float fps = (float)elapsedFrames / ( (float)( ticks - startTime ) / 1000.0f );
+			float fps = (float) elapsedFrames
+				/ ( (float) ( ticks - startTime ) / 1000.0f );
 			printf( "FPS: %.2f\n", fps );
 			printf( "delta: %f\n\n", elapsedTime );
 			std::cout << std::endl;
@@ -469,8 +470,6 @@ std::string Gunship::LoadScript( const char* file )
 	char buffer[256];
 	SDL_RWops* script = SDL_RWFromFile( file, "r" ); // hoo boy this is a leak waiting to happen.
 
-	printf( "script size: %ld\n", script->size( script ) );
-
 	if ( script == nullptr )
 	{
 		printf( "Script %s not found! SDL Error: %s\n", file, SDL_GetError() );
@@ -481,14 +480,53 @@ std::string Gunship::LoadScript( const char* file )
 	size_t sentinel = 1;
 	do
 	{
-		memset( buffer, 0, sizeof(buffer) );
-		sentinel = SDL_RWread( script, buffer, sizeof(buffer) - 1, 1 );
+		memset( buffer, 0, sizeof( buffer ) );
+		sentinel = SDL_RWread( script, buffer, sizeof( buffer ) - 1, 1 );
 		result += buffer;
 	}
 	while ( sentinel != 0 );
 
 	SDL_RWclose( script );
 	return result;
+}
+
+void Gunship::ReportException( v8::Isolate* isolate, v8::TryCatch& try_catch )
+{
+	v8::HandleScope handle_scope( isolate );
+	v8::String::Utf8Value exception( try_catch.Exception() );
+	const char* exception_string = *exception;
+	v8::Handle< v8::Message > message = try_catch.Message();
+	if ( message.IsEmpty() )
+	{
+		// V8 didn't provide any extra information about this error; just
+		// print the exception.
+		printf( "%s\n", exception_string );
+	}
+	else
+	{
+		// Print (filename):(line number): (message).
+		v8::String::Utf8Value filename(
+			message->GetScriptOrigin().ResourceName() );
+		const char* filename_string = *filename;
+		int linenum = message->GetLineNumber();
+		printf( "%s:%i: %s\n", filename_string, linenum, exception_string );
+		// Print line of source code.
+		v8::String::Utf8Value sourceline( message->GetSourceLine() );
+		const char* sourceline_string = *sourceline;
+		printf( "%s\n", sourceline_string );
+		// Print wavy underline (GetUnderline is deprecated).
+		int start = message->GetStartColumn();
+		for ( int i = 0; i < start; i++ )
+		{
+			printf( " " );
+		}
+		int end = message->GetEndColumn();
+		for ( int i = start; i < end; i++ )
+		{
+			printf( "^" );
+		}
+		printf( "\n" );
+	}
 }
 
 int main( int argc, char* argv[] )
