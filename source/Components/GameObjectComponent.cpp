@@ -83,10 +83,11 @@ void GameObjectComponent::AddBehavior( const v8::FunctionCallbackInfo< v8::Value
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	printf( "argument is function: %s\n", (args[0]->IsFunction() ? "true" : "false") );
-
-	v8::Local< v8::Function > function = v8::Local< v8::Function >::Cast( args[0] );
-	v8::Persistent< v8::Object, v8::CopyablePersistentTraits< v8::Object > > _gameObject( isolate, gameObject );
-	v8::Persistent< v8::Function, v8::CopyablePersistentTraits< v8::Function > > _function( isolate, function );
-	gunship->currentScene->AddBehavior( _gameObject, _function );
+	if ( args[0]->IsFunction() )
+	{
+		v8::Local< v8::Function > function = v8::Local< v8::Function >::Cast( args[0] );
+		v8::Persistent< v8::Object, v8::CopyablePersistentTraits< v8::Object > > _gameObject( isolate, gameObject );
+		v8::Persistent< v8::Function, v8::CopyablePersistentTraits< v8::Function > > _function( isolate, function );
+		//gunship->currentScene->behaviors.push_back( BehaviorComponent(  ) )
+	}
 }

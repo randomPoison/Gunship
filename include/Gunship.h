@@ -28,7 +28,6 @@
 #include "Input.h"
 
 #include "Components/Component.h"
-#include "Components/BehaviorComponent.h"
 #include "Components/GameObjectComponent.h"
 
 #include "Scene.h"

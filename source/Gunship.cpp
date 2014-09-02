@@ -228,7 +228,7 @@ bool Gunship::InitSystems()
 	// ===============================
 	// INITIALIZE SCENE AND COMPONENTS
 	// ===============================
-	currentScene = new Scene( root, renderWindow );
+	currentScene = new Scene( this, root, renderWindow );
 
 	// initialize primitive meshes
 	createColourCube();
@@ -265,7 +265,7 @@ bool Gunship::InitializeV8()
 
 	v8::Local< v8::ObjectTemplate > _global = v8::ObjectTemplate::New();
 
-	// make gunship object
+	// GLOBAL GUNSHIP OBJECT
 	v8::Local< v8::ObjectTemplate > _gunship = v8::ObjectTemplate::New();
 	_gunship->SetInternalFieldCount( 1 );
 
@@ -279,7 +279,7 @@ bool Gunship::InitializeV8()
 	_gameObjectPrototype->Set( isolate, "AddCamera", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddCameraComponent ) );
 	_gameObjectPrototype->Set( isolate, "AddMesh", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddMesh ) );
 	_gameObjectPrototype->Set( isolate, "SetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPosition ) );
-	_gameObjectPrototype->Set( isolate, "AddBehavior", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddBehavior ) );
+	//_gameObjectPrototype->Set( isolate, "AddBehavior", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddBehavior ) );
 
 	// GAMEOBJECT INSTANCES
 	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );
@@ -413,7 +413,7 @@ void Gunship::Start()
 			elapsedFrames = 0;
 
 			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
-			printf( "Behaviors:\t%lu\n", currentScene->behaviors.size() );
+			// TODO figure out how many behaviors there are.
 			std::cout << std::endl;
 		}
 
@@ -450,14 +450,14 @@ Scene* Gunship::CurrentScene()
 Scene* Gunship::ResetCurrentScene()
 {
 	delete currentScene;
-	currentScene = new Scene( root, renderWindow );
+	currentScene = new Scene( this, root, renderWindow );
 	return currentScene;
 }
 
 Scene* Gunship::ResetCurrentScene( std::function< void( Scene& ) > init )
 {
 	delete currentScene;
-	currentScene = new Scene( root, renderWindow );
+	currentScene = new Scene( this, root, renderWindow );
 	init( *currentScene );
 	return currentScene;
 }
