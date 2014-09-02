@@ -11,6 +11,7 @@
 #include <SDL_keycode.h>
 #include <SDL_joystick.h>
 #include <SDL_gamecontroller.h>
+#include <SDL_assert.h>
 
 #include <OgreRoot.h>
 #include <OgreManualObject.h>
@@ -39,8 +40,6 @@ class Gunship
 public:
 	// SDL variables
 	SDL_Window* window;
-	SDL_RWops* startupScript;
-	char sampleScript[256];
 
 	// Ogre variables
 	Ogre::Root* root;
@@ -70,5 +69,7 @@ public:
 	Scene* CurrentScene();
 	Scene* ResetCurrentScene();
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
+
+	std::string LoadScript( const char* script );
 };
 
