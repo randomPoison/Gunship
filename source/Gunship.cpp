@@ -279,6 +279,7 @@ bool Gunship::InitializeV8()
 	_gameObjectPrototype->Set( isolate, "AddCamera", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddCameraComponent ) );
 	_gameObjectPrototype->Set( isolate, "AddMesh", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddMesh ) );
 	_gameObjectPrototype->Set( isolate, "SetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPosition ) );
+	_gameObjectPrototype->Set( isolate, "AddBehavior", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddBehavior ) );
 
 	// GAMEOBJECT INSTANCES
 	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );
@@ -412,6 +413,7 @@ void Gunship::Start()
 			elapsedFrames = 0;
 
 			printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
+			printf( "Behaviors:\t%lu\n", currentScene->behaviors.size() );
 			std::cout << std::endl;
 		}
 
@@ -465,7 +467,7 @@ std::string Gunship::LoadScript( const char* file )
 	std::string result;
 
 	char buffer[256];
-	SDL_RWops* script = SDL_RWFromFile( file, "r" );
+	SDL_RWops* script = SDL_RWFromFile( file, "r" ); // hoo boy this is a leak waiting to happen.
 
 	printf( "script size: %ld\n", script->size( script ) );
 
@@ -484,8 +486,6 @@ std::string Gunship::LoadScript( const char* file )
 		result += buffer;
 	}
 	while ( sentinel != 0 );
-
-	printf( "%s:\n%s\n\n", file, result.c_str() );
 
 	SDL_RWclose( script );
 	return result;

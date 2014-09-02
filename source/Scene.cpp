@@ -43,6 +43,11 @@ void Scene::AddMesh( ComponentInfo& gameObject, const char* mesh )
 	owner->node->attachObject( cubeEntity );
 }
 
+void Scene::AddBehavior( V8_COPYABLE_PERSISTENT(v8::Object) object, V8_COPYABLE_PERSISTENT(v8::Function) function )
+{
+	behaviors.emplace_back( object, function );
+}
+
 GameObjectComponent* Scene::FindGameObject( ComponentInfo& gameObjectInfo )
 {
 	for ( int index = static_cast<int>( gameObjectInfo.index ); index >= 0; index-- )

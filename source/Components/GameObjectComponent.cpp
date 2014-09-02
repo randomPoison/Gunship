@@ -10,7 +10,7 @@ GameObjectComponent::GameObjectComponent( Ogre::SceneNode* node, const char* nam
 
 void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
-	V8_ENTER_SCOPE();
+	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
 	if ( args.IsConstructCall() )
@@ -37,7 +37,7 @@ void GameObjectComponent::CreateGameObjectComponent( const v8::FunctionCallbackI
 
 void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
-	V8_ENTER_SCOPE();
+	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
 	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
@@ -53,7 +53,7 @@ void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8
 
 void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
-	V8_ENTER_SCOPE();
+	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
 	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
@@ -66,7 +66,7 @@ void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& 
 
 void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
-	V8_ENTER_SCOPE();
+	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
 	ComponentInfo info{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
@@ -78,3 +78,15 @@ void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value
 	component->node->setPosition( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
 }
 
+void GameObjectComponent::AddBehavior( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_CALLBACK_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	printf( "argument is function: %s\n", (args[0]->IsFunction() ? "true" : "false") );
+
+	v8::Local< v8::Function > function = v8::Local< v8::Function >::Cast( args[0] );
+	v8::Persistent< v8::Object, v8::CopyablePersistentTraits< v8::Object > > _gameObject( isolate, gameObject );
+	v8::Persistent< v8::Function, v8::CopyablePersistentTraits< v8::Function > > _function( isolate, function );
+	gunship->currentScene->AddBehavior( _gameObject, _function );
+}
