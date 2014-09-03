@@ -70,7 +70,15 @@ public:
 	Scene* ResetCurrentScene();
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
 
-	static std::string LoadScript( const char* script );
+	/**
+	 * \brief Loads and runs a startup script.
+	 *
+	 * \info A startup script is one that is used by Gunship to
+	 * initialize the JS context.
+	 */
+	void RunStartupScript( const char* script );
+
+	static std::string LoadScript( std::string script );
 	static void ReportException( v8::Isolate* isolate, v8::TryCatch& tryCatch );
 };
 

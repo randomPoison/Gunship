@@ -64,6 +64,9 @@ file(GLOB COMPONENT_INCLUDES
 	include/Components/*.h)
 source_group("include\\components" FILES ${COMPONENT_INCLUDES})
 
+# add js file definition
+add_definitions(-DJS_ROOT_DIR="${CMAKE_SOURCE_DIR}/js")
+
 # Now compile the library
 add_executable(	${PROJECT_NAME}
 				${PROJECT_INCLUDES} ${PROJECT_SOURCES}
@@ -71,10 +74,6 @@ add_executable(	${PROJECT_NAME}
 target_link_libraries(	${PROJECT_NAME}
 						${LIBS}
 						${V8_LINK_LIBRARIES} ${V8_LINK_LIBRARIES} rt pthread)
-
-add_custom_command(	TARGET ${PROJECT_NAME} PRE_BUILD
-					COMMAND ${CMAKE_COMMAND} -E copy_directory
-					${CMAKE_SOURCE_DIR}/js $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")

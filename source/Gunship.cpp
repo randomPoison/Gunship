@@ -334,21 +334,20 @@ bool Gunship::InitializeV8()
 	v8::Local< v8::Object > gunship = global->Get( V8_STRING( isolate, "Gunship" ) )->ToObject();
 	gunship->SetInternalField( 0, v8::External::New( isolate, this ) );
 
-	// RUN STARTUP SCRIPT
-	std::string startup = LoadScript( "startup.js" );
-	{
-		v8::TryCatch tryCatch;
+	// RUN STARTUP SCRIPTS
+	// gunship startup
+	RunStartupScript( "startup.js" );
 
-		v8::Local< v8::Script > script = v8::Script::Compile( V8_STRING( isolate, startup.c_str() ) );
-		v8::Local< v8::Value > result = script->Run();
-		v8::String::Utf8Value utf8( result );
-
-		if ( tryCatch.HasCaught() )
-		{
-			printf( "startup script failed:\n" );
-			ReportException( isolate, tryCatch );
-		}
-	}
+	// gl-matrix startup
+	RunStartupScript( "gl-matrix/common.js" );
+	RunStartupScript( "gl-matrix/vec2.js" );
+	RunStartupScript( "gl-matrix/vec3.js" );
+	RunStartupScript( "gl-matrix/vec4.js" );
+	RunStartupScript( "gl-matrix/mat2.js" );
+	RunStartupScript( "gl-matrix/mat2d.js" );
+	RunStartupScript( "gl-matrix/mat3.js" );
+	RunStartupScript( "gl-matrix/mat4.js" );
+	RunStartupScript( "gl-matrix/quat.js" );
 
 	return true;
 }
@@ -360,8 +359,7 @@ void Gunship::Start()
 	// create scope for v8
 	v8::Isolate::Scope isolateScope( isolate );
 	v8::HandleScope handleScope( isolate );
-	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate,
-		_context );
+	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, _context );
 	v8::Context::Scope contextScope( context );
 
 	// run game script
@@ -489,16 +487,16 @@ Scene* Gunship::ResetCurrentScene( std::function< void( Scene& ) > init )
 	return currentScene;
 }
 
-std::string Gunship::LoadScript( const char* file )
+std::string Gunship::LoadScript( std::string file )
 {
 	std::string result;
 
 	char buffer[256];
-	SDL_RWops* script = SDL_RWFromFile( file, "r" ); // hoo boy this is a leak waiting to happen.
+	SDL_RWops* script = SDL_RWFromFile( file.c_str(), "r" ); // hoo boy this is a leak waiting to happen.
 
 	if ( script == nullptr )
 	{
-		printf( "Script %s not found! SDL Error: %s\n", file, SDL_GetError() );
+		printf( "Script %s not found! SDL Error: %s\n", file.c_str(), SDL_GetError() );
 		SDL_RWclose( script );
 		return std::string();
 	}
@@ -514,6 +512,30 @@ std::string Gunship::LoadScript( const char* file )
 
 	SDL_RWclose( script );
 	return result;
+}
+
+void Gunship::RunStartupScript( const char* file )
+{
+	// create scope for v8
+	v8::Isolate::Scope isolateScope( isolate );
+	v8::HandleScope handleScope( isolate );
+	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, _context );
+	v8::Context::Scope contextScope( context );
+
+	std::string startup = LoadScript( JS_ROOT_DIR + ( "/" + std::string( file ) ) );
+	{
+		v8::TryCatch tryCatch;
+
+		v8::Local< v8::Script > script = v8::Script::Compile( V8_STRING( isolate, startup.c_str() ) );
+		v8::Local< v8::Value > result = script->Run();
+		v8::String::Utf8Value utf8( result );
+
+		if ( tryCatch.HasCaught() )
+		{
+			printf( "startup script %s failed:\n", file );
+			ReportException( isolate, tryCatch );
+		}
+	}
 }
 
 void Gunship::ReportException( v8::Isolate* isolate, v8::TryCatch& try_catch )
