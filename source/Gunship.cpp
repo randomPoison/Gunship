@@ -339,15 +339,11 @@ bool Gunship::InitializeV8()
 	RunStartupScript( "startup.js" );
 
 	// gl-matrix startup
-	RunStartupScript( "gl-matrix/common.js" );
-	RunStartupScript( "gl-matrix/vec2.js" );
-	RunStartupScript( "gl-matrix/vec3.js" );
-	RunStartupScript( "gl-matrix/vec4.js" );
-	RunStartupScript( "gl-matrix/mat2.js" );
-	RunStartupScript( "gl-matrix/mat2d.js" );
-	RunStartupScript( "gl-matrix/mat3.js" );
-	RunStartupScript( "gl-matrix/mat4.js" );
-	RunStartupScript( "gl-matrix/quat.js" );
+#ifdef _DEBUG
+	RunStartupScript( "gl-matrix/gl-matrix.js" );
+#else
+	RunStartupScript( "gl-matrix/gl-matrix-min.js" );
+#endif
 
 	return true;
 }
