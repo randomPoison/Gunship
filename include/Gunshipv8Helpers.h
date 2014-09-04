@@ -9,6 +9,7 @@
 #define V8_UNSIGNED( isolate, value ) v8::Integer::NewFromUnsigned( isolate, value )
 #define V8_STRING( isolate, string ) v8::String::NewFromUtf8( isolate, string )
 #define V8_BOOL( isolate, value ) v8::Boolean::New( isolate, value )
+#define V8_NUMBER( isolate, value ) v8::Number::New( isolate, value )
 
 #define V8_GET_UNSIGNED( isolate, object, param ) object->Get( V8_STRING( isolate, param ) )->Uint32Value()
 #define V8_GET_FROM_VECTOR( object, index ) object->Get( index )->NumberValue()

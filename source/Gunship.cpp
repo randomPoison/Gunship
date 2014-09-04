@@ -314,6 +314,7 @@ bool Gunship::InitializeV8()
 	_gameObjectPrototype->Set( isolate, "SetPositionByValue", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPositionByValue ) );
 	_gameObjectPrototype->Set( isolate, "Translate", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::Translate ) );
 	_gameObjectPrototype->Set( isolate, "TranslateByValue", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::TranslateByValue ) );
+	_gameObjectPrototype->Set( isolate, "GetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::GetPosition ) );
 
 	// GAMEOBJECT INSTANCES
 	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );

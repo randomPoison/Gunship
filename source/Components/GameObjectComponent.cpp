@@ -127,3 +127,24 @@ void GameObjectComponent::TranslateByValue( const v8::FunctionCallbackInfo< v8::
 
 	component->node->translate( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
 }
+
+void GameObjectComponent::GetPosition( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_CALLBACK_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
+
+	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+
+	v8::Local< v8::Float32Array > vec3 = v8::Local< v8::Float32Array >::Cast( args[0] );
+	Ogre::Vector3 pos = component->node->getPosition();
+	vec3->Set( 0, V8_NUMBER( isolate, pos.x ) );
+	vec3->Set( 1, V8_NUMBER( isolate, pos.y ) );
+	vec3->Set( 2, V8_NUMBER( isolate, pos.z ) );
+
+	args.GetReturnValue().Set( vec3 );
+}
