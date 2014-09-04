@@ -312,6 +312,7 @@ bool Gunship::InitializeV8()
 	_gameObjectPrototype->Set( isolate, "AddMesh", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::AddMesh ) );
 	_gameObjectPrototype->Set( isolate, "SetPosition", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::SetPosition ) );
 	_gameObjectPrototype->Set( isolate, "Translate", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::Translate ) );
+	_gameObjectPrototype->Set( isolate, "TranslateByValue", V8_FUNCTION_TEMPLATE( isolate, GameObjectComponent::TranslateByValue ) );
 
 	// GAMEOBJECT INSTANCES
 	_gameObjectInstance->Set( isolate, "id", V8_UNSIGNED( isolate, -1 ) );

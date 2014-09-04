@@ -11,5 +11,6 @@
 #define V8_BOOL( isolate, value ) v8::Boolean::New( isolate, value )
 
 #define V8_GET_UNSIGNED( isolate, object, param ) object->Get( V8_STRING( isolate, param ) )->Uint32Value()
+#define V8_GET_FROM_VECTOR( object, index ) object->Get( index )->NumberValue()
 
 #define V8_COPYABLE_PERSISTENT( type ) v8::Persistent< type, v8::CopyablePersistentTraits< type > >

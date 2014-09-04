@@ -17,4 +17,5 @@ struct GameObjectComponent
 
 	static void SetPosition( const v8::FunctionCallbackInfo< v8::Value >& args );
 	static void Translate( const v8::FunctionCallbackInfo< v8::Value >& args );
+	static void TranslateByValue( const v8::FunctionCallbackInfo< v8::Value >& args );
 };

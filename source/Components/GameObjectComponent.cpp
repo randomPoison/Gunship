@@ -3,8 +3,8 @@
 
 GameObjectComponent::GameObjectComponent( Ogre::SceneNode* node, const char* name ) :
 	id( Component::GenerateUniqueComponentID() ),
-	name( name ),
-	node( node )
+		name( name ),
+		node( node )
 {
 }
 
@@ -40,8 +40,9 @@ void GameObjectComponent::AddCameraComponent( const v8::FunctionCallbackInfo< v8
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
-						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
 
 	if ( !gameObject->Get( V8_STRING( isolate, "hasCamera" ) )->BooleanValue() )
 	{
@@ -56,8 +57,9 @@ void GameObjectComponent::AddMesh( const v8::FunctionCallbackInfo< v8::Value >& 
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
-						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
 
 	v8::String::Utf8Value mesh( args[0] );
 	gunship->currentScene->AddMesh( info, *mesh );
@@ -69,8 +71,9 @@ void GameObjectComponent::SetPosition( const v8::FunctionCallbackInfo< v8::Value
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
-						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
 
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
 	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
@@ -83,8 +86,25 @@ void GameObjectComponent::Translate( const v8::FunctionCallbackInfo< v8::Value >
 	V8_CALLBACK_SCOPE();
 	V8_CALLBACK_INIT(args);
 
-	ComponentInfo info{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
-						V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
+
+	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+
+	v8::Local< v8::Float32Array > vec3 = v8::Local< v8::Float32Array >::Cast( args[0] );
+	component->node->translate( V8_GET_FROM_VECTOR( vec3, 0 ), V8_GET_FROM_VECTOR( vec3, 1 ), V8_GET_FROM_VECTOR( vec3, 2 ) );
+}
+
+void GameObjectComponent::TranslateByValue( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_CALLBACK_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
 
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
 	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
