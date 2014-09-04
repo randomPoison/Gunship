@@ -128,6 +128,37 @@ void GameObjectComponent::TranslateByValue( const v8::FunctionCallbackInfo< v8::
 	component->node->translate( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
 }
 
+void GameObjectComponent::SetScale( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_CALLBACK_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
+
+	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+
+	v8::Local< v8::Float32Array > vec3 = v8::Local< v8::Float32Array >::Cast( args[0] );
+	component->node->setScale( V8_GET_FROM_VECTOR( vec3, 0 ), V8_GET_FROM_VECTOR( vec3, 1 ), V8_GET_FROM_VECTOR( vec3, 2 ) );
+}
+
+void GameObjectComponent::SetScaleByValue( const v8::FunctionCallbackInfo< v8::Value >& args )
+{
+	V8_CALLBACK_SCOPE();
+	V8_CALLBACK_INIT(args);
+
+	ComponentInfo info
+	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
+
+	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
+	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
+
+	component->node->setScale( args[0]->NumberValue(), args[1]->NumberValue(), args[2]->NumberValue() );
+}
+
 void GameObjectComponent::GetPosition( const v8::FunctionCallbackInfo< v8::Value >& args )
 {
 	V8_CALLBACK_SCOPE();
