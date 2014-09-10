@@ -25,10 +25,6 @@ void Input::ConsumeInput()
 			exit = true;
 			break;
 		case SDL_KEYDOWN:
-			if( event.key.keysym.scancode != SDL_GetScancodeFromKey( event.key.keysym.scancode ) )
-			{
-				printf( "Physical %s key acting as %s key", SDL_GetScancodeName( event.key.keysym.scancode ), SDL_GetKeyName( event.key.keysym.scancode ) );
-			}
 			if ( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.scancode ) == downKeys.end() )
 			{
 				downKeys.push_back( event.key.keysym.scancode );

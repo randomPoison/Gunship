@@ -28,7 +28,7 @@ Gunship.UpdateInput = function( keys )
 {
 	keys.forEach( function( key )
 	{
-		var callbacks = this.keyDownEvents[key] || [];
+		var callbacks = this.keyDownEvents[key] || []; // ensure that the callback array exists
 		callbacks.forEach( function( callback )
 		{
 			callback();
@@ -44,7 +44,6 @@ Gunship.GameObject.prototype.AddBehavior = function( func )
 
 Gunship.OnKeyDown = function( key, func )
 {
-	print( "adding func to key down: " + key );
 	if ( !this.keyDownEvents[key] )
 	{
 		this.keyDownEvents[key] = []
