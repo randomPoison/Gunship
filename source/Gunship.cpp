@@ -329,8 +329,7 @@ bool Gunship::InitializeV8()
 	_global->Set( isolate, "print", V8_FUNCTION_TEMPLATE( isolate, Print ) );
 
 	// CREATE CONTEXT
-	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr,
-		_global );
+	v8::Local< v8::Context > context = v8::Context::New( isolate, nullptr, _global );
 	_context.Reset( isolate, context );
 	v8::Context::Scope contextScope( context );
 
@@ -349,6 +348,8 @@ bool Gunship::InitializeV8()
 #else
 	RunStartupScript( "gl-matrix/gl-matrix-min.js" );
 #endif
+
+	RunStartupScript( "SDL_scancode.js" );
 
 	return true;
 }
@@ -410,22 +411,13 @@ void Gunship::Start()
 			// print out state of controllers
 			for ( SDL_GameController* controller : input.controllers )
 			{
-				printf( "Controller:\t%s\n",
-					SDL_GameControllerName( controller ) );
-				printf( "\tLeft X:\t%f\n",
-					input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTX ) );
-				printf( "\tLeft Y:\t%f\n",
-					input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTY ) );
-				printf( "\tRight X:\t%f\n",
-					input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTX ) );
-				printf( "\tRight Y:\t%f\n",
-					input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTY ) );
-				printf( "\tLeft Trigger:\t%f\n",
-					input.AxisValue( controller,
-						SDL_CONTROLLER_AXIS_TRIGGERLEFT ) );
-				printf( "\tRight Trigger:\t%f\n",
-					input.AxisValue( controller,
-						SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
+				printf( "Controller:\t%s\n", SDL_GameControllerName( controller ) );
+				printf( "\tLeft X:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTX ) );
+				printf( "\tLeft Y:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_LEFTY ) );
+				printf( "\tRight X:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTX ) );
+				printf( "\tRight Y:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_RIGHTY ) );
+				printf( "\tLeft Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT ) );
+				printf( "\tRight Trigger:\t%f\n", input.AxisValue( controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
 				std::cout << std::endl;
 			}
 
