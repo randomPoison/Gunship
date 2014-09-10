@@ -4,10 +4,10 @@ Gunship.GameObject.prototype.gunship = Gunship;
 
 Gunship.behaviors = [];
 
-Gunship.keyDownEvents = {};
-Gunship.keyUpEvents = {};
-Gunship.keyPressedEvents = {};
-Gunship.keyReleasedEvents = {};
+Gunship.keyDownEvents = [];
+Gunship.keyUpEvents = [];
+Gunship.keyPressedEvents = [];
+Gunship.keyReleasedEvents = [];
 
 Gunship.AddBehavior = function( gameObject, func )
 {
@@ -24,6 +24,18 @@ Gunship.Update = function( delta )
 	}
 };
 
+Gunship.UpdateInput = function( keys )
+{
+	keys.forEach( function( key )
+	{
+		var callbacks = this.keyDownEvents[key] || [];
+		callbacks.forEach( function( callback )
+		{
+			callback();
+		}, this );
+	}, this );
+};
+
 // add convenience methods
 Gunship.GameObject.prototype.AddBehavior = function( func )
 {
@@ -32,18 +44,19 @@ Gunship.GameObject.prototype.AddBehavior = function( func )
 
 Gunship.OnKeyDown = function( key, func )
 {
-	if ( !keyDownEvents[key] )
+	print( "adding func to key down: " + key );
+	if ( !this.keyDownEvents[key] )
 	{
-		keyDownEvents[key] = []
+		this.keyDownEvents[key] = []
 	}
-	keyDownEvents[key].push( func );
+	this.keyDownEvents[key].push( func );
 };
 
 Gunship.OnKeyPressed = function( key, func )
 {
-	if ( !keyPressedEvents[key] )
+	if ( !this.keyPressedEvents[key] )
 	{
-		keyPressedEvents[key] = [];
+		this.keyPressedEvents[key] = [];
 	}
-	keyPressedEvents[key].push( key, func );
+	this.keyPressedEvents[key].push( key, func );
 };

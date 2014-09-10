@@ -403,7 +403,7 @@ void Gunship::Start()
 		lastTime = currentTime;
 
 		// debug output
-		if ( input.KeyPressed( SDLK_BACKQUOTE ) )
+		if ( input.KeyPressed( SDL_SCANCODE_GRAVE ) )
 		{
 			std::cout << "Gunship Debugging Info:" << std::endl;
 			std::cout << "-----------------------" << std::endl;
@@ -435,6 +435,10 @@ void Gunship::Start()
 			std::cout << std::endl;
 		}
 
+		// call input callbacks
+		input.Update( this );
+
+		// update behaviors
 		currentScene->Update( input, elapsedTime );
 
 		// render stuffs

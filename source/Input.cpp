@@ -25,15 +25,19 @@ void Input::ConsumeInput()
 			exit = true;
 			break;
 		case SDL_KEYDOWN:
-			if ( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.sym ) == downKeys.end() )
+			if( event.key.keysym.scancode != SDL_GetScancodeFromKey( event.key.keysym.scancode ) )
 			{
-				downKeys.push_back( event.key.keysym.sym );
-				keyDownEvents.push_back( event.key.keysym.sym );
+				printf( "Physical %s key acting as %s key", SDL_GetScancodeName( event.key.keysym.scancode ), SDL_GetKeyName( event.key.keysym.scancode ) );
+			}
+			if ( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.scancode ) == downKeys.end() )
+			{
+				downKeys.push_back( event.key.keysym.scancode );
+				keyDownEvents.push_back( event.key.keysym.scancode );
 			}
 			break;
 		case SDL_KEYUP:
-			downKeys.erase( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.sym ) );
-			keyUpEvents.push_back( event.key.keysym.sym );
+			downKeys.erase( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.scancode ) );
+			keyUpEvents.push_back( event.key.keysym.scancode );
 			break;
 		case SDL_JOYAXISMOTION:
 			joyAxisEvents.push_back( event.jaxis );
@@ -42,7 +46,28 @@ void Input::ConsumeInput()
 	}
 }
 
-bool Input::KeyPressed( SDL_Keycode key ) const
+void Input::Update( Gunship* gunship )
+{
+	// enter v8 scope
+	v8::Isolate* isolate = gunship->isolate;
+	v8::Isolate::Scope isolateScope( isolate );
+	v8::HandleScope handleScope( isolate );
+	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, gunship->_context );
+	v8::Context::Scope contextScope( context );
+
+	v8::Local< v8::Array > _downKeys = V8_ARRAY( isolate, downKeys.size() );
+	for ( unsigned index = 0; index < downKeys.size(); index++ )
+	{
+		_downKeys->Set( index, V8_INTEGER( isolate, downKeys[index] ) );
+	}
+
+	v8::Local< v8::Object > _gunship = context->Global()->Get( V8_STRING( isolate, "Gunship" ) )->ToObject();
+	v8::Local< v8::Function > callback = _gunship->ToObject()->Get( V8_STRING( isolate, "UpdateInput" ) ).As< v8::Function >();
+	v8::Local< v8::Value > args[] = { v8::Local< v8::Array >::New( isolate, _downKeys ) };
+	callback->Call( _gunship, 1, args );
+}
+
+bool Input::KeyPressed( SDL_Scancode key ) const
 {
 	return std::find( keyDownEvents.begin(), keyDownEvents.end(), key ) != keyDownEvents.end();
 }
