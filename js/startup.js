@@ -24,11 +24,32 @@ Gunship.Update = function( delta )
 	}
 };
 
-Gunship.UpdateInput = function( keys )
+Gunship.UpdateInput = function( input )
 {
-	keys.forEach( function( key )
+	// pressed keys
+	input.pressed.forEach( function( key )
+	{
+		var callbacks = this.keyPressedEvents[key] || [];
+		callbacks.forEach( function( callback )
+		{
+			callback();
+		}, this );
+	}, this );
+
+	// down keys
+	input.down.forEach( function( key )
 	{
 		var callbacks = this.keyDownEvents[key] || []; // ensure that the callback array exists
+		callbacks.forEach( function( callback )
+		{
+			callback();
+		}, this );
+	}, this );
+
+	// released keys
+	input.released.forEach( function( key )
+	{
+		var callbacks = this.keyReleasedEvents[key] || [];
 		callbacks.forEach( function( callback )
 		{
 			callback();
@@ -57,5 +78,14 @@ Gunship.OnKeyPressed = function( key, func )
 	{
 		this.keyPressedEvents[key] = [];
 	}
-	this.keyPressedEvents[key].push( key, func );
+	this.keyPressedEvents[key].push( func );
+};
+
+Gunship.OnKeyReleased = function( key, func )
+{
+	if ( !this.keyReleasedEvents[key] )
+	{
+		this.keyReleasedEvents[key] = [];
+	}
+	this.keyReleasedEvents[key].push( func );
 };
