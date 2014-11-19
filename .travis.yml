@@ -17,6 +17,9 @@ before_install:
   - sudo hg clone https://bitbucket.org/sinbad/ogre
   - sudo apt-get install libxaw7-dev
 
+  # clone v8
+  - sudo git clone https://github.com/v8/v8-git-mirror.git
+
 install:
   # install g++4.8
   - sudo apt-get update -qq
@@ -40,6 +43,13 @@ install:
   - cd SDL2-2.0.3
   - sudo ./configure && sudo make
   - sudo make install
+  - cd ..
+  
+  # build v8 and export the environement variable
+  - cd v8-git-mirror
+  - sudo make builddeps
+  - sudo make native
+  - sudo export V8_HOME=${PWD}
   - cd ..
 
 before_script:
