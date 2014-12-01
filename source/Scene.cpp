@@ -25,11 +25,19 @@ void Scene::Update( const Input& input, float delta )
 	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, gunship->_context );
 	v8::Context::Scope contextScope( context );
 
+	v8::TryCatch tryCatch;
+
 	// call js Update() function
 	v8::Local< v8::Object > _gunship = context->Global()->Get( V8_STRING( isolate, "Gunship") )->ToObject();
 	v8::Local< v8::Function > _update = v8::Local< v8::Function >::Cast( _gunship->Get( V8_STRING( isolate, "Update" ) ) );
 	v8::Handle< v8::Value > args[] = { v8::Number::New( isolate, delta ) };
 	_update->Call( context->Global(), 1, args );
+
+	if ( tryCatch.HasCaught() )
+	{
+		printf( "game script updated has failed:\n" );
+		V8Helpers::ReportException( isolate, tryCatch );
+	}
 }
 
 ComponentInfo Scene::AddGameObject( const char* name )

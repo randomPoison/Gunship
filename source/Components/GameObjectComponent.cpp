@@ -165,8 +165,8 @@ void GameObjectComponent::GetPosition( const v8::FunctionCallbackInfo< v8::Value
 	V8_CALLBACK_INIT(args);
 
 	ComponentInfo info
-	{	V8_GET_UNSIGNED( isolate, gameObject, "id" ),
-		V8_GET_UNSIGNED( isolate, gameObject, "index" )};
+	{ V8_GET_UNSIGNED( isolate, gameObject, "id" ),
+	  V8_GET_UNSIGNED( isolate, gameObject, "index" ) };
 
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
 	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
