@@ -7,15 +7,12 @@ before_install:
   - cd ..
   - sudo add-apt-repository ppa:apokluda/boost1.53 -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-add-repository ppa:openmw/openmw -y
   - sudo apt-get update
 
   # download sdl2
   - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - sudo tar -xvzf SDL2-2.0.3.tar.gz
-  
-  # clone Ogre1.9 and install dependencies
-  - sudo hg clone https://bitbucket.org/sinbad/ogre
-  - sudo apt-get install libxaw7-dev
 
   # clone v8
   - sudo git clone https://github.com/v8/v8-git-mirror.git
@@ -29,15 +26,8 @@ install:
   # install boost1.53
   - sudo apt-get install -qq libboost1.53-dev
 
-  # build and install Ogre
-  - cd ogre
-  - sudo hg update v1-9-0
-  - sudo mkdir build
-  - cd build
-  - sudo cmake ..
-  - sudo make
-  - sudo make install
-  - cd ../..
+  # install Ogre
+  - sudo apt-get install -qq libogre-1.9-dev
 
   # build and install SDL2
   - cd SDL2-2.0.3
@@ -46,11 +36,11 @@ install:
   - cd ..
   
   # build v8 and export the environement variable
-  - cd v8-git-mirror
-  - sudo make builddeps
-  - sudo make native
-  - sudo export V8_HOME=${PWD}
-  - cd ..
+  #- cd v8-git-mirror
+  #- sudo make builddeps
+  #- sudo make native
+  #- sudo export V8_HOME=${PWD}
+  #- cd ..
 
 before_script:
   # configure build directory
