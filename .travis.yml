@@ -5,25 +5,21 @@ compiler:
 
 before_install:
   - cd ..
-  - sudo add-apt-repository ppa:boost-latest/ppa -y
+  - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu `lsb_release -sc` main universe restricted multiverse" -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-add-repository ppa:openmw/openmw -y
   - sudo apt-get update
 
 install:
   # install g++4.8
-  - sudo apt-get update -qq
   - sudo apt-get install -qq g++-4.8
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-
-  # install boost
-  - sudo apt-get install -qq libboost-thread1.55-dev
 
   # install Ogre
   - sudo apt-get install -qq libogre-1.9-dev
 
   # build and install SDL2
-  - sudo apt-get install libsdl2-dev
+  - sudo apt-get install -qq libsdl2-dev
 
   # build v8 and export the environement variable
   - sudo apt-get install -qq libv8-dev
