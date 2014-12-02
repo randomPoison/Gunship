@@ -75,7 +75,7 @@ target_link_libraries(	${PROJECT_NAME}
 						${LIBS}
 						${V8_LINK_LIBRARIES} ${V8_LINK_LIBRARIES} rt pthread)
 
-if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+#if (CMAKE_COMPILER_IS_GNUCXX)
+#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
+#endif(CMAKE_COMPILER_IS_GNUCXX)
 

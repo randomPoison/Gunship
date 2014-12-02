@@ -28,7 +28,7 @@ before_script:
   # configure build directory
   - sudo mkdir build
   - cd build
+  - sudo cmake ../Gunship
 
 script:
-  - sudo cmake ../Gunship
   - sudo make
