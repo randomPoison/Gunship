@@ -15,6 +15,12 @@
 #define V8_NUMBER( isolate, value ) v8::Number::New( isolate, value )
 #define V8_ARRAY( isolate, value ) v8::Array::New( isolate, value );
 
+#define V8_FILL_ARRAY_FROM_VECTOR( array, vector, type ) \
+	for ( unsigned index = 0; index < vector.size(); index++ )\
+	{\
+		array->Set( index, type( isolate, vector[index] ) );\
+	}
+
 #define V8_GET_UNSIGNED( isolate, object, param ) object->Get( V8_STRING( isolate, param ) )->Uint32Value()
 #define V8_GET_FROM_VECTOR( object, index ) object->Get( index )->NumberValue()
 
