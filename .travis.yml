@@ -8,11 +8,11 @@ before_install:
   - sudo add-apt-repository ppa:apokluda/boost1.53 -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-add-repository ppa:openmw/openmw -y
-  - sudo apt-add-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get update
 
-  # clone v8
-  #- sudo git clone https://github.com/v8/v8-git-mirror.git
+  # download sdl2
+  - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
+  - sudo tar -xvzf SDL2-2.0.3.tar.gz
 
 install:
   # install g++4.8
@@ -26,15 +26,14 @@ install:
   # install Ogre
   - sudo apt-get install -qq libogre-1.9-dev
 
-  # install SDL2
-  - sudo apt-get install -qq libsdl2
-  
+  # build and install SDL2
+  - cd SDL2-2.0.3
+  - sudo ./configure && sudo make
+  - sudo make install
+  - cd ..
+
   # build v8 and export the environement variable
-  #- cd v8-git-mirror
-  #- sudo make builddeps
-  #- sudo make native
-  #- sudo export V8_HOME=${PWD}
-  #- cd ..
+  - sudo apt-get install -qq libv8-dev
 
 before_script:
   # configure build directory
