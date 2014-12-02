@@ -36,11 +36,11 @@ install:
   - cd ..
   
   # build v8 and export the environement variable
-  #- cd v8-git-mirror
-  #- sudo make builddeps
-  #- sudo make native
-  #- sudo export V8_HOME=${PWD}
-  #- cd ..
+  - cd v8-git-mirror
+  - sudo make builddeps
+  - sudo make native
+  - sudo export V8_HOME=${PWD}
+  - cd ..
 
 before_script:
   # configure build directory
