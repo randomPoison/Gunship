@@ -171,11 +171,18 @@ void GameObjectComponent::GetPosition( const v8::FunctionCallbackInfo< v8::Value
 	GameObjectComponent* component = gunship->currentScene->FindGameObject( info );
 	gameObject->Set( V8_STRING( isolate, "index" ), V8_UNSIGNED( isolate, info.index ) );
 
-	v8::Local< v8::Float32Array > vec3 = v8::Local< v8::Float32Array >::Cast( args[0] );
-	Ogre::Vector3 pos = component->node->getPosition();
-	vec3->Set( 0, V8_NUMBER( isolate, pos.x ) );
-	vec3->Set( 1, V8_NUMBER( isolate, pos.y ) );
-	vec3->Set( 2, V8_NUMBER( isolate, pos.z ) );
+	if ( args[0]->IsFloat32Array() )
+	{
+		v8::Local< v8::Float32Array > vec3 = v8::Local< v8::Float32Array >::Cast( args[0] );
+		Ogre::Vector3 pos = component->node->getPosition();
+		vec3->Set( 0, V8_NUMBER( isolate, pos.x ) );
+		vec3->Set( 1, V8_NUMBER( isolate, pos.y ) );
+		vec3->Set( 2, V8_NUMBER( isolate, pos.z ) );
 
-	args.GetReturnValue().Set( vec3 );
+		args.GetReturnValue().Set( vec3 );
+	}
+	else
+	{
+		isolate->ThrowException( v8::Exception::TypeError( v8::String::NewFromUtf8( isolate, "GameObject.GetPosition() must be passed a vec3 an an argument." ) ) );
+	}
 }
