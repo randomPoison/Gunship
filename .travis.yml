@@ -5,14 +5,10 @@ compiler:
 
 before_install:
   - cd ..
-  - sudo add-apt-repository ppa:apokluda/boost1.53 -y
+  - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu `lsb_release -sc` main universe restricted multiverse" -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-add-repository ppa:openmw/openmw -y
   - sudo apt-get update
-
-  # download sdl2
-  - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
-  - sudo tar -xvzf SDL2-2.0.3.tar.gz
 
 install:
   # install g++4.8
@@ -20,17 +16,14 @@ install:
   - sudo apt-get install -qq g++-4.8
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 
-  # install boost1.53
-  - sudo apt-get install -qq libboost1.53-dev
+  # install boost
+  - sudo apt-get install -qq libboost-dev
 
   # install Ogre
   - sudo apt-get install -qq libogre-1.9-dev
 
   # build and install SDL2
-  - cd SDL2-2.0.3
-  - sudo ./configure && sudo make
-  - sudo make install
-  - cd ..
+  - sudo apt-get install libsdl2-dev
 
   # build v8 and export the environement variable
   - sudo apt-get install -qq libv8-dev
