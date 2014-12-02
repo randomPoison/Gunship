@@ -1,5 +1,7 @@
 #pragma once
 
+#include <v8.h>
+
 #define V8_CALLBACK_SCOPE()	v8::Isolate* isolate = v8::Isolate::GetCurrent();\
 							v8::HandleScope handleScope( isolate );
 #define V8_CALLBACK_INIT( args )	v8::Local< v8::Object > gameObject = args.Holder();\
@@ -21,3 +23,8 @@
 
 #define V8_GET_UNSIGNED( isolate, object, param ) object->Get( V8_STRING( isolate, param ) )->Uint32Value()
 #define V8_GET_FROM_VECTOR( object, index ) object->Get( index )->NumberValue()
+
+namespace V8Helpers
+{
+	void ReportException( v8::Isolate* isolate, v8::TryCatch& try_catch );
+}

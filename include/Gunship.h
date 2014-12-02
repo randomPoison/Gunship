@@ -23,8 +23,8 @@
 #include <OgreEntity.h>
 #include <OgreVector3.h>
 
-#include "GunshipTypes.h"
-#include "Gunshipv8Helpers.h"
+#include "Types.h"
+#include "V8Helpers.h"
 #include "Input.h"
 
 #include "Components/Component.h"
@@ -79,6 +79,5 @@ public:
 	void RunStartupScript( const char* script );
 
 	static std::string LoadScript( std::string script );
-	static void ReportException( v8::Isolate* isolate, v8::TryCatch& tryCatch );
 };
 
