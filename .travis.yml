@@ -5,7 +5,9 @@ compiler:
 
 before_install:
   - cd ..
-  - sudo add-apt-repository ppa:andrewfenn/ogredev -y
+
+  - sudo add-apt-repository ppa:openmw/openmw -y
+  - sudo add-apt-repository ppa:dirk-computer42/c42-backport-games -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-add-repository ppa:alt-os/nodejs -y
   - sudo apt-get update
@@ -16,7 +18,7 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 
   # install Ogre
-  - sudo apt-get install -qq libogre-dev
+  - sudo apt-get install -qq libogre1.8-dev
 
   # build and install SDL2
   - sudo apt-get install -qq libsdl2-dev
