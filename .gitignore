@@ -9,3 +9,4 @@ tmp
 *.o
 *.make
 *.out
+*.old.*

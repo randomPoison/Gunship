@@ -1,8 +1,7 @@
 #include "Gunship.h"
 #include "Components/Component.h"
 
-Component::Component( GameObject& owner ) :
-	owner( owner ),
+Component::Component() :
 	id( GenerateUniqueComponentID() )
 {
 }

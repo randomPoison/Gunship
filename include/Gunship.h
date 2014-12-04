@@ -3,12 +3,15 @@
 #include <vector>
 #include <functional>
 
+#include <v8.h>
+
 #include <SDL_syswm.h>
 #include <SDL_events.h>
 #include <SDL_keyboard.h>
 #include <SDL_keycode.h>
 #include <SDL_joystick.h>
 #include <SDL_gamecontroller.h>
+#include <SDL_assert.h>
 
 #include <OgreRoot.h>
 #include <OgreManualObject.h>
@@ -20,24 +23,14 @@
 #include <OgreEntity.h>
 #include <OgreVector3.h>
 
-#include "GunshipTypes.h"
+#include "Types.h"
+#include "V8Helpers.h"
+#include "Input.h"
 
-// component locators
-#include "Components/ComponentLocator.h"
-#include "Components/Camera.h"
-#include "Components/Behavior.h"
-#include "Components/Collider.h"
-#include "Components/GameObject.h"
-
-// components
 #include "Components/Component.h"
-#include "Components/CameraComponent.h"
-#include "Components/BehaviorComponent.h"
-#include "Components/ColliderComponent.h"
 #include "Components/GameObjectComponent.h"
 
 #include "Scene.h"
-#include "Input.h"
 
 /**
  * \brief A class representing an instance of the Gunship engine.
@@ -45,6 +38,21 @@
 class Gunship
 {
 public:
+	// SDL variables
+	SDL_Window* window;
+
+	// Ogre variables
+	Ogre::Root* root;
+	Ogre::RenderWindow* renderWindow;
+
+	// Gunship variables
+	Scene* currentScene;
+	Input input;
+
+	// v8 variables
+	v8::Isolate* isolate;
+	v8::Persistent< v8::Context > _context;
+
 	// default constructor
 	Gunship();
 
@@ -52,9 +60,9 @@ public:
 
 	// initialization and shutdown functions
 	bool InitSystems();
-	bool Configure();
-	void Start();
+	bool InitializeV8();
 
+	void Start();
 	bool ShutDown();
 
 	// other functions
@@ -62,12 +70,14 @@ public:
 	Scene* ResetCurrentScene();
 	Scene* ResetCurrentScene( std::function< void( Scene& ) > );
 
-private:
-	// Variables and stuffs
-	SDL_Window* window;
-	Ogre::Root* root;
-	Ogre::RenderWindow* renderWindow;
+	/**
+	 * \brief Loads and runs a startup script.
+	 *
+	 * \info A startup script is one that is used by Gunship to
+	 * initialize the JS context.
+	 */
+	void RunStartupScript( const char* script );
 
-	Scene* currentScene;
-	Input input;
+	static std::string LoadScript( std::string script );
 };
+

@@ -1,12 +1,15 @@
 #include "Gunship.h"
 #include "Scene.h"
 
-static std::string MeshID( const char* name, GameObjectComponent* owner )
+static inline std::string MeshID( const char* name, const GameObjectComponent& owner )
 {
-	return std::string( name ) + std::to_string( owner->id );
+	return std::string( name ) + std::to_string( owner.id );
 }
 
-Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), renderWindow( render )
+Scene::Scene( Gunship* gunship, Ogre::Root* root, Ogre::RenderWindow* render ) :
+	gunship( gunship ),
+	root( root ),
+	renderWindow( render )
 {
 	sceneManager = root->createSceneManager( Ogre::ST_GENERIC );
 
@@ -15,202 +18,64 @@ Scene::Scene( Ogre::Root* root, Ogre::RenderWindow* render ) : root( root ), ren
 
 void Scene::Update( const Input& input, float delta )
 {
-	RunCollisions();
+	// create scope for v8
+	v8::Isolate* isolate = gunship->isolate;
+	v8::Isolate::Scope isolateScope( isolate );
+	v8::HandleScope handleScope( isolate );
+	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, gunship->_context );
+	v8::Context::Scope contextScope( context );
 
-	// cache original number of components
-	// in case new ones are added during frame
-	size_t numBehaviors = behaviorComponents.size();
-	for ( size_t index = 0; index < numBehaviors; index++ )
+	v8::TryCatch tryCatch;
+
+	// call js Update() function
+	v8::Local< v8::Object > _gunship = context->Global()->Get( V8_STRING( isolate, "Gunship") )->ToObject();
+	v8::Local< v8::Function > _update = v8::Local< v8::Function >::Cast( _gunship->Get( V8_STRING( isolate, "Update" ) ) );
+	v8::Handle< v8::Value > args[] = { v8::Number::New( isolate, delta ) };
+	_update->Call( context->Global(), 1, args );
+
+	if ( tryCatch.HasCaught() )
 	{
-		BehaviorComponent& behavior = behaviorComponents[index];
-		behavior.behavior( behavior.owner, *this ,input, delta );
-	}
-
-	// remove any game objects that need to be destroyed
-	DestroyMarkedComponents();
-}
-
-void Scene::RunCollisions()
-{
-	// clear previous collision list
-	collisions.clear();
-
-	// run collisions
-	// integer index necessary for the case where colliders.size() is 0
-	for ( int first = 0; first < (int)colliders.size() - 1; first++ )
-	{
-		for ( unsigned second = first + 1; second < colliders.size(); second++ )
-		{
-			if ( ColliderComponent::Collide( colliders[first], colliders[second] ) )
-			{
-				collisions.emplace_back( std::make_pair( Collider( *this, colliders[first].id, first ), Collider( *this, colliders[second].id, second ) ) );
-			}
-		}
+		printf( "game script updated has failed:\n" );
+		V8Helpers::ReportException( isolate, tryCatch );
 	}
 }
 
-GameObject Scene::AddGameObject( const char* name )
+ComponentInfo Scene::AddGameObject( const char* name )
 {
-	gameObjects.emplace_back( this, sceneManager->getRootSceneNode()->createChildSceneNode(), name );
-	return GameObject( this, gameObjects.back().node, gameObjects.back().id, gameObjects.size() - 1 );
+	gameObjects.emplace_back( sceneManager->getRootSceneNode()->createChildSceneNode(), name );
+	return ComponentInfo{ gameObjects.back().id, gameObjects.size() - 1 };
 }
 
-Camera Scene::AddCameraComponent( GameObject& gameObject )
+void Scene::AddCameraComponent( ComponentInfo& gameObject )
 {
-	// create camera and viewport
-	GameObjectComponent* owner = FindComponent( gameObject );
-	Ogre::Camera* camera = sceneManager->createCamera( std::to_string( owner->id ) );
+	GameObjectComponent* owner = FindGameObject( gameObject );
+	Ogre::Camera* camera = sceneManager->createCamera( std::to_string( gameObject.id ) );
 	owner->node->attachObject( camera );
 	Ogre::Viewport* viewport = renderWindow->addViewport( camera );
 	viewport->setBackgroundColour( Ogre::ColourValue( 1, 0, 0, 1 ) );
 
 	// temporary values for testing purposes
 	camera->setNearClipDistance( 5 );
-
-	// create camera component
-	cameraComponents.emplace_back( gameObject, camera, viewport );
-	return Camera( this, cameraComponents.back().id, cameraComponents.size() - 1 );
 }
 
-Behavior Scene::AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior )
+void Scene::AddMesh( ComponentInfo& gameObject, const char* mesh )
 {
-	behaviorComponents.emplace_back( gameObject, behavior );
-	FindComponent( gameObject )->numBehaviors++;
-	return Behavior( *this, behaviorComponents.back().id, behaviorComponents.size() - 1 );
-}
-
-Collider Scene::AddColliderComponent( GameObject& gameObject, float radius )
-{
-	colliders.emplace_back( gameObject, radius );
-	return Collider( *this, colliders.back().id, colliders.size() - 1 );
-}
-
-void Scene::AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh )
-{
-	GameObjectComponent* owner = FindComponent( gameObject );
-	Ogre::Entity* cubeEntity = sceneManager->createEntity( MeshID( name, owner ).c_str(), mesh );
+	GameObjectComponent* owner = FindGameObject( gameObject );
+	Ogre::Entity* cubeEntity = sceneManager->createEntity( MeshID( mesh, *owner ).c_str(), mesh );
 	cubeEntity->setMaterialName( "Test/ColourTest" );
 	owner->node->attachObject( cubeEntity );
 }
 
-GameObjectComponent* Scene::FindComponent( GameObject& gameObject )
+GameObjectComponent* Scene::FindGameObject( ComponentInfo& gameObjectInfo )
 {
-	// game objects can only ever be moved backwards,
-	// so start at last known index and search back.
-	for ( int index = ( gameObject.index < gameObjects.size() ) ? gameObject.index : gameObjects.size() - 1; index >= 0; index-- )
+	for ( int index = static_cast<int>( gameObjectInfo.index ); index >= 0; index-- )
 	{
-		GameObjectComponent& component = gameObjects[index];
-		if ( component.id == gameObject.id )
+		if ( gameObjects[index].id == gameObjectInfo.id )
 		{
-			// update cached index
-			gameObject.index = index;
-			return &component;
+			gameObjectInfo.index = index;
+			return &gameObjects[index];
 		}
 	}
+
 	return nullptr;
-}
-
-bool Scene::MarkForDestroy( GameObject gameObject )
-{
-	if ( std::find( gameObjectsToDestroy.begin(), gameObjectsToDestroy.end(), gameObject ) == gameObjectsToDestroy.end() )
-	{
-		gameObjectsToDestroy.push_back( gameObject );
-		return true;
-	}
-	return false;
-}
-
-bool Scene::MarkForDestroy( Behavior behavior )
-{
-	if ( std::find( behaviorsToDestroy.begin(), behaviorsToDestroy.end(), behavior ) == behaviorsToDestroy.end() )
-	{
-		behaviorsToDestroy.push_back( behavior );
-		return true;
-	}
-	return false;
-}
-
-bool Scene::MarkForDestroy( Collider collider )
-{
-	if ( std::find( collidersToDestroy.begin(), collidersToDestroy.end(), collider ) == collidersToDestroy.end() )
-	{
-		collidersToDestroy.push_back( collider );
-		return true;
-	}
-	return false;
-}
-
-void Scene::DestroyMarkedComponents()
-{
-	// ====================
-	// DESTROY GAME OBJECTS
-	// ====================
-	for ( GameObject& gameObject : gameObjectsToDestroy )
-	{
-		GameObjectComponent* component = FindComponent( gameObject );
-
-		// track down the behaviors the component owns
-		for ( size_t behaviorIndex = 0, count = 0; behaviorIndex < behaviorComponents.size() && count < component->numBehaviors; behaviorIndex++ )
-		{
-			if ( behaviorComponents[behaviorIndex].owner.id == gameObject.id )
-			{
-				MarkForDestroy( Behavior( *this, behaviorComponents[behaviorIndex].id, behaviorIndex ) );
-				count++;
-			}
-		}
-
-		// track down the colliders the component owns
-		for ( size_t colliderIndex = 0; colliderIndex < colliders.size(); colliderIndex++ )
-		{
-			if ( colliders[colliderIndex].owner.id == gameObject.id )
-			{
-				MarkForDestroy( Collider( *this, colliders[colliderIndex].id, colliderIndex ) );
-				break;
-			}
-		}
-
-		// retrieve the component's index from the locator,
-		// the value will be accurate because we called FindComponent() earlier.
-		int gameObjectIndex = gameObject.index;
-
-		// handle destruction of component's resources
-		component->node->getParent()->removeChild( component->node );
-
-		// remove component by swapping it with last live component
-		gameObjects[gameObjectIndex] = gameObjects.back();
-		gameObjects.pop_back();
-	}
-	gameObjectsToDestroy.clear();
-
-	// =================
-	// DESTROY BEHAVIORS
-	// =================
-	for ( Behavior& behavior : behaviorsToDestroy )
-	{
-		// find the component's index
-		// using the same method as Scene::FindComponent()
-		int behaviorIndex = ( behavior.index < behaviorComponents.size() ) ? behavior.index : behaviorComponents.size() - 1;
-		for ( ; behaviorIndex >= 0 && behaviorComponents[behaviorIndex].id != behavior.id; behaviorIndex-- );
-
-		// destroy component by swapping it with last live component
-		behaviorComponents[behaviorIndex] = behaviorComponents.back();
-		behaviorComponents.pop_back();
-	}
-	behaviorsToDestroy.clear();
-
-	// =================
-	// DESTROY COLLIDERS
-	// =================
-	for ( Collider& collider : collidersToDestroy )
-	{
-		// find the component's index
-		// using the same method as Scene::FindComponent()
-		int colliderIndex = ( collider.index < colliders.size() ) ? collider.index : colliders.size() - 1;
-		for ( ; colliderIndex >= 0 && colliders[colliderIndex].id != collider.id; colliderIndex-- );
-
-		// destroy component by swapping it with the last live component
-		colliders[colliderIndex] = colliders.back();
-		colliders.pop_back();
-	}
-	collidersToDestroy.clear();
 }
