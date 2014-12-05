@@ -9,7 +9,6 @@ before_install:
   - sudo add-apt-repository ppa:openmw/openmw -y
   - sudo add-apt-repository ppa:dirk-computer42/c42-backport-games -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-add-repository ppa:alt-os/nodejs -y
   - sudo apt-get update
 
 install:
@@ -22,9 +21,6 @@ install:
 
   # build and install SDL2
   - sudo apt-get install -qq libsdl2-dev
-
-  # build v8 and export the environement variable
-  - sudo apt-get install -qq libv8-dev
 
 before_script:
   # configure build directory
