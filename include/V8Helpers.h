@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include <v8.h>
 
 #define V8_CALLBACK_SCOPE()	v8::Isolate* isolate = v8::Isolate::GetCurrent();\
@@ -24,7 +26,20 @@
 #define V8_GET_UNSIGNED( isolate, object, param ) object->Get( V8_STRING( isolate, param ) )->Uint32Value()
 #define V8_GET_FROM_VECTOR( object, index ) object->Get( index )->NumberValue()
 
-namespace V8Helpers
+namespace Gunship
 {
-	void ReportException( v8::Isolate* isolate, v8::TryCatch& try_catch );
+	namespace V8Helpers
+	{
+		/**
+		 * \brief Loads and runs a startup script.
+		 *
+		 * \info A startup script is one that is used by Gunship to
+		 * initialize the JS context.
+		 */
+		void RunStartupScript( v8::Isolate isolate, const char* script );
+
+		void ReportException( v8::Isolate* isolate, v8::TryCatch& try_catch );
+
+		std::string LoadScript( std::string script );
+	}
 }

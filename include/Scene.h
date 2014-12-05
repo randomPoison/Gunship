@@ -3,27 +3,32 @@
 #include <vector>
 #include <utility>
 
-class Gunship;
+#include "Engine.h"
 
-class Scene
+namespace Gunship
 {
-public:
-	Gunship* gunship;
+	class Engine;
 
-	std::vector< GameObjectComponent > gameObjects;
+	class Scene
+	{
+	public:
+		Engine* _engine;
 
-	Ogre::Root* root;
-	Ogre::SceneManager* sceneManager;
-	Ogre::RenderWindow* renderWindow;
+		//std::vector< GameObjectComponent > gameObjects;
 
-	Scene( Gunship* gunship, Ogre::Root* root, Ogre::RenderWindow* renderWindow );
+		Ogre::Root* _root;
+		Ogre::SceneManager* _sceneManager;
+		Ogre::RenderWindow* _renderWindow;
 
-	void Update( const Input& input, float delta );
+		Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-	// javascript helper functions
-	ComponentInfo AddGameObject( const char* name = "GameObject" );
-	void AddCameraComponent( ComponentInfo& gameObject );
-	void AddMesh( ComponentInfo& gameObject, const char* mesh );
+		void Update( const Input& input, float delta );
 
-	GameObjectComponent* FindGameObject( ComponentInfo& gameObjectInfo );
-};
+		// javascript helper functions
+//		ComponentInfo AddGameObject( const char* name = "GameObject" );
+//		void AddCameraComponent( ComponentInfo& gameObject );
+//		void AddMesh( ComponentInfo& gameObject, const char* mesh );
+//
+//		GameObjectComponent* FindGameObject( ComponentInfo& gameObjectInfo );
+	};
+}

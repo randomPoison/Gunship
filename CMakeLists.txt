@@ -32,50 +32,36 @@ list(APPEND LIBS ${SDL2_LIBRARY})
 find_package(OGRE REQUIRED)
 list(APPEND LIBS ${OGRE_LIBRARIES})
 
-find_package(V8 REQUIRED)
-
 add_definitions(-DOGRE_PLUGIN_DIR_REL="${OGRE_PLUGIN_DIR_REL}")
 add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 
 # The project's include directories
 file(GLOB PROJECT_INCLUDE_DIRS
-	include
-	${SDL2_INCLUDE_DIR}
-	${OGRE_INCLUDE_DIRS}
-	${V8_INCLUDE_DIR})
+     include
+     ${SDL2_INCLUDE_DIR}
+     ${OGRE_INCLUDE_DIRS})
 include_directories(SYSTEM ${PROJECT_INCLUDE_DIRS})
 set(GUNSHIP_INCLUDES ${PROJECT_INCLUDE_DIRS})
 
 # The project's sources
 # broken up by directory to get the filters right in VS
 file(GLOB PROJECT_SOURCES
-	source/*.cpp)
+     source/*.cpp)
 source_group("source" FILES ${PROJECT_SOURCES})
 
 file(GLOB PROJECT_INCLUDES
-	include/*.h)
+     include/*.h)
 source_group("include" FILES ${PROJECT_INCLUDES})
-
-file(GLOB COMPONENT_SOURCES
-	source/Components/*.cpp)
-source_group("source\\components" FILES ${COMPONENT_SOURCES})
-
-file(GLOB COMPONENT_INCLUDES
-	include/Components/*.h)
-source_group("include\\components" FILES ${COMPONENT_INCLUDES})
 
 # add js file definition
 add_definitions(-DJS_ROOT_DIR="${CMAKE_SOURCE_DIR}/js")
 
 # Now compile the library
-add_executable(	${PROJECT_NAME}
-				${PROJECT_INCLUDES} ${PROJECT_SOURCES}
-				${COMPONENT_INCLUDES} ${COMPONENT_SOURCES})
-target_link_libraries(	${PROJECT_NAME}
-						${LIBS}
-						${V8_LINK_LIBRARIES} ${V8_LINK_LIBRARIES} rt pthread)
+add_executable(${PROJECT_NAME}
+               ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
+target_link_libraries(${PROJECT_NAME}
+                      ${LIBS})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
 endif(CMAKE_COMPILER_IS_GNUCXX)
-
