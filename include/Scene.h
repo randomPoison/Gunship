@@ -3,32 +3,35 @@
 #include <vector>
 #include <utility>
 
-#include "Engine.h"
+#include "entityx/entityx.h"
+
+#include "Input.h"
+
+namespace Ogre
+{
+	class Root;
+	class RenderWindow;
+	class SceneManager;
+}
 
 namespace Gunship
 {
 	class Engine;
 
-	class Scene
+	class Scene : public entityx::EntityX
 	{
 	public:
-		Engine* _engine;
+		explicit Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* renderWindow );
 
-		//std::vector< GameObjectComponent > gameObjects;
-
-		Ogre::Root* _root;
-		Ogre::SceneManager* _sceneManager;
-		Ogre::RenderWindow* _renderWindow;
-
-		Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* renderWindow );
-
+		/**
+		 * \brief Update all the running systems.
+		 */
 		void Update( const Input& input, float delta );
 
-		// javascript helper functions
-//		ComponentInfo AddGameObject( const char* name = "GameObject" );
-//		void AddCameraComponent( ComponentInfo& gameObject );
-//		void AddMesh( ComponentInfo& gameObject, const char* mesh );
-//
-//		GameObjectComponent* FindGameObject( ComponentInfo& gameObjectInfo );
+	private:
+		Engine* _engine;
+		Ogre::Root* _root;
+		Ogre::RenderWindow* _renderWindow;
+		Ogre::SceneManager* _sceneManager;
 	};
 }

@@ -1,5 +1,6 @@
 build
 tmp
+external
 *.sublime-project
 *.sublime-workspace
 *.csettings

@@ -3,14 +3,6 @@
 #include <vector>
 #include <functional>
 
-#include <SDL_syswm.h>
-#include <SDL_events.h>
-#include <SDL_keyboard.h>
-#include <SDL_keycode.h>
-#include <SDL_joystick.h>
-#include <SDL_gamecontroller.h>
-#include <SDL_assert.h>
-
 #include <OgreRoot.h>
 #include <OgreManualObject.h>
 #include <OgreRenderWindow.h>
@@ -48,9 +40,12 @@ namespace Gunship
 		void Start();
 		bool ShutDown();
 
-		// other functions
-		Scene* CurrentScene();
-		Scene* ResetCurrentScene();
+		/**
+		 * \brief Retrieve the current scene.
+		 *
+		 * \returns A pointer to the current scene.
+		 */
+		Gunship::Scene* CurrentScene();
 
 	private:
 		// SDL variables
@@ -61,7 +56,7 @@ namespace Gunship
 		Ogre::RenderWindow* _renderWindow;
 
 		// Gunship variables
-		Scene* _currentScene;
+		Gunship::Scene* _currentScene;
 		Input _input;
 	};
 }

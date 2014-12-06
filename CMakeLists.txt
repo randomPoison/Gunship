@@ -1,5 +1,27 @@
 cmake_minimum_required(VERSION 2.8)
 
+include(ExternalProject)
+
+function(source_group_setup ALL_FILES)
+	foreach(FILE ${ALL_FILES})
+		get_filename_component(PARENT_DIR "${FILE}" PATH)
+
+		# skip src or include and changes /'s to \\'s
+		string(REGEX REPLACE "(\\./)?(src|include)/?" "" GROUP "${PARENT_DIR}")
+		string(REPLACE "/" "\\" GROUP "${GROUP}")
+
+		# group into "Source Files" and "Header Files"
+		if ("${FILE}" MATCHES ".*\\.cpp")
+			set(GROUP "Source Files\\${GROUP}")
+		elseif("${FILE}" MATCHES ".*\\.h")
+			set(GROUP "Header Files\\${GROUP}")
+		endif()
+
+		source_group("${GROUP}" FILES "${FILE}")
+	endforeach()
+endfunction(source_group_setup)
+
+
 # Change this to your project's name
 set(PROJECT_NAME "gunship")
 
@@ -14,14 +36,26 @@ endif(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 if(NOT CMAKE_BUILD_TYPE)
 	message("WARNING: CMAKE_BUILD_TYPE is not defined!\n         Defaulting to CMAKE_BUILD_TYPE=RelWithDebInfo. Use ccmake to set a proper value.")
 	set(CMAKE_BUILD_TYPE RelWithDebInfo
-		CACHE STRING "Type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-		FORCE)
+	    CACHE STRING "Type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+	    FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 # Include path for additional CMake library finding scripts
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # Add the libraries
+
+set(entityx_DIR "${CMAKE_SOURCE_DIR}/external/entityx")
+set(entityx_INCLUDE_DIR "${entityx_DIR}/include")
+set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
+ExternalProject_Add(entityx
+                    PREFIX ${entityx_DIR}
+                    GIT_REPOSITORY https://github.com/alecthomas/entityx.git
+                    GIT_TAG 1.0.1
+                    INSTALL_DIR ${entityx_DIR}
+                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR}
+)
+list(APPEND LIBS ${entityx_LIBRARY})
 
 # Tell SDL that we're a library, not an executable
 set(SDL2_BUILDING_LIBRARY true)
@@ -39,22 +73,29 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 file(GLOB PROJECT_INCLUDE_DIRS
      include
      ${SDL2_INCLUDE_DIR}
-     ${OGRE_INCLUDE_DIRS})
+     ${OGRE_INCLUDE_DIRS}
+     ${entityx_INCLUDE_DIR})
 include_directories(SYSTEM ${PROJECT_INCLUDE_DIRS})
 set(GUNSHIP_INCLUDES ${PROJECT_INCLUDE_DIRS})
 
 # The project's sources
 # broken up by directory to get the filters right in VS
 file(GLOB PROJECT_SOURCES
-     source/*.cpp)
+     source/*.cpp
+     source/Components/*.cpp)
 source_group("source" FILES ${PROJECT_SOURCES})
 
 file(GLOB PROJECT_INCLUDES
-     include/*.h)
+     include/*.h
+     include/Components/*.h)
 source_group("include" FILES ${PROJECT_INCLUDES})
 
 # add js file definition
 add_definitions(-DJS_ROOT_DIR="${CMAKE_SOURCE_DIR}/js")
+
+# setup VS filters (and I guess it also does something for XCode?)
+source_group_setup(PROJECT_SORCES)
+source_group_setup(PROJECT_INCLUDES)
 
 # Now compile the library
 add_executable(${PROJECT_NAME}

@@ -1,5 +1,11 @@
 # pragma once
 
+#include <SDL_keycode.h>
+#include <SDL_keyboard.h>
+#include <SDL_joystick.h>
+#include <SDL_gamecontroller.h>
+#include <SDL_events.h>
+
 namespace Gunship
 {
 	class Engine;
