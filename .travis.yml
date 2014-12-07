@@ -5,48 +5,28 @@ compiler:
 
 before_install:
   - cd ..
-  - sudo add-apt-repository ppa:apokluda/boost1.53 -y
+
+  - sudo add-apt-repository ppa:openmw/openmw -y
+  - sudo add-apt-repository ppa:dirk-computer42/c42-backport-games -y
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update
 
-  # download sdl2
-  - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
-  - sudo tar -xvzf SDL2-2.0.3.tar.gz
-  
-  # clone Ogre1.9 and install dependencies
-  - sudo hg clone https://bitbucket.org/sinbad/ogre
-  - sudo apt-get install libxaw7-dev
-
 install:
   # install g++4.8
-  - sudo apt-get update -qq
   - sudo apt-get install -qq g++-4.8
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 
-  # install boost1.53
-  - sudo apt-get install -qq libboost1.53-dev
-
-  # build and install Ogre
-  - cd ogre
-  - sudo hg update v1-9-0
-  - sudo mkdir build
-  - cd build
-  - sudo cmake ..
-  - sudo make
-  - sudo make install
-  - cd ../..
+  # install Ogre
+  - sudo apt-get install -qq libogre-1.8-dev
 
   # build and install SDL2
-  - cd SDL2-2.0.3
-  - sudo ./configure && sudo make
-  - sudo make install
-  - cd ..
+  - sudo apt-get install -qq libsdl2-dev
 
 before_script:
   # configure build directory
   - sudo mkdir build
   - cd build
+  - sudo cmake ../Gunship
 
 script:
-  - sudo cmake ../Gunship
   - sudo make
