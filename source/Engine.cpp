@@ -8,6 +8,7 @@
 
 // temporary includes for createColourCube()
 #include <OgreMeshManager.h>
+#include <OgreMaterialManager.h>
 #include <OgreHardwareBufferManager.h>
 #include <OgreSubMesh.h>
 #include <OgreEntity.h>
@@ -148,8 +149,9 @@ void createColourCube()
 	MaterialPtr material =
 	    MaterialManager::getSingleton().create( "Test/ColourTest",
 	                                            ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
-	material->getTechnique( 0 )->getPass( 0 )->
-	    setVertexColourTracking( TVC_AMBIENT );
+
+	//	material->getTechnique( 0 )->getPass( 0 )->
+//	    setVertexColourTracking( TVC_AMBIENT );
 }
 
 Gunship::Engine::Engine() :

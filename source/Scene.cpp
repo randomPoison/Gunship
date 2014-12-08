@@ -6,7 +6,9 @@ Gunship::Scene::Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* ren
 	_root( root ),
 	_renderWindow( render )
 {
-	_sceneManager = root->createSceneManager( Ogre::ST_GENERIC );
+	_sceneManager = _root->createSceneManager( Ogre::ST_GENERIC,
+	                                           1,
+	                                           Ogre::INSTANCING_CULLING_SINGLETHREAD );
 	_sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 
 	/// @TODO Initialize all systems.
