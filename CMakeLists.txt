@@ -21,7 +21,6 @@ function(source_group_setup ALL_FILES)
 	endforeach()
 endfunction(source_group_setup)
 
-
 # Change this to your project's name
 set(PROJECT_NAME "gunship")
 
