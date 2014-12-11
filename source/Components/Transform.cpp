@@ -1,15 +1,19 @@
-/*
- * \file Transform.cpp
- *
- * \date Dec 6, 2014
- * \author excaliburhissheath
- */
+#include <OgreSceneNode.h>
+#include <OgreSceneManager.h>
 
 #include "Components/Transform.h"
+#include "Scene.h"
 
-Gunship::Transform::Transform( Ogre::Vector3 position, Ogre::Vector3 rotation, Ogre::Vector3 scale ) :
-	position( position ),
-	rotation( rotation ),
-	scale( scale )
+Gunship::Transform::Transform( const Scene& scene,
+                               Ogre::Vector3 position,
+                               Ogre::Quaternion orientation,
+                               Ogre::Vector3 scale )
+	: node( nullptr )
 {
+	Ogre::SceneManager& sceneManager = scene.sceneManager();
+	sceneManager.createSceneNode();
+	sceneManager.getRootSceneNode()->addChild( node );
+	node->setPosition( position );
+	node->setOrientation( orientation );
+	node->setScale( scale );
 }

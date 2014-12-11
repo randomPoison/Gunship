@@ -4,8 +4,6 @@
 #include <SDL_syswm.h>
 #include <SDL_assert.h>
 
-#include "Engine.h"
-
 // temporary includes for createColourCube()
 #include <OgreMeshManager.h>
 #include <OgreMaterialManager.h>
@@ -13,6 +11,9 @@
 #include <OgreSubMesh.h>
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
+
+#include "Engine.h"
+#include "Scene.h"
 
 void createColourCube()
 {
@@ -271,6 +272,17 @@ bool Gunship::Engine::InitSystems()
 	}
 
 	return true;
+}
+
+void Gunship::Engine::SetupCurrentScene( SceneInitFunction initializeFunction )
+{
+	if ( _currentScene != nullptr )
+	{
+		delete _currentScene;
+	}
+
+	_currentScene = new Scene( this, _root, _renderWindow );
+	initializeFunction( *_currentScene );
 }
 
 void Gunship::Engine::Start()

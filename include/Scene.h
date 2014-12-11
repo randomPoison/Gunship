@@ -28,10 +28,18 @@ namespace Gunship
 		 */
 		void Update( const Input& input, float delta );
 
+		Engine& engine() const;
+		Ogre::Root& ogreRoot() const;
+		Ogre::RenderWindow& renderWindow() const;
+		Ogre::SceneManager& sceneManager() const;
+
 	private:
 		Engine* _engine;
 		Ogre::Root* _root;
 		Ogre::RenderWindow* _renderWindow;
 		Ogre::SceneManager* _sceneManager;
+
+		template< typename T >
+		friend class entityx::Component;
 	};
 }

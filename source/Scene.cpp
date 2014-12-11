@@ -18,3 +18,23 @@ void Gunship::Scene::Update( const Input& input, float delta )
 {
 	/// @TODO Update all systems.
 }
+
+Gunship::Engine& Gunship::Scene::engine() const
+{
+	return *_engine;
+}
+
+Ogre::Root& Gunship::Scene::ogreRoot() const
+{
+	return *_root;
+}
+
+Ogre::RenderWindow& Gunship::Scene::renderWindow() const
+{
+	return *_renderWindow;
+}
+
+Ogre::SceneManager& Gunship::Scene::sceneManager() const
+{
+	return *_sceneManager;
+}

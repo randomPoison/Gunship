@@ -44,35 +44,6 @@ void Gunship::Input::ConsumeInput()
 
 void Gunship::Input::Update( Engine* engine )
 {
-//	// enter v8 scope
-//	v8::Isolate* isolate = engine->isolate;
-//	v8::Isolate::Scope isolateScope( isolate );
-//	v8::HandleScope handleScope( isolate );
-//	v8::Local< v8::Context > context = v8::Local< v8::Context >::New( isolate, engine->_context );
-//	v8::Context::Scope contextScope( context );
-//
-//	// down keys array
-//	v8::Local< v8::Array > _downKeys = V8_ARRAY( isolate, downKeys.size() );
-//	V8_FILL_ARRAY_FROM_VECTOR( _downKeys, downKeys, V8_INTEGER );
-//
-//	// pressed keys array
-//	v8::Local< v8::Array > _pressedKeys = V8_ARRAY( isolate, keyDownEvents.size() );
-//	V8_FILL_ARRAY_FROM_VECTOR( _pressedKeys, keyDownEvents, V8_INTEGER );
-//
-//	// released keys array
-//	v8::Local< v8::Array > _releasedKeys = V8_ARRAY( isolate, keyUpEvents.size() );
-//	V8_FILL_ARRAY_FROM_VECTOR( _releasedKeys, keyUpEvents, V8_INTEGER );
-//
-//	v8::Local< v8::Object > _gunship = context->Global()->Get( V8_STRING( isolate, "Gunship" ) )->ToObject();
-//	v8::Local< v8::Function > callback = _gunship->ToObject()->Get( V8_STRING( isolate, "UpdateInput" ) ).As< v8::Function >();
-//
-//	// create args
-//	v8::Local< v8::Value > args[] = { v8::Object::New( isolate ) };
-//	args[0]->ToObject()->Set( V8_STRING( isolate, "down" ), _downKeys );
-//	args[0]->ToObject()->Set( V8_STRING( isolate, "pressed" ), _pressedKeys );
-//	args[0]->ToObject()->Set( V8_STRING( isolate, "released" ), _releasedKeys );
-//
-//	callback->Call( _gunship, 1, args );
 }
 
 bool Gunship::Input::KeyPressed( SDL_Scancode key ) const
