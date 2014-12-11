@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.11)
 
 include(ExternalProject)
 
@@ -74,7 +74,7 @@ file(GLOB PROJECT_INCLUDE_DIRS
      ${SDL2_INCLUDE_DIR}
      ${OGRE_INCLUDE_DIRS}
      ${entityx_INCLUDE_DIR})
-include_directories(SYSTEM ${PROJECT_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} SYSTEM ${PROJECT_INCLUDE_DIRS})
 set(GUNSHIP_INCLUDES ${PROJECT_INCLUDE_DIRS})
 
 # The project's sources
