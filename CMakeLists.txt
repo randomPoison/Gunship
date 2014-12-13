@@ -100,12 +100,13 @@ add_executable(${PROJECT_NAME}
                ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
 target_link_libraries(${PROJECT_NAME}
                       ${LIBS})
-target_include_directories(${PROJECT_NAME} PUBLIC
+target_include_directories(${PROJECT_NAME}
+                           SYSTEM PUBLIC
                            include
                            ${SDL2_INCLUDE_DIR}
                            ${OGRE_INCLUDE_DIRS}
                            ${entityx_INCLUDE_DIR})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter -v")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 endif(CMAKE_COMPILER_IS_GNUCXX)

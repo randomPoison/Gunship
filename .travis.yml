@@ -8,11 +8,8 @@ before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo add-apt-repository ppa:excaliburhissheath/ogre-builds -y
   - sudo add-apt-repository ppa:kalakris/cmake -y
+  - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get update -qq
-
-  # download sdl2
-  - sudo wget http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
-  - sudo tar -xvzf SDL2-2.0.3.tar.gz
 
 install:
   # install CMake 2.8.11
@@ -22,14 +19,11 @@ install:
   - sudo apt-get install -qq g++-4.8
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 
-  # build and install Ogre
+  # install Ogre 2.0
   - sudo apt-get install libogre2.0-dev
 
-  # build and install SDL2
-  - cd SDL2-2.0.3
-  - sudo ./configure && sudo make
-  - sudo make install
-  - cd ..
+  # install SDL2
+  - sudo apt-get install sdl2-dev
 
 before_script:
   # configure build directory
