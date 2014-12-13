@@ -7,13 +7,13 @@ before_install:
   - cd ..
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo add-apt-repository ppa:excaliburhissheath/ogre-builds -y
-  - sudo add-apt-repository ppa:kalakris/cmake -y
+  - sudo add-apt-repository ppa:andykimpe/cmake3 -y
   - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get update -qq
 
 install:
-  # install CMake 2.8.11
-  - sudo apt-get install cmake
+  # install CMake 3.0
+  - sudo apt-get install cmake3
 
   # install g++4.8
   - sudo apt-get install -qq g++-4.8
