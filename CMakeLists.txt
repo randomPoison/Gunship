@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.11)
 
 include(ExternalProject)
 
@@ -69,13 +69,11 @@ add_definitions(-DOGRE_PLUGIN_DIR_REL="${OGRE_PLUGIN_DIR_REL}")
 add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 
 # The project's include directories
-file(GLOB PROJECT_INCLUDE_DIRS
-     include
-     ${SDL2_INCLUDE_DIR}
-     ${OGRE_INCLUDE_DIRS}
-     ${entityx_INCLUDE_DIR})
-include_directories(SYSTEM ${PROJECT_INCLUDE_DIRS})
-set(GUNSHIP_INCLUDES ${PROJECT_INCLUDE_DIRS})
+set(GUNSHIP_INCLUDES
+    include
+    ${SDL2_INCLUDE_DIR}
+    ${OGRE_INCLUDE_DIRS}
+    ${entityx_INCLUDE_DIR})
 
 # The project's sources
 # broken up by directory to get the filters right in VS
@@ -99,9 +97,9 @@ source_group_setup(PROJECT_INCLUDES)
 # Now compile the library
 add_executable(${PROJECT_NAME}
                ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
-target_link_libraries(${PROJECT_NAME}
-                      ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${GUNSHIP_INCLUDES})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wno-unused-parameter")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 endif(CMAKE_COMPILER_IS_GNUCXX)
