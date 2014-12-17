@@ -1,6 +1,7 @@
 #pragma once
 
 #include <entityx/Entity.h>
+#include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <OgreQuaternion.h>
 

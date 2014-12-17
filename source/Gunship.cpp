@@ -1,11 +1,9 @@
-#include <OgreSceneNode.h>
-#include <OgreVector3.h>
-
 #include "Engine.h"
 #include "Scene.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Components/Mesh.h"
+#include "Components/Light.h"
 
 void InitializeScene( Gunship::Scene& scene )
 {
@@ -19,6 +17,11 @@ void InitializeScene( Gunship::Scene& scene )
 	entityx::Entity cube = scene.entities.create();
 	Gunship::Transform::Handle cubeTransform = cube.assign< Gunship::Transform >( scene );
 	cube.assign< Gunship::Mesh >( scene, cubeTransform, "Cube.mesh" );
+
+	entityx::Entity light = scene.entities.create();
+	Gunship::Transform::Handle lightTransform = light.assign< Gunship::Transform >( scene );
+	lightTransform->node->setPosition( 12.0f, 56.0f, 3.0f );
+	light.assign< Gunship::Components::Light >( scene, lightTransform );
 }
 
 int main( int argc, char* argv[] )
