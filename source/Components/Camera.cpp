@@ -13,6 +13,8 @@ Gunship::Camera::Camera( const Scene& scene, const Transform::Handle& transform,
 	camera = scene.sceneManager().createCamera( cameraName );
 	camera->detachFromParent();
 	transform->node->attachObject( camera );
+	camera->setNearClipDistance( 0.5f );
+	camera->setFarClipDistance( 1000.0f );
 
 	// setup the camera's compositor
 	// each camera get's a workspace.
@@ -20,12 +22,12 @@ Gunship::Camera::Camera( const Scene& scene, const Transform::Handle& transform,
 	Ogre::CompositorManager2* pCompositorManager =
 		scene.ogreRoot().getCompositorManager2();
 	const Ogre::String workspaceName = "scene workspace";
-	const Ogre::IdString workspaceNameHash = workspaceName;
-	pCompositorManager->createBasicWorkspaceDef( workspaceName,
+	const Ogre::IdString workspaceID( workspaceName );
+	pCompositorManager->createBasicWorkspaceDef( workspaceID,
 	                                             Ogre::ColourValue::Red );
 	pCompositorManager->addWorkspace( &scene.sceneManager(),
 	                                  &scene.renderWindow(),
 	                                  camera,
-	                                  workspaceNameHash,
+	                                  workspaceID,
 	                                  true );
 }

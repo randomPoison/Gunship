@@ -11,7 +11,7 @@ Gunship::Transform::Transform( const Scene& scene,
 	: node( nullptr )
 {
 	Ogre::SceneManager& sceneManager = scene.sceneManager();
-	sceneManager.createSceneNode();
+	node = sceneManager.createSceneNode();
 	sceneManager.getRootSceneNode()->addChild( node );
 	node->setPosition( position );
 	node->setOrientation( orientation );
