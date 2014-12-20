@@ -1,9 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <utility>
-
-#include "entityx/entityx.h"
+#include <entityx/Entity.h>
+#include <entityx/Event.h>
+#include <entityx/System.h>
 
 #include "Input.h"
 
@@ -18,15 +17,18 @@ namespace Gunship
 {
 	class Engine;
 
-	class Scene : public entityx::EntityX
+	class Scene
 	{
 	public:
-		explicit Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* renderWindow );
+		explicit Scene( Engine* engine, Ogre::Root* root,
+		    Ogre::RenderWindow* renderWindow );
 
-		/**
-		 * \brief Update all the running systems.
-		 */
-		void Update( const Input& input, float delta );
+		template< typename S >
+		void AddSystem()
+		{
+			_behaviorSystems.add< S >();
+		}
+		entityx::Entity CreateGameObject();
 
 		Engine& engine() const;
 		Ogre::Root& ogreRoot() const;
@@ -39,7 +41,16 @@ namespace Gunship
 		Ogre::RenderWindow* _renderWindow;
 		Ogre::SceneManager* _sceneManager;
 
-		template< typename T >
-		friend class entityx::Component;
+		entityx::EventManager _events;
+		entityx::EntityManager _entities;
+		entityx::SystemManager _coreSystems;
+		entityx::SystemManager _behaviorSystems;
+
+		friend class Engine;
+
+		/**
+		 * \brief Update all the running systems.
+		 */
+		void Update( float delta );
 	};
 }

@@ -218,7 +218,7 @@ void Gunship::Engine::Start()
 		_input.Update( this );
 
 		// update behaviors
-		_currentScene->Update( _input, elapsedTime );
+		_currentScene->Update( elapsedTime );
 
 		// render stuffs
 		_root->renderOneFrame();

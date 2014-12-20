@@ -4,7 +4,10 @@
 Gunship::Scene::Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* render ) :
 	_engine( engine ),
 	_root( root ),
-	_renderWindow( render )
+	_renderWindow( render ),
+	_entities( _events ),
+	_coreSystems( _entities, _events ),
+	_behaviorSystems( _entities, _events )
 {
 	_sceneManager = _root->createSceneManager( Ogre::ST_GENERIC,
 	                                           1,
@@ -14,9 +17,14 @@ Gunship::Scene::Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* ren
 	/// @TODO Initialize all systems.
 }
 
-void Gunship::Scene::Update( const Input& input, float delta )
+void Gunship::Scene::Update( float delta )
 {
-	/// @TODO Update all systems.
+	_behaviorSystems.update_all( delta );
+}
+
+entityx::Entity Gunship::Scene::CreateGameObject()
+{
+	return _entities.create();
 }
 
 Gunship::Engine& Gunship::Scene::engine() const

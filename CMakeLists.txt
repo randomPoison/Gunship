@@ -49,10 +49,9 @@ set(entityx_INCLUDE_DIR "${entityx_DIR}/include")
 set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
 ExternalProject_Add(entityx
                     PREFIX ${entityx_DIR}
-                    GIT_REPOSITORY https://github.com/alecthomas/entityx.git
-                    GIT_TAG 1.0.1
+                    GIT_REPOSITORY https://github.com/excaliburHisSheath/entityx.git
                     INSTALL_DIR ${entityx_DIR}
-                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR}
+                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float
 )
 list(APPEND LIBS ${entityx_LIBRARY})
 
