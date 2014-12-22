@@ -2,8 +2,8 @@
 
 #include <entityx/Entity.h>
 #include <entityx/Event.h>
-#include <entityx/System.h>
 
+#include "SystemManager.h"
 #include "Input.h"
 
 namespace Ogre
@@ -20,13 +20,14 @@ namespace Gunship
 	class Scene
 	{
 	public:
-		explicit Scene( Engine* engine, Ogre::Root* root,
-		    Ogre::RenderWindow* renderWindow );
+		explicit Scene( Engine* engine,
+		                Ogre::Root* root,
+		                Ogre::RenderWindow* renderWindow );
 
 		template< typename S >
 		void AddSystem()
 		{
-			_behaviorSystems.add< S >();
+			_behaviorSystems.Add< S >();
 		}
 		entityx::Entity CreateGameObject();
 
@@ -41,15 +42,18 @@ namespace Gunship
 		Ogre::RenderWindow* _renderWindow;
 		Ogre::SceneManager* _sceneManager;
 
-		entityx::EventManager _events;
 		entityx::EntityManager _entities;
-		entityx::SystemManager _coreSystems;
-		entityx::SystemManager _behaviorSystems;
+		SystemManager< DefaultSystemBase > _coreSystems;
+		SystemManager< BehaviorSystemBase > _behaviorSystems;
 
 		friend class Engine;
 
 		/**
-		 * \brief Update all the running systems.
+		 * @brief Update all the running systems.
+		 *
+		 * @details
+		 *     This is called by the Engine as part of the normal frame loop,
+		 *     and is not accessible to client code.
 		 */
 		void Update( float delta );
 	};

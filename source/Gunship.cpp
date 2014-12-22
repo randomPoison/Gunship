@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Scene.h"
+#include "System.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Components/Mesh.h"
@@ -15,10 +16,9 @@ struct Player : public entityx::Component< Player >
 	float moveSpeed;
 };
 
-struct PlayerMovementSystem : public entityx::System< PlayerMovementSystem >
+struct PlayerMovementSystem : public Gunship::System< PlayerMovementSystem, Gunship::BehaviorSystemBase >
 {
-	void update( entityx::EntityManager &entities,
-	             entityx::EventManager &events,
+	void Update( entityx::EntityManager& entities,
 	             float delta ) override
 	{
 		Gunship::Transform::Handle transform;
