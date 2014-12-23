@@ -52,6 +52,12 @@ bool Gunship::Input::KeyPressed( SDL_Scancode key )
 	return std::find( keyDownEvents.begin(), keyDownEvents.end(), key ) != keyDownEvents.end();
 }
 
+bool Gunship::Input::KeyDown( SDL_Scancode key )
+{
+	KeyEvents& downKeys = _instance->_downKeys;
+	return std::find( downKeys.begin(), downKeys.end(), key ) != downKeys.end();
+}
+
 float Gunship::Input::AxisValue( int controller, SDL_GameControllerAxis axis )
 {
 	return AxisValue( _instance->_controllers[controller], axis );
