@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utility>
+#include <memory>
 #include <vector>
 
 #include <entityx/help/NonCopyable.h>
@@ -14,31 +15,24 @@ namespace Gunship
 	{
 	public:
 		template< class SystemType, typename ... Args >
-		SystemType& Add( Args&& ... args )
+		std::shared_ptr< SystemType > Add( Args&& ... args )
 		{
-			// have the map allocate space for the system
-			_systems.emplace_back();
-
-			// get pointer to memory allocated within the map
-			BaseType* systemAddress = &_systems.back();
-
-			// re-construct the object with the correct derived type
-			SystemType* newSystem =
-				new( systemAddress ) SystemType( std::forward< Args >( args ) ... );
-
-			return *newSystem;
+			std::shared_ptr< SystemType > systemPointer(
+				new SystemType( std::forward< Args >( args ) ... ) );
+			_systems.push_back( systemPointer );
+			return systemPointer;
 		}
 
 		template< typename ... Args >
 		void UpdateAll( Args&& ... args )
 		{
-			for ( BaseType& system : _systems )
+			for ( std::shared_ptr<BaseType>& system : _systems )
 			{
-				system.Update( std::forward< Args >( args ) ... );
+				system->Update( std::forward< Args >( args ) ... );
 			}
 		}
 
 	private:
-		std::vector< BaseType > _systems;
+		std::vector< std::shared_ptr< BaseType > > _systems;
 	};
 }

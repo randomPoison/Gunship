@@ -4,14 +4,6 @@
 #include <SDL_syswm.h>
 #include <SDL_assert.h>
 
-// temporary includes for createColourCube()
-#include <OgreMeshManager.h>
-#include <OgreMaterialManager.h>
-#include <OgreHardwareBufferManager.h>
-#include <OgreSubMesh.h>
-#include <OgreEntity.h>
-#include <OgreSceneNode.h>
-
 #include <OgreResourceGroupManager.h>
 
 #include "Engine.h"
@@ -104,6 +96,11 @@ bool Gunship::Engine::InitSystems()
 	// ===============================
 	_currentScene = new Scene( this, _root, _renderWindow );
 
+	// ================
+	// INITIALIZE INPUT
+	// =================
+	Input::Initialize();
+
 	// initialize joysticks and whatnot
 	if ( SDL_NumJoysticks() > 0 )
 	{
@@ -119,7 +116,7 @@ bool Gunship::Engine::InitSystems()
 			        SDL_GetError() );
 			return false;
 		}
-		_input.controllers.push_back( controller );
+		Input::controllers().push_back( controller );
 	}
 
 	// Setup Resource Groups
@@ -156,8 +153,8 @@ void Gunship::Engine::Start()
 	bool gameRunning = true;
 	while ( gameRunning )
 	{
-		_input.ConsumeInput();
-		if ( _input.exit )
+		Input::ConsumeInput();
+		if ( Input::exit() )
 		{
 			gameRunning = false;
 			continue;
@@ -169,33 +166,33 @@ void Gunship::Engine::Start()
 		lastTime = currentTime;
 
 		// debug output
-		if ( _input.KeyPressed( SDL_SCANCODE_GRAVE ) )
+		if ( Input::KeyPressed( SDL_SCANCODE_GRAVE ) )
 		{
 			std::cout << "Gunship Debugging Info:" << std::endl;
 			std::cout << "-----------------------" << std::endl;
 
 			// print out state of controllers
-			for ( SDL_GameController* controller : _input.controllers )
+			for ( SDL_GameController* controller : Input::controllers() )
 			{
 				printf( "Controller:\t%s\n",
 				        SDL_GameControllerName( controller ) );
 				printf( "\tLeft X:\t%f\n",
-				        _input.AxisValue( controller,
+				        Input::AxisValue( controller,
 				                          SDL_CONTROLLER_AXIS_LEFTX ) );
 				printf( "\tLeft Y:\t%f\n",
-				        _input.AxisValue( controller,
+				        Input::AxisValue( controller,
 				                          SDL_CONTROLLER_AXIS_LEFTY ) );
 				printf( "\tRight X:\t%f\n",
-				        _input.AxisValue( controller,
+				        Input::AxisValue( controller,
 				                          SDL_CONTROLLER_AXIS_RIGHTX ) );
 				printf( "\tRight Y:\t%f\n",
-				        _input.AxisValue( controller,
+				        Input::AxisValue( controller,
 				                          SDL_CONTROLLER_AXIS_RIGHTY ) );
 				printf( "\tLeft Trigger:\t%f\n",
-				        _input.AxisValue( controller,
+				        Input::AxisValue( controller,
 				                          SDL_CONTROLLER_AXIS_TRIGGERLEFT ) );
 				printf( "\tRight Trigger:\t%f\n",
-				        _input.AxisValue( controller,
+				        Input::AxisValue( controller,
 				                          SDL_CONTROLLER_AXIS_TRIGGERRIGHT ) );
 				std::cout << std::endl;
 			}
@@ -214,9 +211,6 @@ void Gunship::Engine::Start()
 			std::cout << std::endl;
 		}
 
-		// call input callbacks
-		_input.Update( this );
-
 		// update behaviors
 		_currentScene->Update( elapsedTime );
 
@@ -231,6 +225,8 @@ void Gunship::Engine::Start()
 
 bool Gunship::Engine::ShutDown()
 {
+	Input::TearDown();
+
 	// Close and destroy the window
 	SDL_DestroyWindow( _window );
 

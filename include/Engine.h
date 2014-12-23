@@ -1,17 +1,7 @@
 #pragma once
 
-#include <vector>
-#include <functional>
-
 #include <OgreRoot.h>
-#include <OgreManualObject.h>
 #include <OgreRenderWindow.h>
-#include <OgreSceneManager.h>
-#include <OgreSceneNode.h>
-#include <OgreCamera.h>
-#include <OgreViewport.h>
-#include <OgreEntity.h>
-#include <OgreVector3.h>
 
 #include "Types.h"
 #include "Input.h"
@@ -77,6 +67,5 @@ namespace Gunship
 
 		// Gunship variables
 		Gunship::Scene* _currentScene;
-		Input _input;
 	};
 }

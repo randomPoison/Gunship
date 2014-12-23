@@ -20,7 +20,7 @@ namespace Gunship
 	 *     the purposed of compatibility with other EntityX systems, and may
 	 *     be utilized in the future.
 	 */
-	class SystemBase
+	class SystemBase : public entityx::help::NonCopyable
 	{
 	public:
 		typedef Uint32 Family;
@@ -33,7 +33,7 @@ namespace Gunship
 	class DefaultSystemBase : SystemBase
 	{
 	public:
-		virtual void Update( entityx::EntityManager& entities ) {}
+		virtual void Update( entityx::EntityManager& entities ) = 0;
 	};
 
 	template< class Derived, class Base = DefaultSystemBase >
@@ -53,6 +53,6 @@ namespace Gunship
 	class BehaviorSystemBase : SystemBase
 	{
 	public:
-		virtual void Update( entityx::EntityManager& entities, float delta ) {};
+		virtual void Update( entityx::EntityManager& entities, float delta ) = 0;
 	};
 }

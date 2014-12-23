@@ -44,6 +44,6 @@ Ogre::SceneManager& Gunship::Scene::sceneManager() const
 
 void Gunship::Scene::Update( float delta )
 {
-	_coreSystems.UpdateAll();
+	_coreSystems.UpdateAll( _entities );
 	_behaviorSystems.UpdateAll( _entities, delta );
 }
