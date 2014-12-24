@@ -100,6 +100,7 @@ source_group_setup(PROJECT_INCLUDES)
 
 # Create static library target
 add_library(LibGunship ${LIBGUNSHIP_SOURCES})
+add_dependencies(LibGunship entityx)
 
 # Now configure the targets
 add_executable(Gunship ${GUNSHIP_EXE_SOURCES})
