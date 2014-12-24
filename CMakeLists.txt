@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.12)
 
 include(ExternalProject)
 
@@ -21,10 +21,7 @@ function(source_group_setup ALL_FILES)
 	endforeach()
 endfunction(source_group_setup)
 
-# Change this to your project's name
-set(PROJECT_NAME "gunship")
-
-project(${PROJECT_NAME} CXX C)
+project(Gunship CXX C)
 
 # Avoid source tree pollution
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -33,9 +30,9 @@ endif(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 
 # Add a sensible build type default and warning because empty means no optimization and no debug info.
 if(NOT CMAKE_BUILD_TYPE)
-	message("WARNING: CMAKE_BUILD_TYPE is not defined!\n         Defaulting to CMAKE_BUILD_TYPE=RelWithDebInfo. Use ccmake to set a proper value.")
-	set(CMAKE_BUILD_TYPE RelWithDebInfo
-	    CACHE STRING "Type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+	message("WARNING: CMAKE_BUILD_TYPE is not defined!\n         Defaulting to CMAKE_BUILD_TYPE=Debug. Use ccmake to set a proper value.")
+	set(CMAKE_BUILD_TYPE Debug
+	    CACHE STRING "Type of build, options are: None Debug Release RelWithDebInfo."
 	    FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
@@ -68,37 +65,50 @@ add_definitions(-DOGRE_PLUGIN_DIR_REL="${OGRE_PLUGIN_DIR_REL}")
 add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 
 # The project's include directories
-set(GUNSHIP_INCLUDES
-    include
+set(GUNSHIP_EXTERNAL_INCLUDES
     ${SDL2_INCLUDE_DIR}
     ${OGRE_INCLUDE_DIRS}
     ${entityx_INCLUDE_DIR})
 
-# The project's sources
-# broken up by directory to get the filters right in VS
+set(GUNSHIP_INCLUDE_DIR
+    include)
+
+set(GUNSHIP_INCLUDE_DIRS
+    ${GUNSHIP_INCLUDE_DIR}
+    ${GUNSHIP_EXTERNAL_INCLUDES})
+
+# Get all source files (used for setting up VS filters)
 file(GLOB PROJECT_SOURCES
      source/*.cpp
      source/Components/*.cpp)
-source_group("source" FILES ${PROJECT_SOURCES})
 
+file(GLOB GUNSHIP_EXE_SOURCES
+     source/Gunship.cpp)
+
+# All header files (used for setting up VS filters)
 file(GLOB PROJECT_INCLUDES
      include/*.h
      include/Components/*.h)
-source_group("include" FILES ${PROJECT_INCLUDES})
 
-# add js file definition
-add_definitions(-DJS_ROOT_DIR="${CMAKE_SOURCE_DIR}/js")
+# Get source files for libgunship (PROJECT_SOURCES minus Gunship.cpp)
+set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES})
+list(REMOVE_ITEM LIBGUNSHIP_SOURCES ${GUNSHIP_EXE_SOURCES})
 
 # setup VS filters (and I guess it also does something for XCode?)
 source_group_setup(PROJECT_SORCES)
 source_group_setup(PROJECT_INCLUDES)
 
-# Now compile the library
-add_executable(${PROJECT_NAME}
-               ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
-target_link_libraries(${PROJECT_NAME} ${LIBS})
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${GUNSHIP_INCLUDES})
+# Create static library target
+add_library(LibGunship ${LIBGUNSHIP_SOURCES})
 
+# Now configure the targets
+add_executable(Gunship ${GUNSHIP_EXE_SOURCES})
+target_link_libraries(LibGunship ${LIBS})
+target_include_directories(LibGunship PUBLIC ${GUNSHIP_INCLUDE_DIR})
+target_include_directories(LibGunship SYSTEM PUBLIC ${GUNSHIP_EXTERNAL_INCLUDES})
+target_link_libraries(Gunship LibGunship)
+
+# Compiler flags
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
 endif(CMAKE_COMPILER_IS_GNUCXX)
