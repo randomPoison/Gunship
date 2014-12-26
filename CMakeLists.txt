@@ -39,17 +39,28 @@ endif(NOT CMAKE_BUILD_TYPE)
 # Include path for additional CMake library finding scripts
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Add the libraries
-
+# Add entityx using the ExternalProject module.
+# We can either use an existing download of entityx
+# or download it from github directly.
+# We default to downloading it, but if the user specifies
+# its location on disc (through the ENTITYX_HOME variable)
+# then we'll use the existing location
 set(entityx_DIR "${CMAKE_SOURCE_DIR}/external/entityx")
 set(entityx_INCLUDE_DIR "${entityx_DIR}/include")
 set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
-ExternalProject_Add(entityx
-                    PREFIX ${entityx_DIR}
-                    GIT_REPOSITORY https://github.com/excaliburHisSheath/entityx.git
-                    INSTALL_DIR ${entityx_DIR}
-                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float
-)
+if(NOT ENTITYX_HOME)
+	ExternalProject_Add(entityx
+	                    PREFIX ${entityx_DIR}
+	                    GIT_REPOSITORY https://github.com/excaliburHisSheath/entityx.git
+	                    INSTALL_DIR ${entityx_DIR}
+	                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float)
+else()
+	ExternalProject_Add(entityx
+	                    PREFIX ${entityx_DIR}
+	                    SOURCE_DIR ${ENTITYX_HOME}
+	                    INSTALL_DIR ${entityx_DIR}
+	                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float)
+endif()
 list(APPEND LIBS ${entityx_LIBRARY})
 
 # Tell SDL that we're a library, not an executable
@@ -99,15 +110,24 @@ source_group_setup(PROJECT_SORCES)
 source_group_setup(PROJECT_INCLUDES)
 
 # Create static library target
-add_library(LibGunship ${LIBGUNSHIP_SOURCES})
+add_library(LibGunship STATIC ${LIBGUNSHIP_SOURCES})
 add_dependencies(LibGunship entityx)
-
-# Now configure the targets
-add_executable(Gunship ${GUNSHIP_EXE_SOURCES})
 target_link_libraries(LibGunship ${LIBS})
 target_include_directories(LibGunship PUBLIC ${GUNSHIP_INCLUDE_DIR})
 target_include_directories(LibGunship SYSTEM PUBLIC ${GUNSHIP_EXTERNAL_INCLUDES})
-target_link_libraries(Gunship LibGunship)
+
+# If a value for GUNSHIP_BUILD_EXE hasn't been set,
+# default it to TRUE
+if(NOT DEFINED GUNSHIP_BUILD_EXE)
+	set(GUNSHIP_BUILD_EXE ON
+	    CACHE BOOL "Whether or not Gunship should build the default executable. If OFF, only the static library will be built.")
+endif()
+
+# Now create the default executable
+if(${GUNSHIP_BUILD_EXE})
+	add_executable(Gunship ${GUNSHIP_EXE_SOURCES})
+	target_link_libraries(Gunship LibGunship)
+endif(${GUNSHIP_BUILD_EXE})
 
 # Compiler flags
 if (CMAKE_COMPILER_IS_GNUCXX)

@@ -27,6 +27,11 @@ namespace Gunship
 		bool InitSystems();
 
 		/**
+		 * @brief Destroy and cleanup the current scene, then start a new one.
+		 */
+		void ResetCurrentScene();
+
+		/**
 		 * @brief Throws away the current scene (if one exists) and creates a new one.
 		 *
 		 * @param initializationFunction

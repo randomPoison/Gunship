@@ -129,7 +129,7 @@ bool Gunship::Engine::InitSystems()
 	return true;
 }
 
-void Gunship::Engine::SetupCurrentScene( SceneInitFunction initializeFunction )
+void Gunship::Engine::ResetCurrentScene()
 {
 	if ( _currentScene != nullptr )
 	{
@@ -137,6 +137,12 @@ void Gunship::Engine::SetupCurrentScene( SceneInitFunction initializeFunction )
 	}
 
 	_currentScene = new Scene( this, _root, _renderWindow );
+}
+
+void Gunship::Engine::SetupCurrentScene( SceneInitFunction initializeFunction )
+{
+	ResetCurrentScene();
+	SDL_assert( initializeFunction != nullptr );
 	initializeFunction( *_currentScene );
 }
 
