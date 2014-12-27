@@ -47,7 +47,18 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # then we'll use the existing location
 set(entityx_DIR "${CMAKE_SOURCE_DIR}/external/entityx")
 set(entityx_INCLUDE_DIR "${entityx_DIR}/include")
-set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
+
+# Default compiler args
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+		set(entityx_LIBRARY "${entityx_DIR}/lib/entityx-d.lib")
+	else()
+		set(entityx_LIBRARY "${entityx_DIR}/lib/entityx.lib")
+	endif()
+endif()
+
 if(NOT ENTITYX_HOME)
 	ExternalProject_Add(entityx
 	                    PREFIX ${entityx_DIR}
@@ -102,7 +113,7 @@ file(GLOB PROJECT_INCLUDES
      include/Components/*.h)
 
 # Get source files for libgunship (PROJECT_SOURCES minus Gunship.cpp)
-set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES})
+set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES} ${PROJECT_INCLUDES})
 list(REMOVE_ITEM LIBGUNSHIP_SOURCES ${GUNSHIP_EXE_SOURCES})
 
 # setup VS filters (and I guess it also does something for XCode?)
