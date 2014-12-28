@@ -16,7 +16,8 @@ install:
   # configure Gunship solution
   - mkdir build
   - cd build
-  - cmake ../Gunship -G "Visual Studio 12 2013" -DOGRE_HOME:PATH=C:\OgreSDK_v2-0-0 -DCMAKE_BUILD_TYPE=Release
+  - cmake # let's have CMake list it's generators so we can see what's missing
+  - cmake ../Gunship -DOGRE_HOME:PATH=C:\OgreSDK_v2-0-0 -DCMAKE_BUILD_TYPE=Release
 
 build:
   project: C:\projects\build\Gunship.sln
