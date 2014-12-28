@@ -47,21 +47,24 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # then we'll use the existing location
 set(entityx_DIR "${CMAKE_SOURCE_DIR}/external/entityx")
 set(entityx_INCLUDE_DIR "${entityx_DIR}/include")
-set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
-if(NOT ENTITYX_HOME)
-	ExternalProject_Add(entityx
-	                    PREFIX ${entityx_DIR}
-	                    GIT_REPOSITORY https://github.com/excaliburHisSheath/entityx.git
-	                    INSTALL_DIR ${entityx_DIR}
-	                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float)
-else()
-	ExternalProject_Add(entityx
-	                    PREFIX ${entityx_DIR}
-	                    SOURCE_DIR ${ENTITYX_HOME}
-	                    INSTALL_DIR ${entityx_DIR}
-	                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float)
+
+# Default compiler args
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+		set(entityx_LIBRARY "${entityx_DIR}/lib/entityx-d.lib")
+	else()
+		set(entityx_LIBRARY "${entityx_DIR}/lib/entityx.lib")
+	endif()
 endif()
-list(APPEND LIBS ${entityx_LIBRARY})
+
+
+set(ENTITYX_DT_TYPE float CACHE STRING "The type used for delta time in EntityX update methods.")
+set(ENTITYX_BUILD_SHARED OFF CACHE BOOL "Build shared libraries?")
+set(ENTITYX_INSTALL_TARGET OFF CACHE BOOL "Create the install target?")
+add_subdirectory(external/entityx)
+list(APPEND LIBS entityx)
 
 # Tell SDL that we're a library, not an executable
 set(SDL2_BUILDING_LIBRARY true)
@@ -79,7 +82,7 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 set(GUNSHIP_EXTERNAL_INCLUDES
     ${SDL2_INCLUDE_DIR}
     ${OGRE_INCLUDE_DIRS}
-    ${entityx_INCLUDE_DIR})
+    external/entityx)
 
 set(GUNSHIP_INCLUDE_DIR
     include)
@@ -102,7 +105,7 @@ file(GLOB PROJECT_INCLUDES
      include/Components/*.h)
 
 # Get source files for libgunship (PROJECT_SOURCES minus Gunship.cpp)
-set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES})
+set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES} ${PROJECT_INCLUDES})
 list(REMOVE_ITEM LIBGUNSHIP_SOURCES ${GUNSHIP_EXE_SOURCES})
 
 # setup VS filters (and I guess it also does something for XCode?)

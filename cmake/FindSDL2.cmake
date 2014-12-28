@@ -106,6 +106,7 @@
 FIND_PATH(SDL2_INCLUDE_DIR SDL.h
 	HINTS
 	$ENV{SDL2}
+	${SDL2_HOME}
 	PATH_SUFFIXES include/SDL2 include SDL2
 	i686-w64-mingw32/include/SDL2
 	x86_64-w64-mingw32/include/SDL2
