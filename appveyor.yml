@@ -21,5 +21,8 @@ install:
   - cd build
   - cmake ../Gunship -DOGRE_HOME:PATH=C:\OgreSDK_v2-0-0 -DCMAKE_BUILD_TYPE=Release
 
+environment:
+  SDL2: C:\SDL2-2.0.3
+
 build:
   project: C:\projects\build\Gunship.sln
