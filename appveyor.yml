@@ -19,11 +19,10 @@ install:
   # configure Gunship solution
   - mkdir build
   - cd build
-  - cmake ../Gunship -DCMAKE_BUILD_TYPE=Release
+  - cmake ../Gunship -DCMAKE_BUILD_TYPE=Release -DOGRE_HOME:PATH=C:\OgreSDK_2-0-0
 
 environment:
   SDL2: C:\SDL2-2.0.3
-  OGRE_HOME: C:\OgreSDK_v2-0-0
 
 build:
   project: C:\projects\build\Gunship.sln
