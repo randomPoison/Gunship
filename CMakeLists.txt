@@ -59,20 +59,12 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	endif()
 endif()
 
-if(NOT ENTITYX_HOME)
-	ExternalProject_Add(entityx
-	                    PREFIX ${entityx_DIR}
-	                    GIT_REPOSITORY https://github.com/excaliburHisSheath/entityx.git
-	                    INSTALL_DIR ${entityx_DIR}
-	                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float)
-else()
-	ExternalProject_Add(entityx
-	                    PREFIX ${entityx_DIR}
-	                    SOURCE_DIR ${ENTITYX_HOME}
-	                    INSTALL_DIR ${entityx_DIR}
-	                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${entityx_DIR} -DENTITYX_DT_TYPE=float)
-endif()
-list(APPEND LIBS ${entityx_LIBRARY})
+
+set(ENTITYX_DT_TYPE float CACHE STRING "The type used for delta time in EntityX update methods.")
+set(ENTITYX_BUILD_SHARED OFF CACHE BOOL "Build shared libraries?")
+set(ENTITYX_INSTALL_TARGET OFF CACHE BOOL "Create the install target?")
+add_subdirectory(external/entityx)
+list(APPEND LIBS entityx)
 
 # Tell SDL that we're a library, not an executable
 set(SDL2_BUILDING_LIBRARY true)
@@ -90,7 +82,7 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 set(GUNSHIP_EXTERNAL_INCLUDES
     ${SDL2_INCLUDE_DIR}
     ${OGRE_INCLUDE_DIRS}
-    ${entityx_INCLUDE_DIR})
+    external/entityx)
 
 set(GUNSHIP_INCLUDE_DIR
     include)
