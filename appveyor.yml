@@ -1,22 +1,22 @@
 install:
+  # move up out of Gunship directory
   - cd ..
+
+  # upgrade cmake
+  - choco install cmake
 
   # download SDL2 SDK
   - appveyor DownloadFile http://libsdl.org/release/SDL2-devel-2.0.3-VC.zip
   - 7z x SDL2-devel-2.0.3-VC.zip -oC:\
-  
-  # download Ogre1.9 SDK
-  - appveyor DownloadFile http://iweb.dl.sourceforge.net/project/ogre/ogre/1.9/1.9/OgreSDK_vc11_v1-9-0.exe
-  - OgreSDK_vc11_v1-9-0.exe -oC:\ -y
-  
+
+  # download Ogre2.0 SDK
+  - appveyor DownloadFile https://www.dropbox.com/s/789wnaiysq9kkiu/OgreSDK_v2-0-0.zip?dl=1
+  - 7z x OgreSDK_v2-0-0.zip -oC:\
+
   # configure Gunship solution
   - mkdir build
   - cd build
-  - cmake ../Gunship -DBoost_INCLUDE_DIR:PATH=C:/OgreSDK_vc11_v1-9-0/boost -DBoost_LIBRARY_DIR:PATH=C:/OgreSDK_vc11_v1-9-0/boost/lib -DBoost_THREAD_LIBRARY_DEBUG:FILEPATH=C:/OgreSDK_vc11_v1-9-0/boost/lib/libboost_thread-vc110-mt-gd-1_55.lib -DBoost_THREAD_LIBRARY_RELEASE:FILEPATH=C:/OgreSDK_vc11_v1-9-0/boost/lib/libboost_thread-vc110-mt-1_55.lib
-  
-environment:
-  SDL2: C:\SDL2-2.0.3
-  OGRE_HOME: C:\OgreSDK_vc11_v1-9-0
+  - cmake ../Gunship -G "Visual Studio 12 2013" -DOGRE_HOME:PATH=C:\OgreSDK_v2-0-0 -DCMAKE_BUILD_TYPE=Release
 
 build:
-  project: C:\projects\build\gunship.sln
+  project: C:\projects\build\Gunship.sln
