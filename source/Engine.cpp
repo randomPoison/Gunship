@@ -101,24 +101,6 @@ bool Gunship::Engine::InitSystems()
 	// =================
 	Input::Initialize();
 
-	// initialize joysticks and whatnot
-	if ( SDL_NumJoysticks() > 0 )
-	{
-		printf( "num joysticks: %d\n", SDL_NumJoysticks() );
-		SDL_GameController* controller = SDL_GameControllerOpen( 0 );
-
-		std::cout << "joystick is controller: "
-		    << ( SDL_IsGameController( 0 ) ? "true" : "false" ) << std::endl;
-
-		if ( controller == nullptr )
-		{
-			printf( "Warning: Unable to open game controller! SDL Error: %s\n",
-			        SDL_GetError() );
-			return false;
-		}
-		Input::controllers().push_back( controller );
-	}
-
 	// Setup Resource Groups
 	Ogre::ResourceGroupManager& resourceGroupManager = Ogre::ResourceGroupManager::getSingleton();
 	resourceGroupManager.createResourceGroup( "Test Resources" );

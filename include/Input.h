@@ -17,6 +17,11 @@ namespace Gunship
 	class Input : public Singleton< Input >
 	{
 	public:
+		struct MouseCoord
+		{
+			int x, y;
+		};
+
 		typedef std::vector< SDL_Scancode > KeyEvents;
 		typedef std::vector< SDL_GameController* > ControllerArray;
 		typedef std::vector< SDL_JoyAxisEvent > JoystickEvents;
@@ -34,8 +39,11 @@ namespace Gunship
 		static float AxisValue( SDL_GameController*,
 		                        SDL_GameControllerAxis axis );
 
-		static ControllerArray& controllers();
+		static const ControllerArray& controllers();
 		static bool exit();
+
+		static MouseCoord mouseMovement();
+		static MouseCoord mousePosition();
 
 	private:
 		friend class Singleton< Input >;
@@ -45,6 +53,9 @@ namespace Gunship
 		KeyEvents _keyUpEvents;
 		ControllerArray _controllers;
 		JoystickEvents _joyAxisEvents;
+
+		MouseCoord _mouseMovement;
+		MouseCoord _mousePos;
 
 		bool _exit;
 
