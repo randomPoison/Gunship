@@ -19,7 +19,8 @@ namespace Gunship
 	public:
 		struct MouseCoord
 		{
-			int x, y;
+			int x = 0;
+			int y = 0;
 		};
 
 		typedef std::vector< SDL_Scancode > KeyEvents;
