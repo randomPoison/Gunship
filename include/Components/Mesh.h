@@ -13,10 +13,15 @@ namespace Gunship
 {
 	class Scene;
 
-	struct Mesh : entityx::Component< Mesh >
+	namespace Components
 	{
-		Mesh( const Scene& scene, const Transform::Handle& transform, const char* meshName );
+		struct Mesh : entityx::Component< Mesh >
+		{
+			Mesh( const Scene& scene,
+			      Transform::Handle transform,
+			      const char* meshName );
 
-		Ogre::Entity* entity;
-	};
+			Ogre::Entity* mesh;
+		};
+	}
 }
