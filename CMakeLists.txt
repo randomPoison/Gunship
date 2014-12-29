@@ -36,29 +36,11 @@ if(NOT CMAKE_BUILD_TYPE)
 	    FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+set(GUNSHIP_BUILD_EXE ON
+    CACHE BOOL "Whether or not Gunship should build the default executable. If OFF, only the static library will be built.")
+
 # Include path for additional CMake library finding scripts
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-# Add entityx using the ExternalProject module.
-# We can either use an existing download of entityx
-# or download it from github directly.
-# We default to downloading it, but if the user specifies
-# its location on disc (through the ENTITYX_HOME variable)
-# then we'll use the existing location
-set(entityx_DIR "${CMAKE_SOURCE_DIR}/external/entityx")
-set(entityx_INCLUDE_DIR "${entityx_DIR}/include")
-
-# Default compiler args
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	set(entityx_LIBRARY "${entityx_DIR}/lib/libentityx.a")
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-	if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-		set(entityx_LIBRARY "${entityx_DIR}/lib/entityx-d.lib")
-	else()
-		set(entityx_LIBRARY "${entityx_DIR}/lib/entityx.lib")
-	endif()
-endif()
-
 
 set(ENTITYX_DT_TYPE float CACHE STRING "The type used for delta time in EntityX update methods.")
 set(ENTITYX_BUILD_SHARED OFF CACHE BOOL "Build shared libraries?")
@@ -66,9 +48,7 @@ set(ENTITYX_INSTALL_TARGET OFF CACHE BOOL "Create the install target?")
 add_subdirectory(external/entityx)
 list(APPEND LIBS entityx)
 
-# Tell SDL that we're a library, not an executable
 set(SDL2_BUILDING_LIBRARY true)
-
 find_package(SDL2 REQUIRED)
 list(APPEND LIBS ${SDL2_LIBRARY})
 
@@ -119,13 +99,6 @@ target_link_libraries(LibGunship ${LIBS})
 target_include_directories(LibGunship PUBLIC ${GUNSHIP_INCLUDE_DIR})
 target_include_directories(LibGunship SYSTEM PUBLIC ${GUNSHIP_EXTERNAL_INCLUDES})
 
-# If a value for GUNSHIP_BUILD_EXE hasn't been set,
-# default it to TRUE
-if(NOT DEFINED GUNSHIP_BUILD_EXE)
-	set(GUNSHIP_BUILD_EXE ON
-	    CACHE BOOL "Whether or not Gunship should build the default executable. If OFF, only the static library will be built.")
-endif()
-
 # Now create the default executable
 if(${GUNSHIP_BUILD_EXE})
 	add_executable(Gunship ${GUNSHIP_EXE_SOURCES})
@@ -134,5 +107,5 @@ endif(${GUNSHIP_BUILD_EXE})
 
 # Compiler flags
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -std=c++11")
 endif(CMAKE_COMPILER_IS_GNUCXX)

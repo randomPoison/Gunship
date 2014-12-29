@@ -1,9 +1,9 @@
 #pragma once
 
 #include <entityx/Entity.h>
-#include <OgreSceneNode.h>
-#include <OgreVector3.h>
-#include <OgreQuaternion.h>
+
+#include "Math/Vector3.h"
+#include "Math/Quaternion.h"
 
 namespace Ogre
 {
@@ -28,6 +28,8 @@ namespace Gunship
 	 */
 	struct Transform : public entityx::Component< Transform >
 	{
+		Ogre::SceneNode* node;
+
 		/**
 		 * @brief Constructs a transform component.
 		 *
@@ -49,10 +51,29 @@ namespace Gunship
 		 *     The starting scale of the transform. Defaults to no scale.
 		 */
 		Transform( const Scene& scene,
-		           Ogre::Vector3 position       = Ogre::Vector3::ZERO,
-		           Ogre::Quaternion orientation = Ogre::Quaternion::IDENTITY,
-		           Ogre::Vector3 scale          = Ogre::Vector3::UNIT_SCALE );
+		           Vector3 position       = Vector3::ZERO,
+		           Quaternion orientation = Quaternion::IDENTITY,
+		           Vector3 scale          = Vector3::UNIT_SCALE );
 
-		Ogre::SceneNode* node;
+		Vector3 position();
+		void position( float x, float y, float z );
+		void position( Vector3 position );
+		Vector3 derivedPosition();
+		void derivedPosition( float x, float y, float z );
+		void derivedPosition( Vector3 position );
+		void derivedPosition_Updated();
+
+		void Translate( float x, float y, float z );
+		void Translate( Vector3 translation );
+		void TranslateWorld( float x, float y, float z );
+		void TranslateWorld( Vector3 translation );
+
+		void SetPosition( float x, float y, float z );
+		void SetPosition( Vector3 position );
+		void SetDerivedPosition( float x, float y, float z );
+		void SetDerivedPosition( Vector3 position );
+
+		void SetScale( float x, float y, float z );
+		void SetScale( Vector3 scale );
 	};
 }
