@@ -99,4 +99,25 @@ namespace Gunship
 	{
 		node->setScale( scale );
 	}
+
+	void Transform::AddChild( Transform::Handle child )
+	{
+		// make sure new node isn't already a child of another node
+		if ( child->node->getParentSceneNode() != nullptr )
+		{
+			child->node->getParentSceneNode()->removeChild( child->node );
+		}
+
+		node->addChild( child->node );
+	}
+
+	void Transform::RemoveChild( Transform::Handle child )
+	{
+		node->removeChild( child->node );
+	}
+
+	void Transform::RemoveAllChildren()
+	{
+		node->removeAllChildren();
+	}
 }

@@ -75,5 +75,9 @@ namespace Gunship
 
 		void SetScale( float x, float y, float z );
 		void SetScale( Vector3 scale );
+
+		void AddChild( Transform::Handle child );
+		void RemoveChild( Transform::Handle child );
+		void RemoveAllChildren();
 	};
 }
