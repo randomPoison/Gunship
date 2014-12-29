@@ -73,6 +73,11 @@ namespace Gunship
 		void SetDerivedPosition( float x, float y, float z );
 		void SetDerivedPosition( Vector3 position );
 
+		void LookAt( float x, float y, float z );
+		void LookAt( Vector3 target );
+		void LookAtWorld( float x, float y, float z );
+		void LookAtWorld( Vector3 target );
+
 		void SetScale( float x, float y, float z );
 		void SetScale( Vector3 scale );
 

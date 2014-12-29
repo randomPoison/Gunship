@@ -70,6 +70,30 @@ namespace Gunship
 		node->translate( translation, Ogre::Node::TS_WORLD );
 	}
 
+
+	void Transform::LookAt( float x, float y, float z )
+	{
+		node->lookAt( Vector3( x, y, z ), Ogre::Node::TS_LOCAL );
+	}
+
+	void Transform::LookAt( Vector3 target )
+	{
+		node->lookAt( target, Ogre::Node::TS_LOCAL );
+	}
+
+	void Transform::LookAtWorld( float x, float y, float z )
+	{
+		node->_getDerivedPositionUpdated();
+		node->lookAt( Vector3( x, y, z ), Ogre::Node::TS_WORLD );
+	}
+
+	void Transform::LookAtWorld( Vector3 target )
+	{
+		node->_getDerivedPositionUpdated();
+		node->lookAt( target, Ogre::Node::TS_WORLD );
+	}
+
+
 	void Transform::SetPosition( float x, float y, float z )
 	{
 		position( x, y , z );

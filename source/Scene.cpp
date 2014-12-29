@@ -3,47 +3,55 @@
 #include "Scene.h"
 #include "Engine.h"
 
-entityx::EventManager gNullEventManager; //!< Null event manager to give to the EntityManager's constructor.
-
-Gunship::Scene::Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* render ) :
-	_engine( engine ),
-	_root( root ),
-	_renderWindow( render ),
-	_entities( gNullEventManager )
+namespace Gunship
 {
-	_sceneManager = _root->createSceneManager( Ogre::ST_GENERIC,
-	                                           1,
-	                                           Ogre::INSTANCING_CULLING_SINGLETHREAD );
-	_sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
-}
+	entityx::EventManager gNullEventManager; //!< Null event manager to give to the EntityManager's constructor.
 
-entityx::Entity Gunship::Scene::CreateGameObject()
-{
-	return _entities.create();
-}
+	Scene::Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* render )
+		: _engine( engine ),
+		  _root( root ),
+		  _renderWindow( render ),
+		  _entities( gNullEventManager )
+	{
+		_sceneManager = _root->createSceneManager( Ogre::ST_GENERIC,
+		                                           1,
+		                                           Ogre::INSTANCING_CULLING_SINGLETHREAD );
+		_sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
+	}
 
-Gunship::Engine& Gunship::Scene::engine() const
-{
-	return *_engine;
-}
+	entityx::Entity Scene::CreateGameObject()
+	{
+		return _entities.create();
+	}
 
-Ogre::Root& Gunship::Scene::ogreRoot() const
-{
-	return *_root;
-}
+	Gunship::Engine& Scene::engine() const
+	{
+		return *_engine;
+	}
 
-Ogre::RenderWindow& Gunship::Scene::renderWindow() const
-{
-	return *_renderWindow;
-}
+	Ogre::Root& Scene::ogreRoot() const
+	{
+		return *_root;
+	}
 
-Ogre::SceneManager& Gunship::Scene::sceneManager() const
-{
-	return *_sceneManager;
-}
+	Ogre::RenderWindow& Scene::renderWindow() const
+	{
+		return *_renderWindow;
+	}
 
-void Gunship::Scene::Update( float delta )
-{
-	_coreSystems.UpdateAll( _entities );
-	_behaviorSystems.UpdateAll( _entities, delta );
+	Ogre::SceneManager& Scene::sceneManager() const
+	{
+		return *_sceneManager;
+	}
+
+	entityx::EntityManager& Scene::entities()
+	{
+		return _entities;
+	}
+
+	void Gunship::Scene::Update( float delta )
+	{
+		_coreSystems.UpdateAll( _entities );
+		_behaviorSystems.UpdateAll( _entities, delta );
+	}
 }

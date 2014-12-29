@@ -1,10 +1,8 @@
 #pragma once
 
 #include <entityx/Entity.h>
-#include <entityx/Event.h>
 
 #include "SystemManager.h"
-#include "Input.h"
 
 namespace Ogre
 {
@@ -35,6 +33,7 @@ namespace Gunship
 		Ogre::Root& ogreRoot() const;
 		Ogre::RenderWindow& renderWindow() const;
 		Ogre::SceneManager& sceneManager() const;
+		entityx::EntityManager& entities();
 
 	private:
 		Engine* _engine;
