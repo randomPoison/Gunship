@@ -8,9 +8,7 @@ namespace Gunship
 	static const float AXIS_MAX = 32768.0f; ///< The maximum value that SDL2 returns for a joystick's position.
 
 	Input::Input()
-		: _mouseMovement{ 0, 0 },
-		  _mousePos{ 0, 0 },
-		  _exit( false )
+		: _exit( false )
 	{
 		// initialize joysticks and whatnot
 		if ( SDL_NumJoysticks() > 0 )
