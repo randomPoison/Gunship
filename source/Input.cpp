@@ -1,7 +1,7 @@
 #include <iostream>
-#include <algorithm>
 
 #include "Input.h"
+#include "Utility/VectorHelpers.h"
 
 namespace Gunship
 {
@@ -32,13 +32,22 @@ namespace Gunship
 
 	void Input::ConsumeInput()
 	{
+		// retrieve variables from instance
 		KeyEvents& keyDownEvents = _instance->_keyDownEvents;
 		KeyEvents& keyUpEvents = _instance->_keyUpEvents;
 		KeyEvents& downKeys = _instance->_downKeys;
 		JoystickEvents& joyAxisEvents = _instance->_joyAxisEvents;
+		MouseButtonEvents& downMouseButtons = _instance->_downMouseButtons;
+		MouseButtonEvents& pressedMouseButtons = _instance->_pressedMouseButtons;
+		MouseButtonEvents& releasedMousebuttons = _instance->_releasedMouseButtons;
+		MouseCoord& mouseMovement = _instance->_mouseMovement;
+		MouseCoord& mousePos = _instance->_mousePos;
 
+		// reset events from last frame
 		keyUpEvents.clear();
 		joyAxisEvents.clear();
+		pressedMouseButtons.clear();
+		releasedMousebuttons.clear();
 
 		// reset mouse movement values in case mouse did not move this frame
 		_instance->_mouseMovement.x = 0;
@@ -60,17 +69,28 @@ namespace Gunship
 				}
 				break;
 			case SDL_KEYUP:
-				downKeys.erase( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.scancode ) );
+				Utility::EraseIfPresent( downKeys, event.key.keysym.scancode );
 				keyUpEvents.push_back( event.key.keysym.scancode );
 				break;
 			case SDL_JOYAXISMOTION:
 				joyAxisEvents.push_back( event.jaxis );
 				break;
 			case SDL_MOUSEMOTION:
-				_instance->_mouseMovement.x = event.motion.xrel;
-				_instance->_mouseMovement.y = event.motion.yrel;
-				_instance->_mousePos.x = event.motion.x;
-				_instance->_mousePos.y = event.motion.y;
+				mouseMovement.x = event.motion.xrel;
+				mouseMovement.y = event.motion.yrel;
+				mousePos.x = event.motion.x;
+				mousePos.y = event.motion.y;
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if ( std::find( downMouseButtons.begin(), downMouseButtons.end(), event.button.button ) == downMouseButtons.end() )
+				{
+					downMouseButtons.push_back( event.button.button );
+					pressedMouseButtons.push_back( event.button.button );
+				}
+				break;
+			case SDL_MOUSEBUTTONUP:
+				Utility::EraseIfPresent( downMouseButtons, event.button.button );
+				releasedMousebuttons.push_back( event.button.button );
 				break;
 			}
 		}
@@ -82,10 +102,56 @@ namespace Gunship
 		return std::find( keyDownEvents.begin(), keyDownEvents.end(), key ) != keyDownEvents.end();
 	}
 
+	bool Input::KeyReleased( SDL_Scancode key )
+	{
+		KeyEvents& releasedKeys = _instance->_keyUpEvents;
+		return std::find( releasedKeys.begin(), releasedKeys.end(), key ) != releasedKeys.end();
+	}
+
+	bool Input::KeyUp( SDL_Scancode key )
+	{
+		KeyEvents& downKeys = _instance->_downKeys;
+		return std::find( downKeys.begin(), downKeys.end(), key ) == downKeys.end();
+	}
+
 	bool Input::KeyDown( SDL_Scancode key )
 	{
 		KeyEvents& downKeys = _instance->_downKeys;
 		return std::find( downKeys.begin(), downKeys.end(), key ) != downKeys.end();
+	}
+
+	bool Input::MouseButtonPressed( Uint8 button )
+	{
+		MouseButtonEvents& pressedMouseButtons = _instance->_pressedMouseButtons;
+		return std::find( pressedMouseButtons.begin(), pressedMouseButtons.end(), button ) != pressedMouseButtons.end();
+	}
+
+	bool Input::MouseButtonReleased( Uint8 button )
+	{
+		MouseButtonEvents& releasedMouseButtons = _instance->_releasedMouseButtons;
+		return std::find( releasedMouseButtons.begin(), releasedMouseButtons.end(), button ) != releasedMouseButtons.end();
+	}
+
+	bool Input::MouseButtonUp( Uint8 button )
+	{
+		MouseButtonEvents& downMouseButtons = _instance->_downMouseButtons;
+		return std::find( downMouseButtons.begin(), downMouseButtons.end(), button ) == downMouseButtons.end();
+	}
+
+	bool Input::MouseButtonDown( Uint8 button )
+	{
+		MouseButtonEvents& downMouseButtons = _instance->_downMouseButtons;
+		return std::find( downMouseButtons.begin(), downMouseButtons.end(), button ) != downMouseButtons.end();
+	}
+
+	float Input::AxisMotion( Uint8 controller, Uint8 axis )
+	{
+		JoystickEvents& joyAxisEvents = _instance->_joyAxisEvents;
+		auto joyAxis = std::find_if( joyAxisEvents.begin(), joyAxisEvents.end(), [ controller, axis ]( const SDL_JoyAxisEvent& joyAxisEvent )
+		{
+			return joyAxisEvent.which == controller && joyAxisEvent.axis == axis;
+		} );
+		return ( joyAxis != joyAxisEvents.end() ? joyAxis->value / AXIS_MAX : 0.0f );
 	}
 
 	float Input::AxisValue( int controller, SDL_GameControllerAxis axis )
