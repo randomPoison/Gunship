@@ -35,7 +35,7 @@ namespace Gunship
 	class DefaultSystemBase : SystemBase
 	{
 	public:
-		virtual void Update( Scene& scene ) = 0;
+		virtual void Update( Scene& scene, float delta ) = 0;
 	};
 
 	template< class Derived, class Base = DefaultSystemBase >

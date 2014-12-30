@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "Engine.h"
 
+#include "Systems/AlarmSystem.h"
+
 namespace Gunship
 {
 	entityx::EventManager gNullEventManager; //!< Null event manager to give to the EntityManager's constructor.
@@ -17,6 +19,8 @@ namespace Gunship
 		                                           1,
 		                                           Ogre::INSTANCING_CULLING_SINGLETHREAD );
 		_sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
+
+		_coreSystems.Add< Systems::AlarmSystem >();
 	}
 
 	entityx::Entity Scene::CreateGameObject()
@@ -51,7 +55,7 @@ namespace Gunship
 
 	void Gunship::Scene::Update( float delta )
 	{
-		_coreSystems.UpdateAll( *this );
+		_coreSystems.UpdateAll( *this, delta );
 		_behaviorSystems.UpdateAll( *this, delta );
 	}
 }

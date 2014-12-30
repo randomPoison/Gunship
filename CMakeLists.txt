@@ -72,17 +72,15 @@ set(GUNSHIP_INCLUDE_DIRS
     ${GUNSHIP_EXTERNAL_INCLUDES})
 
 # Get all source files (used for setting up VS filters)
-file(GLOB PROJECT_SOURCES
-     source/*.cpp
-     source/Components/*.cpp)
+file(GLOB_RECURSE PROJECT_SOURCES
+     source/*.cpp)
 
 file(GLOB GUNSHIP_EXE_SOURCES
      source/Gunship.cpp)
 
 # All header files (used for setting up VS filters)
-file(GLOB PROJECT_INCLUDES
-     include/*.h
-     include/Components/*.h)
+file(GLOB_RECURSE PROJECT_INCLUDES
+     include/*.h)
 
 # Get source files for libgunship (PROJECT_SOURCES minus Gunship.cpp)
 set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES} ${PROJECT_INCLUDES})
