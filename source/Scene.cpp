@@ -51,7 +51,7 @@ namespace Gunship
 
 	void Gunship::Scene::Update( float delta )
 	{
-		_coreSystems.UpdateAll( _entities );
-		_behaviorSystems.UpdateAll( _entities, delta );
+		_coreSystems.UpdateAll( *this );
+		_behaviorSystems.UpdateAll( *this, delta );
 	}
 }
