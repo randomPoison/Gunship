@@ -10,10 +10,17 @@ namespace Gunship
 	namespace Components
 	{
 		Mesh::Mesh( const Scene& scene, Transform::Handle transform, const char* meshName )
-			: mesh( nullptr )
+			: mesh( nullptr ),
+			  sceneManager( &scene.sceneManager() )
 		{
-			mesh = scene.sceneManager().createEntity( meshName );
+			mesh = sceneManager->createEntity( meshName );
 			transform->node->attachObject( mesh );
+		}
+
+		Mesh::~Mesh()
+		{
+			mesh->detachFromParent();
+			sceneManager->destroyEntity( mesh );
 		}
 	}
 }

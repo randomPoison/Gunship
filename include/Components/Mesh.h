@@ -22,10 +22,13 @@ namespace Gunship
 		struct Mesh : entityx::Component< Mesh >
 		{
 			Ogre::Entity* mesh;
+			Ogre::SceneManager* sceneManager;
 
 			Mesh( const Scene& scene,
 			      Transform::Handle transform,
 			      const char* meshName );
+
+			~Mesh();
 		};
 	}
 }
