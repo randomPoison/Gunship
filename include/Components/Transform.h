@@ -57,6 +57,8 @@ namespace Gunship
 			           Quaternion orientation = Quaternion::IDENTITY,
 			           Vector3 scale = Vector3::UNIT_SCALE );
 
+			~Transform();
+
 			Vector3 position();
 			void position( float x, float y, float z );
 			void position( Vector3 position );

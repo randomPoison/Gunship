@@ -7,6 +7,7 @@
 namespace Ogre
 {
 	class Entity;
+	class SceneManager;
 }
 
 namespace Gunship
@@ -15,13 +16,16 @@ namespace Gunship
 
 	namespace Components
 	{
+		/**
+		 * @brief Component representing a mesh resource.
+		 */
 		struct Mesh : entityx::Component< Mesh >
 		{
+			Ogre::Entity* mesh;
+
 			Mesh( const Scene& scene,
 			      Transform::Handle transform,
 			      const char* meshName );
-
-			Ogre::Entity* mesh;
 		};
 	}
 }

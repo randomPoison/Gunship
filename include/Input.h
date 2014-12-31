@@ -64,8 +64,8 @@ namespace Gunship
 		friend class Singleton< Input >;
 
 		KeyEvents _downKeys;
-		KeyEvents _keyDownEvents;
-		KeyEvents _keyUpEvents;
+		KeyEvents _pressedKeys;
+		KeyEvents _releasedKeys;
 
 		ControllerArray _controllers;
 		JoystickEvents _joyAxisEvents;

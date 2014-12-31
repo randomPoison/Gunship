@@ -22,6 +22,12 @@ namespace Gunship
 			node->setScale( scale );
 		}
 
+		Transform::~Transform()
+		{
+			node->detachAllObjects();
+			node->getParentSceneNode()->removeChild( node );
+		}
+
 		Vector3 Transform::position()
 		{
 			return node->getPosition();
@@ -51,6 +57,7 @@ namespace Gunship
 		{
 			node->_setDerivedPosition( position );
 		}
+
 
 		void Transform::Translate( float x, float y, float z )
 		{
@@ -116,6 +123,7 @@ namespace Gunship
 			derivedPosition( position );
 		}
 
+
 		void Transform::SetScale( float x, float y, float z )
 		{
 			node->setScale( x, y, z );
@@ -125,6 +133,7 @@ namespace Gunship
 		{
 			node->setScale( scale );
 		}
+
 
 		void Transform::AddChild( Transform::Handle child )
 		{

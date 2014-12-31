@@ -33,8 +33,8 @@ namespace Gunship
 	void Input::ConsumeInput()
 	{
 		// retrieve variables from instance
-		KeyEvents& keyDownEvents = _instance->_keyDownEvents;
-		KeyEvents& keyUpEvents = _instance->_keyUpEvents;
+		KeyEvents& pressedKeys = _instance->_pressedKeys;
+		KeyEvents& releasedKeys = _instance->_releasedKeys;
 		KeyEvents& downKeys = _instance->_downKeys;
 		JoystickEvents& joyAxisEvents = _instance->_joyAxisEvents;
 		MouseButtonEvents& downMouseButtons = _instance->_downMouseButtons;
@@ -44,7 +44,8 @@ namespace Gunship
 		MouseCoord& mousePos = _instance->_mousePos;
 
 		// reset events from last frame
-		keyUpEvents.clear();
+		pressedKeys.clear();
+		releasedKeys.clear();
 		joyAxisEvents.clear();
 		pressedMouseButtons.clear();
 		releasedMousebuttons.clear();
@@ -65,12 +66,12 @@ namespace Gunship
 				if ( std::find( downKeys.begin(), downKeys.end(), event.key.keysym.scancode ) == downKeys.end() )
 				{
 					downKeys.push_back( event.key.keysym.scancode );
-					keyDownEvents.push_back( event.key.keysym.scancode );
+					pressedKeys.push_back( event.key.keysym.scancode );
 				}
 				break;
 			case SDL_KEYUP:
 				Utility::EraseIfPresent( downKeys, event.key.keysym.scancode );
-				keyUpEvents.push_back( event.key.keysym.scancode );
+				releasedKeys.push_back( event.key.keysym.scancode );
 				break;
 			case SDL_JOYAXISMOTION:
 				joyAxisEvents.push_back( event.jaxis );
@@ -98,13 +99,13 @@ namespace Gunship
 
 	bool Input::KeyPressed( SDL_Scancode key )
 	{
-		KeyEvents& keyDownEvents = _instance->_keyDownEvents;
-		return std::find( keyDownEvents.begin(), keyDownEvents.end(), key ) != keyDownEvents.end();
+		KeyEvents& pressedKeys = _instance->_pressedKeys;
+		return std::find( pressedKeys.begin(), pressedKeys.end(), key ) != pressedKeys.end();
 	}
 
 	bool Input::KeyReleased( SDL_Scancode key )
 	{
-		KeyEvents& releasedKeys = _instance->_keyUpEvents;
+		KeyEvents& releasedKeys = _instance->_releasedKeys;
 		return std::find( releasedKeys.begin(), releasedKeys.end(), key ) != releasedKeys.end();
 	}
 
