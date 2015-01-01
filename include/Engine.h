@@ -3,7 +3,6 @@
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 
-#include "Types.h"
 #include "Input.h"
 
 namespace Gunship
