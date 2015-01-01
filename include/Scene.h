@@ -1,72 +1,59 @@
 #pragma once
 
-#include <vector>
-#include <utility>
+#include <entityx/Entity.h>
 
-class Scene
+#include "SystemManager.h"
+
+namespace Ogre
 {
-public:
-	Scene( Ogre::Root* root, Ogre::RenderWindow* renderWindow );
+	class Root;
+	class RenderWindow;
+	class SceneManager;
+}
 
-	GameObject AddGameObject( const char* name = "Game Object" );
-	Camera AddCameraComponent( GameObject& gameObject );
-	Behavior AddBehaviorComponent( GameObject& gameObject, BehaviorFunction behavior );
-	Collider AddColliderComponent( GameObject& gameObject, float radius );
+namespace Gunship
+{
+	class Engine;
 
-	void AddMeshToGameObject( GameObject& gameObject, const char* name, const char* mesh );
-	void SetGameObjectLook( GameObject& gameObject, float x, float y, float z );
+	class Scene
+	{
+	public:
+		explicit Scene( Engine* engine,
+		                Ogre::Root* root,
+		                Ogre::RenderWindow* renderWindow );
 
-	GameObjectComponent* FindComponent( GameObject& gameObject );
-	CameraComponent* FindComponent( Camera& camera );
+		template< typename S >
+		void AddSystem()
+		{
+			_behaviorSystems.Add< S >();
+		}
+		entityx::Entity CreateGameObject();
 
-	/**
-	 * \brief Marks a game object for destruction.
-	 *
-	 * \param gameObject the GameObject to be marked for destruction.
-	 *
-	 * \returns True if the GameObject was marked, false if it had already been marked.
-	 */
-	bool MarkForDestroy( GameObject gameObject );
+		Engine& engine() const;
+		Ogre::Root& ogreRoot() const;
+		Ogre::RenderWindow& renderWindow() const;
+		Ogre::SceneManager& sceneManager() const;
+		entityx::EntityManager& entities();
 
-	/**
-	 * \brief Marks a behavior for destruction.
-	 *
-	 * \param behavior the Behavior to be marked for destruction.
-	 *
-	 * \returns True if the Behavior was marked, false if it had already been marked.
-	 */
-	bool MarkForDestroy( Behavior behavior );
+	private:
+		Engine* _engine;
+		Ogre::Root* _root;
+		Ogre::RenderWindow* _renderWindow;
+		Ogre::SceneManager* _sceneManager;
 
-	/**
-	 * \brief Marks a collider for destruction.
-	 *
-	 * \param collider the Collider to be marked for destruction.
-	 *
-	 * \returns True if the Collider was marked, false if it had already been marked.
-	 */
-	bool MarkForDestroy( Collider collider );
+		entityx::EntityManager _entities;
+		SystemManager< DefaultSystemBase > _coreSystems;
+		SystemManager< BehaviorSystemBase > _behaviorSystems;
 
-private:
-	std::vector< GameObjectComponent > gameObjects;
-	std::vector< CameraComponent > cameraComponents;
-	std::vector< BehaviorComponent > behaviorComponents;
-	std::vector< ColliderComponent > colliders;
+		friend class Engine;
 
-	std::vector< GameObject > gameObjectsToDestroy;
-	std::vector< Camera > camerasToDestroy;
-	std::vector< Behavior > behaviorsToDestroy;
-	std::vector< Collider > collidersToDestroy;
-
-	std::vector< std::pair< Collider, Collider > > collisions;
-
-	Ogre::Root* root;
-	Ogre::SceneManager* sceneManager;
-	Ogre::RenderWindow* renderWindow;
-
-	void Update( const Input& input, float delta );
-	void RunCollisions();
-	void DestroyMarkedComponents();
-
-	friend class Gunship;
-	friend class ComponentLocator;
-};
+		/**
+		 * @brief Update all the running systems.
+		 *
+		 * @details
+		 *     This is called by the Engine as part of the normal frame loop,
+		 *     and is not accessible to client code.
+		 */
+		void Update( float delta );
+	};
+}
