@@ -2,7 +2,7 @@
 
 [![Linux Build Status](https://travis-ci.org/excaliburHisSheath/Gunship.svg?branch=master)](https://travis-ci.org/excaliburHisSheath/Gunship)
 
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/v1jtjl6r1vthcke7)](https://ci.appveyor.com/project/excaliburHisSheath/gunship)
+[![Windows Build Status](https://ci.appveyor.com/api/projects/status/v1jtjl6r1vthcke7/branch/master)](https://ci.appveyor.com/project/excaliburHisSheath/gunship/branch/master)
 
 Gunship Engine/Editor
 =====================
