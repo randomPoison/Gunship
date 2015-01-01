@@ -25,7 +25,11 @@ namespace Gunship
 		Transform::~Transform()
 		{
 			node->detachAllObjects();
-			node->getParentSceneNode()->removeChild( node );
+			if ( node->getParentSceneNode() != nullptr )
+			{
+				node->getParentSceneNode()->removeChild( node );
+			}
+			node->getCreator()->destroySceneNode( node );
 		}
 
 		Vector3 Transform::position()
