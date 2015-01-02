@@ -1,8 +1,6 @@
 #pragma once
 
-#include <entityx/Entity.h>
-
-#include "Components/Transform.h"
+#include "Components/SimpleStructComponent.h"
 
 namespace Ogre
 {
@@ -16,16 +14,18 @@ namespace Gunship
 
 	namespace Components
 	{
+		struct Transform;
+
 		/**
 		 * @brief Component representing a mesh resource.
 		 */
-		struct Mesh : entityx::Component< Mesh >
+		struct Mesh : public SimpleStructComponent
 		{
 			Ogre::Entity* mesh;
 			Ogre::SceneManager* sceneManager;
 
 			Mesh( const Scene& scene,
-			      Transform::Handle transform,
+			      const Transform* transform,
 			      const char* meshName );
 
 			~Mesh();

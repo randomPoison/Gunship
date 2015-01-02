@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/SimpleStructComponentManager.h"
+#include "Components/SimpleStructComponent.h"
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
 

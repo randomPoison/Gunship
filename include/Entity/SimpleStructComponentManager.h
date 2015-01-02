@@ -21,13 +21,14 @@ namespace Gunship
 		: public ComponentManager< SimpleStructComponentManager< ComponentType > >
 	{
 	public:
+		template< typename ... Args >
+		void Assign( Entity::ID entity, Args&& ... args )
+		{
+			_components.emplace_back( std::Forward< Args >( args ) ... );
+			_components.back().entityID = entity;
+		}
 
 	private:
 		std::vector< ComponentType > _components;
-	};
-
-	struct SimpleStructComponent
-	{
-		Entity::ID entityID;
 	};
 }

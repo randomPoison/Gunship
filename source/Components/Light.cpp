@@ -1,14 +1,19 @@
 #include <OgreLight.h>
 #include <OgreSceneManager.h>
 
-//#include "Components/Light.h"
 #include "Scene.h"
+#include "Components/Light.h"
+#include "Components/Transform.h"
 
-/*
-Gunship::Components::Light::Light( const Scene& scene, const Transform::Handle& transform )
-	: light( nullptr )
+namespace Gunship
 {
-	light = scene.sceneManager().createLight();
-	transform->node->attachObject( light );
+	namespace Components
+	{
+		Light::Light( const Scene& scene, const Transform* transform )
+			: light( nullptr )
+		{
+			light = scene.sceneManager().createLight();
+			transform->node->attachObject( light );
+		}
+	}
 }
-*/

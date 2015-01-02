@@ -1,8 +1,6 @@
 #pragma once
 
-#include <entityx/Entity.h>
-
-#include "Components/Transform.h"
+#include "Components/SimpleStructComponent.h"
 
 namespace Ogre
 {
@@ -15,9 +13,11 @@ namespace Gunship
 
 	namespace Components
 	{
-		struct Light : public entityx::Component< Light >
+		struct Transform;
+
+		struct Light : public SimpleStructComponent
 		{
-			Light( const Scene& scene, const Transform::Handle& transform );
+			Light( const Scene& scene, const Transform* transform );
 
 			Ogre::Light* light;
 		};
