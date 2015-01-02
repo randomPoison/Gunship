@@ -1,5 +1,5 @@
 #include "Systems/AlarmSystem.h"
-#include "Components/Alarm.h"
+//#include "Components/Alarm.h"
 #include "Scene.h"
 
 namespace Gunship
@@ -8,6 +8,7 @@ namespace Gunship
 	{
 		void AlarmSystem::Update( Scene& scene, float delta )
 		{
+/*
 			for ( entityx::Entity entity : scene.entities().entities_with_components< Components::Alarm >() )
 			{
 				Components::Alarm& alarm = *entity.component< Components::Alarm >().get();
@@ -17,6 +18,7 @@ namespace Gunship
 					alarm.callback( scene, entity );
 				}
 			}
+*/
 		}
 	}
 }

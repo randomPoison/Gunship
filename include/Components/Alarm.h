@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include <entityx/Entity.h>
+#include "Entity/ComponentManager.h"
 
 namespace Gunship
 {

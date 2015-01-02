@@ -42,12 +42,6 @@ set(GUNSHIP_BUILD_EXE ON
 # Include path for additional CMake library finding scripts
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(ENTITYX_DT_TYPE float CACHE STRING "The type used for delta time in EntityX update methods.")
-set(ENTITYX_BUILD_SHARED OFF CACHE BOOL "Build shared libraries?")
-set(ENTITYX_INSTALL_TARGET OFF CACHE BOOL "Create the install target?")
-add_subdirectory(external/entityx)
-list(APPEND LIBS entityx)
-
 set(SDL2_BUILDING_LIBRARY true)
 find_package(SDL2 REQUIRED)
 list(APPEND LIBS ${SDL2_LIBRARY})
@@ -61,8 +55,7 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 # The project's include directories
 set(GUNSHIP_EXTERNAL_INCLUDES
     ${SDL2_INCLUDE_DIR}
-    ${OGRE_INCLUDE_DIRS}
-    external/entityx)
+    ${OGRE_INCLUDE_DIRS})
 
 set(GUNSHIP_INCLUDE_DIR
     include)

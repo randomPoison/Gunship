@@ -2,10 +2,12 @@
 
 #include <utility>
 
+#include "Utility/NonCopyable.h"
+
 namespace Gunship
 {
 	template< typename Class >
-	class Singleton
+	class Singleton : public NonCopyable
 	{
 	public:
 		Class& instance()

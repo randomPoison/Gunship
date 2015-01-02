@@ -4,13 +4,14 @@
 #include <OgreSceneManager.h>
 #include <Compositor/OgreCompositorManager2.h>
 
-#include "Components/Camera.h"
+//#include "Components/Camera.h"
 #include "Scene.h"
 
 namespace Gunship
 {
 	namespace Components
 	{
+/*
 		Camera::Camera( const Scene& scene,
 		                Components::Transform::Handle transform,
 		                const char* cameraName )
@@ -37,5 +38,6 @@ namespace Gunship
 			                                  workspaceID,
 			                                  true );
 		}
+*/
 	}
 }

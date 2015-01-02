@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL_stdinc.h>
-#include <entityx/help/NonCopyable.h>
+#include <Utility/NonCopyable.h>
 
 namespace entityx
 {
@@ -22,7 +22,7 @@ namespace Gunship
 	 *     the purposed of compatibility with other EntityX systems, and may
 	 *     be utilized in the future.
 	 */
-	class SystemBase : public entityx::help::NonCopyable
+	class SystemBase : public NonCopyable
 	{
 	public:
 		typedef Uint32 Family;

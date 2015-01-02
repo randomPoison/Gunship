@@ -4,14 +4,14 @@
 #include <memory>
 #include <vector>
 
-#include <entityx/help/NonCopyable.h>
+#include "Utility/NonCopyable.h"
 
 #include "System.h"
 
 namespace Gunship
 {
 	template< class BaseType >
-	class SystemManager : public entityx::help::NonCopyable
+	class SystemManager : public NonCopyable
 	{
 	public:
 		template< class SystemType, typename ... Args >

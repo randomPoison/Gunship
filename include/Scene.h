@@ -1,8 +1,7 @@
 #pragma once
 
-#include <entityx/Entity.h>
-
-#include "SystemManager.h"
+#include "Entity/SystemManager.h"
+#include "Entity/Entity.h"
 
 namespace Ogre
 {
@@ -27,13 +26,13 @@ namespace Gunship
 		{
 			_behaviorSystems.Add< S >();
 		}
-		entityx::Entity CreateGameObject();
+		Entity CreateGameObject();
 
 		Engine& engine() const;
 		Ogre::Root& ogreRoot() const;
 		Ogre::RenderWindow& renderWindow() const;
 		Ogre::SceneManager& sceneManager() const;
-		entityx::EntityManager& entities();
+		EntityManager& entities();
 
 	private:
 		Engine* _engine;
@@ -41,7 +40,7 @@ namespace Gunship
 		Ogre::RenderWindow* _renderWindow;
 		Ogre::SceneManager* _sceneManager;
 
-		entityx::EntityManager _entities;
+		EntityManager _entities;
 		SystemManager< DefaultSystemBase > _coreSystems;
 		SystemManager< BehaviorSystemBase > _behaviorSystems;
 

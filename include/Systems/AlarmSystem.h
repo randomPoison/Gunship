@@ -1,6 +1,6 @@
 #pragma once
 
-#include <System.h>
+#include "Entity/System.h"
 
 namespace Gunship
 {

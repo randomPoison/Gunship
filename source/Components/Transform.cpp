@@ -1,11 +1,12 @@
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 
-#include "Components/Transform.h"
+//#include "Components/Transform.h"
 #include "Scene.h"
 
 namespace Gunship
 {
+/*
 	namespace Components
 	{
 		Transform::Transform( const Scene& scene,
@@ -160,4 +161,5 @@ namespace Gunship
 			node->removeAllChildren();
 		}
 	}
+*/
 }

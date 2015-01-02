@@ -1,19 +1,17 @@
-#include <entityx/Event.h>
+#include <OgreRoot.h>
+#include <OgreSceneManager.h>
 
 #include "Scene.h"
-#include "Engine.h"
 
 #include "Systems/AlarmSystem.h"
 
 namespace Gunship
 {
-	entityx::EventManager gNullEventManager; //!< Null event manager to give to the EntityManager's constructor.
-
 	Scene::Scene( Engine* engine, Ogre::Root* root, Ogre::RenderWindow* render )
 		: _engine( engine ),
 		  _root( root ),
 		  _renderWindow( render ),
-		  _entities( gNullEventManager )
+		  _entities()
 	{
 		_sceneManager = _root->createSceneManager( Ogre::ST_GENERIC,
 		                                           1,
@@ -21,11 +19,6 @@ namespace Gunship
 		_sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
 
 		_coreSystems.Add< Systems::AlarmSystem >();
-	}
-
-	entityx::Entity Scene::CreateGameObject()
-	{
-		return _entities.create();
 	}
 
 	Gunship::Engine& Scene::engine() const
@@ -48,7 +41,7 @@ namespace Gunship
 		return *_sceneManager;
 	}
 
-	entityx::EntityManager& Scene::entities()
+	EntityManager& Scene::entities()
 	{
 		return _entities;
 	}
