@@ -1,7 +1,6 @@
 #pragma once
 
-#include <entityx/Entity.h>
-
+#include "Entity/SimpleStructComponentManager.h"
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
 
@@ -28,7 +27,7 @@ namespace Gunship
 		 *     we let Ogre manage the scene graph for us at this point.
 		 *     This may change as things go forward.
 		 */
-		struct Transform : public entityx::Component< Transform >
+		struct Transform : public SimpleStructComponent
 		{
 			Ogre::SceneNode* node;
 
@@ -85,8 +84,8 @@ namespace Gunship
 			void SetScale( float x, float y, float z );
 			void SetScale( Vector3 scale );
 
-			void AddChild( Transform::Handle child );
-			void RemoveChild( Transform::Handle child );
+			void AddChild( Transform* child );
+			void RemoveChild( Transform* child );
 			void RemoveAllChildren();
 		};
 	}

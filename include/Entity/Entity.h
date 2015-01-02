@@ -10,13 +10,7 @@ namespace Gunship
 
 		ID id;
 		EntityManager& manager;
-	};
 
-	class EntityManager
-	{
-	public:
-
-	private:
-		static Entity::ID _idIndex;
+		Entity( ID id, EntityManager& manager );
 	};
 }

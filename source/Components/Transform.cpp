@@ -1,18 +1,17 @@
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 
-//#include "Components/Transform.h"
+#include "Components/Transform.h"
 #include "Scene.h"
 
 namespace Gunship
 {
-/*
 	namespace Components
 	{
 		Transform::Transform( const Scene& scene,
-									   Vector3 position,
-									   Quaternion orientation,
-									   Vector3 scale )
+		                      Vector3 position,
+		                      Quaternion orientation,
+		                      Vector3 scale )
 			: node( nullptr )
 		{
 			Ogre::SceneManager& sceneManager = scene.sceneManager();
@@ -140,7 +139,7 @@ namespace Gunship
 		}
 
 
-		void Transform::AddChild( Transform::Handle child )
+		void Transform::AddChild( Transform* child )
 		{
 			// make sure new node isn't already a child of another node
 			if ( child->node->getParentSceneNode() != nullptr )
@@ -151,7 +150,7 @@ namespace Gunship
 			node->addChild( child->node );
 		}
 
-		void Transform::RemoveChild( Transform::Handle child )
+		void Transform::RemoveChild( Transform* child )
 		{
 			node->removeChild( child->node );
 		}
@@ -161,5 +160,4 @@ namespace Gunship
 			node->removeAllChildren();
 		}
 	}
-*/
 }

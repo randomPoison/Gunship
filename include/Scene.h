@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Entity/SystemManager.h"
-#include "Entity/Entity.h"
+#include "Entity/EntityManager.h"
 
 namespace Ogre
 {

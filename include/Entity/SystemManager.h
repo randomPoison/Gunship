@@ -1,8 +1,8 @@
 #pragma once
 
 #include <utility>
-#include <memory>
-#include <vector>
+#include <memory> // TODO remove dependency on STL containers
+#include <vector> // TODO remove dependency on STL containers
 
 #include "Utility/NonCopyable.h"
 
