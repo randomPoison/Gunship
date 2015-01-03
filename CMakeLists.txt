@@ -1,27 +1,10 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-include(ExternalProject)
-
-function(source_group_setup ALL_FILES)
-	foreach(FILE ${ALL_FILES})
-		get_filename_component(PARENT_DIR "${FILE}" PATH)
-
-		# skip src or include and changes /'s to \\'s
-		string(REGEX REPLACE "(\\./)?(src|include)/?" "" GROUP "${PARENT_DIR}")
-		string(REPLACE "/" "\\" GROUP "${GROUP}")
-
-		# group into "Source Files" and "Header Files"
-		if ("${FILE}" MATCHES ".*\\.cpp")
-			set(GROUP "Source Files\\${GROUP}")
-		elseif("${FILE}" MATCHES ".*\\.h")
-			set(GROUP "Header Files\\${GROUP}")
-		endif()
-
-		source_group("${GROUP}" FILES "${FILE}")
-	endforeach()
-endfunction(source_group_setup)
-
 project(Gunship CXX C)
+
+# Include path for additional CMake library finding scripts
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(SetupFileFilters)
 
 # Avoid source tree pollution
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
@@ -35,12 +18,15 @@ if(NOT CMAKE_BUILD_TYPE)
 	    CACHE STRING "Type of build, options are: None Debug Release RelWithDebInfo."
 	    FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
-
 set(GUNSHIP_BUILD_EXE ON
     CACHE BOOL "Whether or not Gunship should build the default executable. If OFF, only the static library will be built.")
+set(GUNSHIP_BUILD_TESTS ON
+    CACHE BOOL "Wether or not the test suite should be built.")
 
-# Include path for additional CMake library finding scripts
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# Compiler flags
+if (CMAKE_COMPILER_IS_GNUCXX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -std=c++11")
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set(ENTITYX_DT_TYPE float CACHE STRING "The type used for delta time in EntityX update methods.")
 set(ENTITYX_BUILD_SHARED OFF CACHE BOOL "Build shared libraries?")
@@ -103,7 +89,3 @@ if(${GUNSHIP_BUILD_EXE})
 	target_link_libraries(Gunship LibGunship)
 endif(${GUNSHIP_BUILD_EXE})
 
-# Compiler flags
-if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -std=c++11")
-endif(CMAKE_COMPILER_IS_GNUCXX)
