@@ -1,5 +1,5 @@
 install:
-  # Do the
+  # Initialize all submodules
   - git submodule update --init --recursive
 
   # move up out of Gunship directory
@@ -26,3 +26,7 @@ environment:
 
 build:
   project: C:\projects\build\Gunship.sln
+
+test_script:
+  - cd tests
+  - GunshipTests

@@ -40,8 +40,8 @@ namespace Gunship
 			virtual void* Allocate( size_t size ) = 0;
 			virtual void Free( void* mem ) = 0;
 
-			virtual size_t Allocated() = 0;
-			virtual size_t Reserved() = 0;
+			virtual size_t allocated() = 0;
+			virtual size_t reserved() = 0;
 		};
 	}
 }

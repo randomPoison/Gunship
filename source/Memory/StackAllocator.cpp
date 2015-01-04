@@ -16,6 +16,8 @@ namespace Gunship
 
 		void StackAllocator::Init( void* buffer, size_t bytes )
 		{
+			SDL_assert_paranoid( !_initialized );
+
 			_bufferSize = bytes;
 			_stackBase = buffer;
 			_stackTop = _stackBase;
@@ -24,42 +26,41 @@ namespace Gunship
 
 		void StackAllocator::TearDown()
 		{
-			SDL_assert( _initialized );
+			SDL_assert_paranoid( _initialized );
+			SDL_assert_release( _stackTop == _stackBase );
 
-			SDL_assert_paranoid( _stackTop == _stackBase );
+			_initialized = false;
 		}
 
 		void* StackAllocator::Allocate( size_t size )
 		{
-			SDL_assert( _initialized );
+			SDL_assert_paranoid( _initialized );
 
 			void* memAddress = _stackTop;
 			_stackTop = static_cast< byte* >( _stackTop ) + size;
-			SDL_assert( Allocated() > _bufferSize );
+			SDL_assert_paranoid( allocated() <= _bufferSize );
 			return memAddress;
 		}
 
 		void StackAllocator::Free( void* mem )
 		{
-			SDL_assert( _initialized );
+			SDL_assert_paranoid( _initialized );
+			SDL_assert_paranoid( mem != nullptr );
+			SDL_assert_paranoid( mem >= _stackBase && mem < _stackTop ); // check that freed address is actually part of this allocator
 
-			// check that freed address is actually part of this allocator
-			SDL_assert( mem >= _stackBase && mem < _stackTop );
-
-			// TODO figure out how to do this in a not sucky way
 			_stackTop = mem;
 		}
 
-		size_t StackAllocator::Allocated()
+		size_t StackAllocator::allocated()
 		{
-			SDL_assert( _initialized );
+			SDL_assert_paranoid( _initialized );
 
 			return static_cast< byte* >( _stackTop ) - static_cast< byte* >( _stackBase );
 		}
 
-		size_t StackAllocator::Reserved()
+		size_t StackAllocator::reserved()
 		{
-			SDL_assert( _initialized );
+			SDL_assert_paranoid( _initialized );
 
 			return _bufferSize;
 		}

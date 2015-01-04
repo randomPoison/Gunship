@@ -30,8 +30,11 @@ before_script:
   # configure build directory
   - sudo mkdir build
   - cd build
-  - cmake --version
 
 script:
+  # build Gunship
   - sudo cmake ../Gunship
   - sudo make
+
+  # run test suite
+  - ./tests/GunshipTests
