@@ -65,4 +65,6 @@ namespace Gunship
 			return _bufferSize;
 		}
 	}
+
+	Memory::Allocator* gDefaultAllocator;
 }

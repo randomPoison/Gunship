@@ -2,24 +2,32 @@
 
 #include <utility>
 #include <memory>
-#include <vector>
 
 #include <entityx/help/NonCopyable.h>
 
 #include "System.h"
+#include "Containers/Array.h"
+#include "Memory/MemoryTypes.h"
 
 namespace Gunship
 {
+	extern Memory::Allocator* gDefaultAllocator;
+
 	template< class BaseType >
 	class SystemManager : public entityx::help::NonCopyable
 	{
 	public:
+		SystemManager()
+			: _systems( gDefaultAllocator, 100 )
+		{
+		}
+
 		template< class SystemType, typename ... Args >
 		std::shared_ptr< SystemType > Add( Args&& ... args )
 		{
 			std::shared_ptr< SystemType > systemPointer(
 				new SystemType( std::forward< Args >( args ) ... ) );
-			_systems.push_back( systemPointer );
+			_systems.PushBack( systemPointer );
 			return systemPointer;
 		}
 
@@ -33,6 +41,6 @@ namespace Gunship
 		}
 
 	private:
-		std::vector< std::shared_ptr< BaseType > > _systems;
+		Array< std::shared_ptr< BaseType > > _systems;
 	};
 }

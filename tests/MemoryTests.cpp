@@ -89,12 +89,19 @@ TEST_CASE( "Stack allocator allocates and frees memory", "[memory][stack_allocat
 		void* bytes;
 		REQUIRE_NOASSERT( bytes = allocator.Allocate( BUFFER_SIZE ) );
 
-		void* tooManyBytes;
-		REQUIRE_ASSERT( tooManyBytes = allocator.Allocate( 1 ) );
+		REQUIRE_ASSERT( allocator.Allocate( 1 ) );
 
 		allocator.Free( bytes ); // no requirements here since
 		                         // behavior after too large allocations
 		                         // is undefined.
+	}
+
+	SECTION( "Stack allocator frees all memory up to the free marker" )
+	{
+		void* marker;
+		marker = allocator.Allocate( 4 );allocator.Allocate( 4 );
+		allocator.Free( marker );
+		REQUIRE( allocator.allocated() == 0 );
 	}
 
 	// tear down allocator

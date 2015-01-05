@@ -1,22 +1,12 @@
 #pragma once
 
-#include <cstdint>
-
+#include "Memory/MemoryTypes.h"
 #include "Utility/NonCopyable.h"
 
 namespace Gunship
 {
 	namespace Memory
 	{
-		typedef std::uint8_t byte;
-
-		/**
-		 * @brief An unsigned integral type large enough to represent any amount of allocated memory.
-		 */
-		typedef std::uint64_t size_t;
-
-		const size_t MEMORY_BUFFER_UNINITIALIZED = UINT64_MAX;
-
 		/**
 		 * @brief Basic allocator interface.
 		 *
@@ -27,7 +17,7 @@ namespace Gunship
 		 *
 		 * @note
 		 *     Allocators are non-copyable, because copying an allocator
-		 *     would imply
+		 *     would imply copying its buffer, which is rarely desirable.
 		 */
 		class Allocator : public NonCopyable
 		{

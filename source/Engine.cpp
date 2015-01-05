@@ -9,6 +9,8 @@
 #include "Engine.h"
 #include "Scene.h"
 
+#include "Memory/StackAllocator.h" // temporary inlclude for allocator testing
+
 Gunship::Engine::Engine() :
 	_window( nullptr ),
 	_root( nullptr ),
@@ -25,8 +27,17 @@ Gunship::Engine::~Engine()
 	}
 }
 
+extern Gunship::Memory::Allocator* gDefaultAllocator;
+
 bool Gunship::Engine::InitSystems()
 {
+	// =========================
+	// INITIALIZE MEMORY SYSTEMS
+	// =========================
+	void* globalBuffer = malloc( 2 * 1024 * 1024 );
+	gDefaultAllocator = new Memory::StackAllocator();
+	gDefaultAllocator->Init( globalBuffer, 2 * 1024 * 1024 );
+
 	// ======================
 	// INITIALIZE SDL SYSTEMS
 	// ======================
