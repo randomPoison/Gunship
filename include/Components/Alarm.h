@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "Entity/ComponentManager.h"
+#include "Components/SimpleStructComponent.h"
 
 namespace Gunship
 {
@@ -10,9 +11,9 @@ namespace Gunship
 
 	namespace Components
 	{
-		struct Alarm : public entityx::Component< Alarm >
+		struct Alarm : public SimpleStructComponent
 		{
-			typedef std::function< void( Scene&, entityx::Entity ) > AlarmCallback;
+			typedef std::function< void( Scene&, Gunship::Entity ) > AlarmCallback;
 
 			float remainingTime;
 			AlarmCallback callback;

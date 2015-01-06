@@ -85,7 +85,6 @@ source_group_setup(PROJECT_INCLUDES)
 
 # Create static library target
 add_library(LibGunship STATIC ${LIBGUNSHIP_SOURCES})
-add_dependencies(LibGunship entityx)
 target_link_libraries(LibGunship ${LIBS})
 target_include_directories(LibGunship PUBLIC ${GUNSHIP_INCLUDE_DIR})
 target_include_directories(LibGunship SYSTEM PUBLIC ${GUNSHIP_EXTERNAL_INCLUDES})

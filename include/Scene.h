@@ -26,7 +26,6 @@ namespace Gunship
 		{
 			_behaviorSystems.Add< S >();
 		}
-		Entity CreateGameObject();
 
 		Engine& engine() const;
 		Ogre::Root& ogreRoot() const;

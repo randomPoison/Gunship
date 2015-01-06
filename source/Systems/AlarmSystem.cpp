@@ -9,7 +9,7 @@ namespace Gunship
 		void AlarmSystem::Update( Scene& scene, float delta )
 		{
 /*
-			for ( entityx::Entity entity : scene.entities().entities_with_components< Components::Alarm >() )
+			for ( Gunship::Entity entity : scene.entities().entities_with_components< Components::Alarm >() )
 			{
 				Components::Alarm& alarm = *entity.component< Components::Alarm >().get();
 				alarm.remainingTime -= delta;
