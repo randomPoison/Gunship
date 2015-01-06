@@ -17,6 +17,9 @@ namespace Gunship
 			void* Allocate( size_t size ) override;
 			void Free( void* mem ) override;
 
+			void* AllocateArray( size_t elementSize, size_t count ) override;
+			void FreeArray( void* mem ) override;
+
 			size_t allocated() override;
 			size_t reserved() override;
 

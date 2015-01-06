@@ -22,6 +22,9 @@ namespace Gunship
 			return *newElementPtr;
 		}
 
+		using ArrayBase::count;
+		using ArrayBase::capacity;
+
 		Iterator begin()
 		{
 			return static_cast< Iterator >( ArrayBase::begin() );

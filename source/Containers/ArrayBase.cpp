@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include <SDL_assert.h>
 
 #include "Containers/ArrayBase.h"
@@ -18,8 +20,11 @@ namespace Gunship
 
 	void ArrayBase::Grow()
 	{
-		// no >:(
-		SDL_assert_always( false );
+		void* newBuffer = _allocator->Allocate( _bufferSize * 2 );
+		memcpy( newBuffer, _buffer, _bufferSize );
+		_allocator->Free( _buffer );
+		_buffer = newBuffer;
+		_bufferSize *= 2;
 	}
 
 	void* ArrayBase::AddElement()

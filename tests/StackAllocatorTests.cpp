@@ -1,29 +1,7 @@
-#define CATCH_CONFIG_MAIN
 #include "Catch/catch.hpp"
 
-#include <SDL_assert.h>
+#include "TestHelpers.h"
 #include "Memory/StackAllocator.h"
-
-#define CONFIGURE_ASSERTS() \
-bool assertHit = false;\
-SDL_SetAssertionHandler( TestCaseAssertionHandler, &assertHit )
-
-#define REQUIRE_ASSERT( expression ) \
-expression;\
-REQUIRE( ( assertHit && #expression ) );\
-assertHit = false
-
-#define REQUIRE_NOASSERT( expression ) \
-expression;\
-REQUIRE( ( !assertHit && #expression ) );\
-assertHit = false
-
-SDL_assert_state TestCaseAssertionHandler( const SDL_assert_data* data,
-                                           void* userdata )
-{
-	*static_cast< bool* >( userdata ) = true;
-	return SDL_ASSERTION_IGNORE;
-}
 
 TEST_CASE( "Stack allocator asserts when not initialized", "[memory][stack_allocator]" )
 {
@@ -101,6 +79,15 @@ TEST_CASE( "Stack allocator allocates and frees memory", "[memory][stack_allocat
 		void* marker;
 		marker = allocator.Allocate( 4 );allocator.Allocate( 4 );
 		allocator.Free( marker );
+		REQUIRE( allocator.allocated() == 0 );
+	}
+
+	SECTION( "Stack allocator correctly allocates and frees arrays" )
+	{
+		void* mem = allocator.AllocateArray( sizeof( int ), 10 );
+		REQUIRE( allocator.allocated() == sizeof( int ) * 10 );
+
+		allocator.FreeArray( mem );
 		REQUIRE( allocator.allocated() == 0 );
 	}
 

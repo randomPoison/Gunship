@@ -51,6 +51,16 @@ namespace Gunship
 			_stackTop = mem;
 		}
 
+		void* StackAllocator::AllocateArray( size_t elementSize, size_t count )
+		{
+			return Allocate( elementSize * count );
+		}
+
+		void StackAllocator::FreeArray( void* mem )
+		{
+			Free( mem );
+		}
+
 		size_t StackAllocator::allocated()
 		{
 			SDL_assert_paranoid( _initialized );

@@ -9,6 +9,18 @@ namespace Gunship
 	public:
 		ArrayBase( Memory::Allocator* allocator, Memory::size_t elementSize, Memory::size_t initialCapacity );
 
+		/**
+		 * @brief Increase the size of the underlying memory buffer.
+		 *
+		 * @details
+		 *     Currently, this implements the *most naive approach possible*:
+		 *     Allocating a new buffer twice as large as the old one and doing a
+		 *     memcpy() to move the old data into the new buffer.
+		 *
+		 * @par
+		 *     Because the old buffer is freed after the copy operation, using ArrayBase
+		 *     with a StackAllocator is unsafe as it will also free the new buffer.
+		 */
 		void Grow();
 		void Shrink();
 
