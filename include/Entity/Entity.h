@@ -8,6 +8,8 @@ namespace Gunship
 	{
 		typedef unsigned int ID;
 
+		operator ID();
+
 		ID id;
 	};
 }

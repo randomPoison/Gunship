@@ -38,5 +38,15 @@ namespace Gunship
 			                                  workspaceID,
 			                                  true );
 		}
+
+		CameraManager::CameraManager( Scene& scene )
+			: _scene( scene )
+		{
+		}
+
+		void CameraManager::Assign( Entity::ID entity )
+		{
+			Assign( entity, _scene, &_scene.componentManager< TransformManager >().Get( entity ) );
+		}
 	}
 }

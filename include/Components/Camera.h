@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Components/SimpleStructComponent.h"
+#include "Components/SimpleStructComponentManager.h"
 
 namespace Ogre
 {
@@ -32,6 +33,19 @@ namespace Gunship
 			Ogre::Camera* camera;
 
 			Camera( const Scene& scene, Transform* transform, const char* cameraName = "Camera" );
+		};
+
+		class CameraManager : public SimpleStructComponentManager< Camera >
+		{
+		public:
+			CameraManager( Scene& scene );
+
+			void Assign( Entity::ID entity );
+
+		private:
+			Scene& _scene;
+
+			using SimpleStructComponentManager< Camera >::Assign;
 		};
 	}
 }

@@ -88,6 +88,8 @@ add_library(LibGunship STATIC ${LIBGUNSHIP_SOURCES})
 target_link_libraries(LibGunship ${LIBS})
 target_include_directories(LibGunship PUBLIC ${GUNSHIP_INCLUDE_DIR})
 target_include_directories(LibGunship SYSTEM PUBLIC ${GUNSHIP_EXTERNAL_INCLUDES})
+target_compile_definitions(LibGunship
+                           PUBLIC -DSDL_ASSERT_LEVEL=3) #for now we're just going to do maximum assert level
 
 # Now create the default executable
 if(${GUNSHIP_BUILD_EXE})

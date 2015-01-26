@@ -23,7 +23,7 @@ namespace Gunship
 	private:
 		static Entity::ID _idCounter;
 
-		std::vector< Entity::ID > _liveEntities; // TODO make this something more appropriate than a flat list
-		std::deque< Entity::ID > _freeIDs;       // TODO make this something more appropraite than a flat list
+		std::vector< Entity::ID > _liveEntities; /// @todo make this something more appropriate than a flat list
+		std::deque< Entity::ID > _freeIDs;       /// @todo make this something more appropraite than a flat list
 	};
 }

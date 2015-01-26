@@ -1,9 +1,13 @@
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
 
+#include <SDL_assert.h>
+
 #include "Scene.h"
 
 #include "Systems/AlarmSystem.h"
+#include "Components/Transform.h"
+#include "Components/Camera.h"
 
 namespace Gunship
 {
@@ -17,6 +21,9 @@ namespace Gunship
 		                                           1,
 		                                           Ogre::INSTANCING_CULLING_SINGLETHREAD );
 		_sceneManager->setAmbientLight( Ogre::ColourValue( 0.5f, 0.5f, 0.5f ) );
+
+		RegisterComponentManager< Components::TransformManager >( new Components::TransformManager( *this ) );
+		RegisterComponentManager< Components::CameraManager >( new Components::CameraManager( *this ) );
 
 		_coreSystems.Add< Systems::AlarmSystem >();
 	}
@@ -46,9 +53,16 @@ namespace Gunship
 		return _entities;
 	}
 
-	void Gunship::Scene::Update( float delta )
+	void Scene::Update( float delta )
 	{
 		_coreSystems.UpdateAll( *this, delta );
 		_behaviorSystems.UpdateAll( *this, delta );
+	}
+
+	ComponentManagerBase& Scene::_componentManager( ComponentManagerBase::ID family )
+	{
+		SDL_assert_paranoid( _componentManagers.count( family ) );
+
+		return *_componentManagers[family];
 	}
 }

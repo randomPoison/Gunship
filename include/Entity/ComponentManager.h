@@ -17,14 +17,14 @@ namespace Gunship
 		 */
 		typedef unsigned int ID;
 
-		virtual ~ComponentManagerBase();
+		virtual ~ComponentManagerBase() = default;
 
 	protected:
 		static ID _familyCounter;
 	};
 
 	template< typename Derived >
-	class ComponentManager : ComponentManagerBase
+	class ComponentManager : public ComponentManagerBase
 	{
 	public:
 		static ID id()

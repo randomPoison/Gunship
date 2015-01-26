@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Components/SimpleStructComponent.h"
+#include "Components/SimpleStructComponentManager.h"
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
 
@@ -87,6 +88,18 @@ namespace Gunship
 			void AddChild( Transform* child );
 			void RemoveChild( Transform* child );
 			void RemoveAllChildren();
+		};
+
+		class TransformManager : public SimpleStructComponentManager< Transform >
+		{
+		public:
+			TransformManager( Scene& scene );
+
+			using SimpleStructComponentManager< Transform >::Assign;
+			void Assign( Entity::ID entity );
+
+		private:
+			Scene& _scene;
 		};
 	}
 }

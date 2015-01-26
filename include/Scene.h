@@ -1,7 +1,11 @@
 #pragma once
 
+#include <unordered_map> ///< @todo remove STL dependency
+#include <memory.h>      ///< @todo remove STL dependency
+
 #include "Entity/SystemManager.h"
 #include "Entity/EntityManager.h"
+#include "Entity/ComponentManager.h"
 
 namespace Ogre
 {
@@ -27,6 +31,18 @@ namespace Gunship
 			_behaviorSystems.Add< S >();
 		}
 
+		template< typename ComponentManager >
+		void RegisterComponentManager( ComponentManager* componentManager )
+		{
+			_componentManagers[ComponentManager::id()] = std::shared_ptr< ComponentManagerBase >( componentManager );
+		}
+
+		template< typename ComponentManager >
+		ComponentManager& componentManager()
+		{
+			return static_cast< ComponentManager& >( _componentManager( ComponentManager::id() ) );
+		}
+
 		Engine& engine() const;
 		Ogre::Root& ogreRoot() const;
 		Ogre::RenderWindow& renderWindow() const;
@@ -43,6 +59,8 @@ namespace Gunship
 		SystemManager< DefaultSystemBase > _coreSystems;
 		SystemManager< BehaviorSystemBase > _behaviorSystems;
 
+		std::unordered_map< ComponentManagerBase::ID, std::shared_ptr< ComponentManagerBase > > _componentManagers;
+
 		friend class Engine;
 
 		/**
@@ -53,5 +71,7 @@ namespace Gunship
 		 *     and is not accessible to client code.
 		 */
 		void Update( float delta );
+
+		ComponentManagerBase& _componentManager( ComponentManagerBase::ID id );
 	};
 }

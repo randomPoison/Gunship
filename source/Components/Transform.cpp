@@ -159,5 +159,17 @@ namespace Gunship
 		{
 			node->removeAllChildren();
 		}
+
+
+		TransformManager::TransformManager( Scene& scene )
+			: _scene( scene )
+		{
+		}
+
+		// Transform Manager
+		void TransformManager::Assign( Entity::ID entity )
+		{
+			Assign( entity, _scene );
+		}
 	}
 }
