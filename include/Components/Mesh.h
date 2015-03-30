@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Components/SimpleStructComponent.h"
+#include "Components/SimpleStructComponentManager.h"
 
 namespace Ogre
 {
@@ -25,10 +26,24 @@ namespace Gunship
 			Ogre::SceneManager* sceneManager;
 
 			Mesh( const Scene& scene,
-			      const Transform* transform,
+			      const Transform& transform,
 			      const char* meshName );
 
 			~Mesh();
+		};
+
+		class MeshManager : public SimpleStructComponentManager< Mesh >
+		{
+		public:
+			MeshManager( Scene& scene );
+
+			Mesh& Assign( Entity::ID entity, const char* meshName );
+
+		private:
+
+			using SimpleStructComponentManager< Mesh >::Assign;
+
+			Scene& _scene;
 		};
 	}
 }

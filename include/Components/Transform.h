@@ -40,22 +40,8 @@ namespace Gunship
 			 *     should eventually be able to remove the need to explicitly
 			 *     pass in the scene, since you have to go through the scene
 			 *     to create the component in the first place.
-			 *
-			 * @param position
-			 *     The position of the transform. Defaults to zero (object
-			 *     is at local origin).
-			 *
-			 * @param orientation
-			 *     The starting orientation of the transform. Defaults to
-			 *     identity (no rotation).
-			 *
-			 * @param scale
-			 *     The starting scale of the transform. Defaults to no scale.
 			 */
-			Transform( const Scene& scene,
-			           Vector3 position = Vector3::ZERO,
-			           Quaternion orientation = Quaternion::IDENTITY,
-			           Vector3 scale = Vector3::UNIT_SCALE );
+			Transform( const Scene& scene );
 
 			~Transform();
 
@@ -96,7 +82,7 @@ namespace Gunship
 			TransformManager( Scene& scene );
 
 			using SimpleStructComponentManager< Transform >::Assign;
-			void Assign( Entity::ID entity );
+			Transform& Assign( Entity::ID entity );
 
 		private:
 			Scene& _scene;

@@ -31,6 +31,16 @@ namespace Gunship
 			_behaviorSystems.Add< S >();
 		}
 
+		/**
+		 * @brief Register the provided ComponentManager object with the scene.
+		 *
+		 * @details
+		 *     The ComponentManager object provided must inherit from ComponentManagerBase.
+		 *
+		 * @todo
+		 *     As per essential c++'s recommendation, change this method to take a
+		 *     std::shared_ptr rather than a raw pointer for the sake of exception safety.
+		 */
 		template< typename ComponentManager >
 		void RegisterComponentManager( ComponentManager* componentManager )
 		{

@@ -26,10 +26,11 @@ namespace Gunship
 	{
 	public:
 		template< typename ... Args >
-		void Assign( Entity::ID entity, Args&& ... args )
+		ComponentType& Assign( Entity::ID entity, Args&& ... args )
 		{
 			_components.emplace_back( std::forward< Args >( args ) ... );
 			_components.back().entityID = entity;
+			return _components.back();
 		}
 
 		/**
@@ -46,6 +47,11 @@ namespace Gunship
 			SDL_assert_paranoid( iterator != _components.end() );
 
 			return *iterator;
+		}
+
+		const std::vector< ComponentType >& components() const
+		{
+			return _components;
 		}
 
 	private:

@@ -8,6 +8,7 @@
 #include "Systems/AlarmSystem.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
+#include "Components/Mesh.h"
 
 namespace Gunship
 {
@@ -24,6 +25,7 @@ namespace Gunship
 
 		RegisterComponentManager< Components::TransformManager >( new Components::TransformManager( *this ) );
 		RegisterComponentManager< Components::CameraManager >( new Components::CameraManager( *this ) );
+		RegisterComponentManager< Components::MeshManager >( new Components::MeshManager( *this ) );
 
 		_coreSystems.Add< Systems::AlarmSystem >();
 	}

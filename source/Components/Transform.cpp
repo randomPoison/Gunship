@@ -8,18 +8,13 @@ namespace Gunship
 {
 	namespace Components
 	{
-		Transform::Transform( const Scene& scene,
-		                      Vector3 position,
-		                      Quaternion orientation,
-		                      Vector3 scale )
+		Transform::Transform( const Scene& scene )
 			: node( nullptr )
 		{
 			Ogre::SceneManager& sceneManager = scene.sceneManager();
 			node = sceneManager.createSceneNode();
 			sceneManager.getRootSceneNode()->addChild( node );
-			node->setPosition( position );
-			node->setOrientation( orientation );
-			node->setScale( scale );
+			node->_getDerivedPositionUpdated();
 		}
 
 		Transform::~Transform()
@@ -167,9 +162,9 @@ namespace Gunship
 		}
 
 		// Transform Manager
-		void TransformManager::Assign( Entity::ID entity )
+		Transform& TransformManager::Assign( Entity::ID entity )
 		{
-			Assign( entity, _scene );
+			return Assign( entity, _scene );
 		}
 	}
 }
