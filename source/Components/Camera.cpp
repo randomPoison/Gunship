@@ -13,13 +13,13 @@ namespace Gunship
 	namespace Components
 	{
 		Camera::Camera( const Scene& scene,
-		                Transform* transform,
+		                Transform& transform,
 		                const char* cameraName )
 		{
 			// create camera and add it to scene heirarchy
 			camera = scene.sceneManager().createCamera( cameraName );
 			camera->detachFromParent();
-			transform->node->attachObject( camera );
+			transform.node->attachObject( camera );
 			camera->setNearClipDistance( 0.5f );
 			camera->setFarClipDistance( 1000.0f );
 
@@ -46,7 +46,9 @@ namespace Gunship
 
 		void CameraManager::Assign( Entity::ID entity )
 		{
-			Assign( entity, _scene, &_scene.componentManager< TransformManager >().Get( entity ) );
+			Assign( entity,
+			        _scene,
+			        _scene.componentManager< TransformManager >().Get( entity ) );
 		}
 	}
 }

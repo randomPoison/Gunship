@@ -32,7 +32,7 @@ namespace Gunship
 		{
 			Ogre::Camera* camera;
 
-			Camera( const Scene& scene, Transform* transform, const char* cameraName = "Camera" );
+			Camera( const Scene& scene, Transform& transform, const char* cameraName = "Camera" );
 		};
 
 		class CameraManager : public SimpleStructComponentManager< Camera >

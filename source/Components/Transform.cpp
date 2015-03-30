@@ -14,7 +14,6 @@ namespace Gunship
 			Ogre::SceneManager& sceneManager = scene.sceneManager();
 			node = sceneManager.createSceneNode();
 			sceneManager.getRootSceneNode()->addChild( node );
-			node->_getDerivedPositionUpdated();
 		}
 
 		Transform::~Transform()
