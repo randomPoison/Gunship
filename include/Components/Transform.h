@@ -42,7 +42,7 @@ namespace Gunship
 			 *     to create the component in the first place.
 			 */
 			Transform( const Scene& scene );
-
+			Transform( Transform&& original );
 			~Transform();
 
 			Vector3 position();

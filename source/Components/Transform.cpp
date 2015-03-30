@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 
@@ -16,14 +18,23 @@ namespace Gunship
 			sceneManager.getRootSceneNode()->addChild( node );
 		}
 
+		Transform::Transform( Transform&& original )
+		{
+			node = original.node;
+			original.node = nullptr;
+		}
+
 		Transform::~Transform()
 		{
-			node->detachAllObjects();
-			if ( node->getParentSceneNode() != nullptr )
+			if ( node != nullptr )
 			{
-				node->getParentSceneNode()->removeChild( node );
+				node->detachAllObjects();
+				if ( node->getParentSceneNode() != nullptr )
+				{
+					node->getParentSceneNode()->removeChild( node );
+				}
+				node->getCreator()->destroySceneNode( node );
 			}
-			node->getCreator()->destroySceneNode( node );
 		}
 
 		Vector3 Transform::position()

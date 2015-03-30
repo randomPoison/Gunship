@@ -18,13 +18,15 @@ namespace Gunship
 		{
 			// create camera and add it to scene heirarchy
 			camera = scene.sceneManager().createCamera( cameraName );
+
 			camera->detachFromParent();
 			transform.node->attachObject( camera );
+
 			camera->setNearClipDistance( 0.5f );
 			camera->setFarClipDistance( 1000.0f );
 
 			// setup the camera's compositor
-			// each camera get's a workspace.
+			// each camera gets a workspace.
 			// This probably isn't a good idea.
 			Ogre::CompositorManager2* pCompositorManager =
 				scene.ogreRoot().getCompositorManager2();
@@ -44,11 +46,11 @@ namespace Gunship
 		{
 		}
 
-		void CameraManager::Assign( Entity::ID entity )
+		Camera& CameraManager::Assign( Entity::ID entity )
 		{
-			Assign( entity,
-			        _scene,
-			        _scene.componentManager< TransformManager >().Get( entity ) );
+			return Assign( entity,
+			               _scene,
+			               _scene.componentManager< TransformManager >().Get( entity ) );
 		}
 	}
 }

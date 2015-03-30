@@ -28,7 +28,7 @@ namespace Gunship
 			Mesh( const Scene& scene,
 			      const Transform& transform,
 			      const char* meshName );
-
+			Mesh( Mesh&& original );
 			~Mesh();
 		};
 

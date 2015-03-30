@@ -20,10 +20,22 @@ namespace Gunship
 			transform.node->attachObject( mesh );
 		}
 
+		Mesh::Mesh( Mesh&& original )
+		{
+			mesh = original.mesh;
+			sceneManager = original.sceneManager;
+
+			original.mesh = nullptr;
+			original.sceneManager = nullptr;
+		}
+
 		Mesh::~Mesh()
 		{
-			mesh->detachFromParent();
-			sceneManager->destroyEntity( mesh );
+			if ( mesh != nullptr && sceneManager != nullptr )
+			{
+				mesh->detachFromParent();
+				sceneManager->destroyEntity( mesh );
+			}
 		}
 
 		MeshManager::MeshManager( Scene& scene )
