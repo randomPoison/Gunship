@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 
@@ -18,10 +16,18 @@ namespace Gunship
 			sceneManager.getRootSceneNode()->addChild( node );
 		}
 
-		Transform::Transform( Transform&& original )
+		Transform::Transform( Transform& original )
 		{
 			node = original.node;
 			original.node = nullptr;
+		}
+
+		Transform& Transform::operator=( Transform& original )
+		{
+			node = original.node;
+			original.node = nullptr;
+
+			return *this;
 		}
 
 		Transform::~Transform()

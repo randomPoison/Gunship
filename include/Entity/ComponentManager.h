@@ -21,6 +21,18 @@ namespace Gunship
 
 	protected:
 		static ID _familyCounter;
+
+		/**
+		 * @brief Destroys all components marked for destruction.
+		 *
+		 * @details
+		 *     This is to be overridden with implementation-specific
+		 *     for the given component mangaer. This is only necessary
+		 *     to ensure that all component managers support deferred destruction.
+		 */
+		virtual void DestroyAllMarked() = 0;
+
+		friend class Scene;
 	};
 
 	template< typename Derived >

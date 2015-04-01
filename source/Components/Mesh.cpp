@@ -20,13 +20,24 @@ namespace Gunship
 			transform.node->attachObject( mesh );
 		}
 
-		Mesh::Mesh( Mesh&& original )
+		Mesh::Mesh( Mesh& original )
 		{
 			mesh = original.mesh;
 			sceneManager = original.sceneManager;
 
 			original.mesh = nullptr;
 			original.sceneManager = nullptr;
+		}
+
+		Mesh& Mesh::operator=( Mesh& original )
+		{
+			mesh = original.mesh;
+			sceneManager = original.sceneManager;
+
+			original.mesh = nullptr;
+			original.sceneManager = nullptr;
+
+			return *this;
 		}
 
 		Mesh::~Mesh()

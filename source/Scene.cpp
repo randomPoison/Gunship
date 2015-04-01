@@ -57,8 +57,15 @@ namespace Gunship
 
 	void Scene::Update( float delta )
 	{
+		// Update all behaviors.
 		_coreSystems.UpdateAll( *this, delta );
 		_behaviorSystems.UpdateAll( *this, delta );
+
+		// Destroy all marked components.
+		for ( auto& element : _componentManagers )
+		{
+			element.second->DestroyAllMarked();
+		}
 	}
 
 	ComponentManagerBase& Scene::_componentManager( ComponentManagerBase::ID family )
