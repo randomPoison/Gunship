@@ -22,20 +22,12 @@ namespace Gunship
 
 		Mesh::Mesh( Mesh& original )
 		{
-			mesh = original.mesh;
-			sceneManager = original.sceneManager;
-
-			original.mesh = nullptr;
-			original.sceneManager = nullptr;
+			MoveOutOf( original );
 		}
 
 		Mesh& Mesh::operator=( Mesh& original )
 		{
-			mesh = original.mesh;
-			sceneManager = original.sceneManager;
-
-			original.mesh = nullptr;
-			original.sceneManager = nullptr;
+			MoveOutOf( original );
 
 			return *this;
 		}
@@ -47,6 +39,17 @@ namespace Gunship
 				mesh->detachFromParent();
 				sceneManager->destroyEntity( mesh );
 			}
+		}
+
+		void Mesh::MoveOutOf( Mesh& original )
+		{
+			entityID = original.entityID;
+
+			mesh = original.mesh;
+			sceneManager = original.sceneManager;
+
+			original.mesh = nullptr;
+			original.sceneManager = nullptr;
 		}
 
 		MeshManager::MeshManager( Scene& scene )

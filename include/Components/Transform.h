@@ -30,6 +30,7 @@ namespace Gunship
 		 */
 		struct Transform : public SimpleStructComponent
 		{
+		public:
 			Ogre::SceneNode* node;
 
 			/**
@@ -75,6 +76,9 @@ namespace Gunship
 			void AddChild( Transform* child );
 			void RemoveChild( Transform* child );
 			void RemoveAllChildren();
+
+		private:
+			void MoveOutOf( Transform& original );
 		};
 
 		class TransformManager : public SimpleStructComponentManager< Transform >

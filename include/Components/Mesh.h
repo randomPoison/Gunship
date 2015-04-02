@@ -22,6 +22,7 @@ namespace Gunship
 		 */
 		struct Mesh : public SimpleStructComponent
 		{
+		public:
 			Ogre::Entity* mesh;
 			Ogre::SceneManager* sceneManager;
 
@@ -31,6 +32,9 @@ namespace Gunship
 			Mesh( Mesh& original );
 			Mesh& operator=( Mesh& original );
 			~Mesh();
+
+		private:
+			void MoveOutOf( Mesh& original );
 		};
 
 		class MeshManager : public SimpleStructComponentManager< Mesh >

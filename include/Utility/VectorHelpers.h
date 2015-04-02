@@ -5,10 +5,11 @@
 
 namespace Gunship
 {
-	namespace Utility
+	class VectorHelpers
 	{
-		template< typename T >
-		void EraseIfPresent( std::vector< T >& items, T element )
+	public:
+		template < typename T >
+		static void EraseIfPresent( std::vector< T >& items, T element )
 		{
 			auto item = std::find( items.begin(), items.end(), element );
 			if ( item != items.end() )
@@ -16,5 +17,12 @@ namespace Gunship
 				items.erase( item );
 			}
 		}
-	}
+
+		template < typename T >
+		static bool Contains( const std::vector< T >& items, T element )
+		{
+			auto item = std::find( items.begin(), items.end(), element );
+			return item != items.end();
+		}
+	};
 }

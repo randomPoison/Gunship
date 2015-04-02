@@ -8,6 +8,8 @@
 #include "Entity/Entity.h"
 #include "Entity/ComponentManager.h"
 
+#include "Utility/VectorHelpers.h"
+
 namespace Gunship
 {
 	/**
@@ -40,6 +42,8 @@ namespace Gunship
 		template < typename... Args >
 		ComponentType& Assign( Entity::ID entityID, Args&&... args )
 		{
+			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
+
 			// Emplace new component into the components vector
 			_components.emplace_back( std::forward< Args >( args )... );
 			_components.back().entityID = entityID;
@@ -65,6 +69,7 @@ namespace Gunship
 		void Destroy( Entity::ID entityID )
 		{
 			SDL_assert_paranoid( _componentIndices.count( entityID ) );
+			SDL_assert_paranoid( !VectorHelpers::Contains( _markedForDestruction, entityID ) );
 
 			_markedForDestruction.push_back( entityID );
 		}
@@ -125,21 +130,32 @@ namespace Gunship
 		 */
 		void DestroyImmediate( Entity::ID entityID )
 		{
-			// Retrieve the index of the component to be destroyed.
+			// Retrieve the index of the component to be destroyed, then
+			// remove the component to be destroyed from the index map.
 			size_t index = _componentIndices[entityID];
-
-			// Remove the component to be destroyed from the index map.
 			_componentIndices.erase( entityID );
 
-			// Swap the last component into the destroyed component's spot.
-			// Is this going to be considered a move, or a copy?
-			_components[index] = _components.back();
+			// If the component isn't at the end of the vector,
+			// swap the last component into the destroyed component's spot.
+			// Otherwise we can just pop the end of the vector.
+			if ( index != _components.size() - 1 )
+			{
+				// Since the old component isn't at the end of the vector,
+				// the component we're moving shouldn't have the same entityID.
+				SDL_assert_paranoid( _components.back().entityID != entityID );
 
-			// Remove the duplicated component.
+				// Swap the positions of the two components
+				std::swap( _components[index], _components.back() );
+
+				// Put the moved component's index back in the map.
+				_componentIndices[_components[index].entityID] = index;
+			}
+
+			// The marked component is now guaranteed to be at the end.
+			// Pop the last element to destroy it.
 			_components.pop_back();
 
-			// Update the index association for the moved component.
-			_componentIndices[_components[index].entityID] = index;
+			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
 		}
 	};
 }

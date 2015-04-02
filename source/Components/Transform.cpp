@@ -18,14 +18,12 @@ namespace Gunship
 
 		Transform::Transform( Transform& original )
 		{
-			node = original.node;
-			original.node = nullptr;
+			MoveOutOf( original );
 		}
 
 		Transform& Transform::operator=( Transform& original )
 		{
-			node = original.node;
-			original.node = nullptr;
+			MoveOutOf( original );
 
 			return *this;
 		}
@@ -171,6 +169,13 @@ namespace Gunship
 			node->removeAllChildren();
 		}
 
+		void Transform::MoveOutOf( Transform& original )
+		{
+			entityID = original.entityID;
+
+			node = original.node;
+			original.node = nullptr;
+		}
 
 		TransformManager::TransformManager( Scene& scene )
 			: _scene( scene )
