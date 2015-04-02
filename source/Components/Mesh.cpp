@@ -20,12 +20,12 @@ namespace Gunship
 			transform.node->attachObject( mesh );
 		}
 
-		Mesh::Mesh( Mesh& original )
+		Mesh::Mesh( Mesh&& original )
 		{
 			MoveOutOf( original );
 		}
 
-		Mesh& Mesh::operator=( Mesh& original )
+		Mesh& Mesh::operator=( Mesh&& original )
 		{
 			MoveOutOf( original );
 

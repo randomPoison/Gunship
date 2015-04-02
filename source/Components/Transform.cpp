@@ -16,12 +16,12 @@ namespace Gunship
 			sceneManager.getRootSceneNode()->addChild( node );
 		}
 
-		Transform::Transform( Transform& original )
+		Transform::Transform( Transform&& original )
 		{
 			MoveOutOf( original );
 		}
 
-		Transform& Transform::operator=( Transform& original )
+		Transform& Transform::operator=( Transform&& original )
 		{
 			MoveOutOf( original );
 
