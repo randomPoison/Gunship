@@ -11,41 +11,50 @@ namespace Gunship
 	{
 		AlarmManager::AlarmID AlarmManager::Assign( Entity::ID entityID, float duration, AlarmCallback callback )
 		{
+			// Add the alarm to the pending queue.
 			AlarmID alarmID = _idCounter++;
-
-			// Insert the new alarm into the timeline.
-			auto iterator = _timeline.begin();
-			for ( ; iterator != _timeline.end(); ++iterator )
-			{
-				if ( duration > iterator->remainingTime )
-				{
-					duration -= iterator->remainingTime;
-				}
-				else
-				{
-					iterator->remainingTime -= duration;
-					break;
-				}
-			}
-
-			// Insert the new alarm into the timeline.
-			_timeline.insert( iterator, { alarmID, duration } );
+			_pendingForAdd.push_back( { alarmID, duration } );
 
 			// Add the alarm data to the data map.
 			_alarmData[alarmID] = { entityID, callback };
-
 			return alarmID;
 		}
 
 		void AlarmManager::Cancel( AlarmID alarmID )
 		{
 			SDL_assert_paranoid( _alarmData.count( alarmID ) );
+			SDL_assert_paranoid( !VectorHelpers::Contains( _cancelled, alarmID ) );
 
 			_cancelled.push_back( alarmID );
 		}
 
 		void AlarmManager::DestroyAllMarked()
 		{
+			// Add pending alarms.
+			for ( PendingAlarm& pendingAlarm : _pendingForAdd )
+			{
+				// Find the new alarm's place in the timeline.
+				auto iterator = _timeline.begin();
+				for ( ; iterator != _timeline.end(); ++iterator )
+				{
+					if ( pendingAlarm.duration > iterator->remainingTime )
+					{
+						pendingAlarm.duration -= iterator->remainingTime;
+					}
+					else
+					{
+						iterator->remainingTime -= pendingAlarm.duration;
+						break;
+					}
+				}
+
+				// Insert the new alarm into the timeline.
+				_timeline.insert( iterator, { pendingAlarm.alarmID, pendingAlarm.duration } );
+			}
+
+			_pendingForAdd.clear();
+
+			// Destroy marked alarms.
 			for ( AlarmID alarmID : _cancelled )
 			{
 				DestroyImmediate( alarmID );

@@ -29,6 +29,16 @@ namespace Gunship
 			typedef size_t AlarmID;
 			typedef std::function< void( Scene&, Entity ) > AlarmCallback;
 
+			/**
+			 * @brief Registers the alarm with the alarm manager.
+			 *
+			 * @note
+			 *     The alarm is not added immediately to the timeline, rather
+			 *     it is queued up as pending and all pending alarms are added
+			 *     to the timeline after the component destruction sweep. This
+			 *     is done to handle the case where an alarm callback registers
+			 *     new alarms with the manager.
+			 */
 			AlarmID Assign( Entity::ID entityID, float duration, AlarmCallback callback );
 
 			/**
@@ -57,9 +67,16 @@ namespace Gunship
 				AlarmCallback callback;
 			};
 
+			struct PendingAlarm
+			{
+				AlarmID alarmID;
+				float duration;
+			};
+
 			vector< Alarm > _timeline;
 			unordered_map< AlarmID, AlarmData > _alarmData;
 			vector< AlarmID > _cancelled;
+			vector< PendingAlarm > _pendingForAdd;
 
 			AlarmID _idCounter;
 
