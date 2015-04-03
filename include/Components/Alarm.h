@@ -30,7 +30,19 @@ namespace Gunship
 			typedef std::function< void( Scene&, Entity ) > AlarmCallback;
 
 			AlarmID Assign( Entity::ID entityID, float duration, AlarmCallback callback );
-			void Destroy( AlarmID alarmID );
+
+			/**
+			 * @brief Marks a given alarm to be cancelled.
+			 *
+			 * @note
+			 *     This does not immediately cancel the alarm, it only
+			 *     marks the alarm to be removed from the timeline during
+			 *     the component destruction sweep. However, since the
+			 *     destruction sweep takes place before the next alarm
+			 *     tick, the alarm is guaranteed not to go off after it's
+			 *     been cancelled.
+			 */
+			void Cancel( AlarmID alarmID );
 
 		private:
 			struct Alarm
@@ -47,6 +59,7 @@ namespace Gunship
 
 			vector< Alarm > _timeline;
 			unordered_map< AlarmID, AlarmData > _alarmData;
+			vector< AlarmID > _cancelled;
 
 			AlarmID _idCounter;
 

@@ -1,6 +1,9 @@
 #include <algorithm>
 
+#include <SDL_assert.h>
+
 #include "Components/Alarm.h"
+#include "Utility/VectorHelpers.h"
 
 namespace Gunship
 {
@@ -34,27 +37,46 @@ namespace Gunship
 			return alarmID;
 		}
 
-		/// @todo: Actually destroy all marked alarms.
+		void AlarmManager::Cancel( AlarmID alarmID )
+		{
+			SDL_assert_paranoid( _alarmData.count( alarmID ) );
+
+			_cancelled.push_back( alarmID );
+		}
+
 		void AlarmManager::DestroyAllMarked()
 		{
+			for ( AlarmID alarmID : _cancelled )
+			{
+				DestroyImmediate( alarmID );
+			}
+
+			_cancelled.clear();
 		}
 
 		void AlarmManager::DestroyImmediate( AlarmID alarmID )
 		{
-			// Things that need to be done:
-			//
-			// - Remove the alarm from the timeline and correctly update other alarms.
-			// - Remove the alarm data from the data map.
-			// - Call the callback.
+			// Remove alarm data from the data map.
+			_alarmData.erase( alarmID );
 
-			// TODO: Properly update the timeline after removing the data.
-			auto iterator = std::find_if(
-				_timeline.begin(),
-				_timeline.end(),
-				[=]( Alarm& alarm )
-				{
-					return false;
-				} );
+			// Remove the alarm from the timeline, adding its
+			// time to the next alarm to keep things in sync.
+			auto alarm = std::find_if(
+				_timeline.begin(), _timeline.end(),
+				[=]( Alarm& alarm ) { return alarm.id == alarmID; } );
+
+			SDL_assert_paranoid( alarm != _timeline.end() );
+
+			// If alarm isn't last in timeline, add it's time to
+			// the alarm that follows it.
+			auto nextAlarm = alarm + 1;
+			if ( nextAlarm != _timeline.end() )
+			{
+				nextAlarm->remainingTime += alarm->remainingTime;
+			}
+
+			// Remove the alarm from the timeline.
+			_timeline.erase( alarm );
 		}
 
 		void AlarmManager::RemoveAlarms( vector< Alarm >::iterator endIterator )

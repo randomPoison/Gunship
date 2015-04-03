@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Systems/AlarmSystem.h"
 #include "Components/Alarm.h"
 #include "Scene.h"
@@ -14,15 +12,14 @@ namespace Gunship
 		{
 			AlarmManager& alarmManager =
 				scene.componentManager< AlarmManager >();
-
-			auto& iterator = alarmManager._timeline.begin();
+			auto iterator = alarmManager._timeline.begin();
 			for ( ; delta > 0.0f && iterator != alarmManager._timeline.end(); ++iterator )
 			{
-				std::cout << "remaining time: " << iterator->remainingTime
-					<< ", delta: " << delta << std::endl;
-
 				if ( delta > iterator->remainingTime )
 				{
+					// Update the remaining time delta.
+					delta -= iterator->remainingTime;
+
 					// Call the callback.
 					auto& alarmData = alarmManager._alarmData[iterator->id];
 					alarmData.callback( scene, { alarmData.entityID } );
@@ -32,14 +29,11 @@ namespace Gunship
 					iterator->remainingTime -= delta;
 					break;
 				}
-
-				delta -= iterator->remainingTime;
 			}
 
-			if ( iterator != alarmManager._timeline.begin() )
-			{
-				alarmManager.RemoveAlarms( iterator );
-			}
+			// Remove all alarms that have finished.
+			// If iterator points to the first alarm, nothing is removed.
+			alarmManager.RemoveAlarms( iterator );
 		}
 	}
 }
