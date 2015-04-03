@@ -2,12 +2,13 @@ cmake_minimum_required(VERSION 2.8.12)
 
 include(ExternalProject)
 
-function(source_group_setup ALL_FILES)
-	foreach(FILE ${ALL_FILES})
-		get_filename_component(PARENT_DIR "${FILE}" PATH)
+function(source_group_setup PROJECT_ROOT)
+	foreach(FILE ${ARGN})
+		get_filename_component(FILE_DIR "${FILE}" DIRECTORY)
 
 		# skip src or include and changes /'s to \\'s
-		string(REGEX REPLACE "(\\./)?(src|include)/?" "" GROUP "${PARENT_DIR}")
+		string(REPLACE "${PROJECT_ROOT}" "" FILE_DIR "${FILE_DIR}")
+		string(REGEX REPLACE "(\\./)?(source|include)/?" "" GROUP "${FILE_DIR}")
 		string(REPLACE "/" "\\" GROUP "${GROUP}")
 
 		# group into "Source Files" and "Header Files"
@@ -80,8 +81,7 @@ set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES} ${PROJECT_INCLUDES})
 list(REMOVE_ITEM LIBGUNSHIP_SOURCES ${GUNSHIP_EXE_SOURCES})
 
 # setup VS filters (and I guess it also does something for XCode?)
-source_group_setup(PROJECT_SORCES)
-source_group_setup(PROJECT_INCLUDES)
+source_group_setup(${CMAKE_CURRENT_SOURCE_DIR} ${LIBGUNSHIP_SOURCES})
 
 # Create static library target
 add_library(LibGunship STATIC ${LIBGUNSHIP_SOURCES})
