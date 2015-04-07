@@ -72,7 +72,10 @@ namespace Gunship
 
 		void DestroyAll( Entity::ID entityID ) override
 		{
-			Destroy( entityID );
+			if ( _componentIndices.count( entityID ) )
+			{
+				Destroy( entityID );
+			}
 		}
 
 		void DestroyAllMarked() override

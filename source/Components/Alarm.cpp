@@ -32,7 +32,8 @@ namespace Gunship
 		{
 			for ( auto pair : _alarmData )
 			{
-				if ( pair.second.entityID == entityID )
+				if ( pair.second.entityID == entityID &&
+				     VectorHelpers::Contains( _cancelled, pair.first ) )
 				{
 					Cancel( pair.first );
 				}
