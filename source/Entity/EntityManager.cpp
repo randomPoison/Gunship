@@ -3,10 +3,16 @@
 #include <SDL_assert.h>
 
 #include "Entity/EntityManager.h"
+#include "Scene.h"
 
 namespace Gunship
 {
 	Entity::ID EntityManager::_idCounter = 0;
+
+	EntityManager::EntityManager( Scene& scene )
+		: _scene( scene )
+	{
+	}
 
 	Entity EntityManager::Create()
 	{
@@ -22,20 +28,22 @@ namespace Gunship
 			entityID  = _idCounter++;
 		}
 
-		_liveEntities.push_back( entityID );
+		_liveEntities.insert( entityID );
 		return { entityID };
-	}
-
-	void EntityManager::Destroy( Entity entity )
-	{
-		Destroy( entity.id );
 	}
 
 	void EntityManager::Destroy( Entity::ID entityID )
 	{
-		auto iterator = std::find( _liveEntities.begin(), _liveEntities.end(), entityID );
-		SDL_assert_paranoid( iterator != _liveEntities.end() );
-		_liveEntities.erase( iterator );
+		SDL_assert_paranoid( _liveEntities.count( entityID ) );
+
+		// Free the ID.
+		_liveEntities.erase( entityID );
 		_freeIDs.push_back( entityID );
+
+		// Destroy all components associated with the entity.
+		for ( auto pair : _scene._componentManagers )
+		{
+			pair.second->DestroyAll( entityID );
+		}
 	}
 }

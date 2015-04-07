@@ -17,7 +17,7 @@ namespace Gunship
 		: _engine( engine ),
 		  _root( root ),
 		  _renderWindow( render ),
-		  _entities()
+		  _entities( *this )
 	{
 		_sceneManager = _root->createSceneManager( Ogre::ST_GENERIC,
 		                                           1,

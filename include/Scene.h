@@ -31,16 +31,14 @@ namespace Gunship
 			_behaviorSystems.Add< S >();
 		}
 
-		/**
-		 * @brief Register the provided ComponentManager object with the scene.
-		 *
-		 * @details
-		 *     The ComponentManager object provided must inherit from ComponentManagerBase.
-		 *
-		 * @todo
-		 *     As per essential c++'s recommendation, change this method to take a
-		 *     std::shared_ptr rather than a raw pointer for the sake of exception safety.
-		 */
+		/// @brief Register the provided ComponentManager object with the scene.
+		///
+		/// @details
+		///     The ComponentManager object provided must inherit from ComponentManagerBase.
+		///
+		/// @todo
+		///     As per essential c++'s recommendation, change this method to take a
+		///     std::shared_ptr rather than a raw pointer for the sake of exception safety.
 		template< typename ComponentManager >
 		void RegisterComponentManager( ComponentManager* componentManager )
 		{
@@ -72,16 +70,22 @@ namespace Gunship
 		std::unordered_map< ComponentManagerBase::ID, std::shared_ptr< ComponentManagerBase > > _componentManagers;
 
 		friend class Engine;
+		friend class EntityManager;
 
-		/**
-		 * @brief Update all the running systems.
-		 *
-		 * @details
-		 *     This is called by the Engine as part of the normal frame loop,
-		 *     and is not accessible to client code.
-		 */
+		/// @brief Update all the running systems.
+		///
+		/// @details
+		///     This is called by the Engine as part of the normal frame loop,
+		///     and is not accessible to client code.
 		void Update( float delta );
 
+		/// @brief Retries a reference to the ComponentManagerBase with the specified ID.
+		///
+		/// @details
+		///     To reduce the cost of recompiling generic code this provides the bulk
+		///     of the work to retrive a reference to a component manager. The
+		///     templated version simply provides a wrapper that automatically
+		///     retrieves the ID and typecasts the result.
 		ComponentManagerBase& _componentManager( ComponentManagerBase::ID id );
 	};
 }

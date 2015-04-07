@@ -26,19 +26,17 @@ namespace Gunship
 	    : public ComponentManager< SimpleStructComponentManager< ComponentType > >
 	{
 	public:
-		/**
-		 * @brief Assigns one component to the entity, constructing it with arguments provided.
-		 *
-		 * @note
-		 *     This is meant to be a utility method provided to children of this class,
-		 *     who should provide their own interface for assigning components
-		 *     which only takes the necessary arguments.
-		 *
-		 *     For example, if the component type requires the scene to be passed in
-		 *     to the constructor, then the manager should cache off a reference to the
-		 *     scene on construction and automatically pass the scene to new components
-		 *     so that clients do not have to remember to do so every time.
-		 */
+		/// @brief Assigns one component to the entity, constructing it with arguments provided.
+		///
+		/// @note
+		///     This is meant to be a utility method provided to children of this class,
+		///     who should provide their own interface for assigning components
+		///     which only takes the necessary arguments.
+		///
+		///     For example, if the component type requires the scene to be passed in
+		///     to the constructor, then the manager should cache off a reference to the
+		///     scene on construction and automatically pass the scene to new components
+		///     so that clients do not have to remember to do so every time.
 		template < typename... Args >
 		ComponentType& Assign( Entity::ID entityID, Args&&... args )
 		{
@@ -54,24 +52,27 @@ namespace Gunship
 			return _components.back();
 		}
 
-		/**
-		 * @brief Marks the entity's associated component for destruction.
-		 *
-		 * @note
-		 *     This only marks the component for deferred destruction,
-		 *     and will continue to exist and be accessible until the end
-		 *     of the frame. At the end of each frame Gunship destroys all
-		 *     marked components.
-		 *
-		 *     This method will assert in debug builds if the entity does not
-		 *     have an associated component.
-		 */
+		/// @brief Marks the entity's associated component for destruction.
+		///
+		/// @note
+		///     This only marks the component for deferred destruction,
+		///     and will continue to exist and be accessible until the end
+		///     of the frame. At the end of each frame Gunship destroys all
+		///     marked components.
+		///
+		///     This method will assert in debug builds if the entity does not
+		///     have an associated component.
 		void Destroy( Entity::ID entityID )
 		{
 			SDL_assert_paranoid( _componentIndices.count( entityID ) );
 			SDL_assert_paranoid( !VectorHelpers::Contains( _markedForDestruction, entityID ) );
 
 			_markedForDestruction.push_back( entityID );
+		}
+
+		void DestroyAll( Entity::ID entityID ) override
+		{
+			Destroy( entityID );
 		}
 
 		void DestroyAllMarked() override
@@ -93,9 +94,7 @@ namespace Gunship
 			_markedForDestruction.clear();
 		}
 
-		/**
-		 * @brief Retrieve a reference to the specified entity's component.
-		 */
+		/// @brief Retrieve a reference to the specified entity's component.
 		ComponentType& Get( Entity::ID entityID )
 		{
 			SDL_assert_paranoid( _componentIndices.count( entityID ) );
@@ -119,15 +118,13 @@ namespace Gunship
 
 		std::vector< Entity::ID > _markedForDestruction;
 
-		/**
-		 * @brief Destroys the component associated with the given Entity.
-		 *
-		 * @details
-		 *     Destruction occurs in constant time, and does not require
-		 *     the elements of the internal array to be shifted, so only
-		 *     the destroyed component and the last component in the
-		 *     array are affected.
-		 */
+		/// @brief Destroys the component associated with the given Entity.
+		///
+		/// @details
+		///     Destruction occurs in constant time, and does not require
+		///     the elements of the internal array to be shifted, so only
+		///     the destroyed component and the last component in the
+		///     array are affected.
 		void DestroyImmediate( Entity::ID entityID )
 		{
 			// Retrieve the index of the component to be destroyed, then

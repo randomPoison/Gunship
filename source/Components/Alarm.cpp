@@ -28,6 +28,17 @@ namespace Gunship
 			_cancelled.push_back( alarmID );
 		}
 
+		void AlarmManager::DestroyAll( Entity::ID entityID )
+		{
+			for ( auto pair : _alarmData )
+			{
+				if ( pair.second.entityID == entityID )
+				{
+					Cancel( pair.first );
+				}
+			}
+		}
+
 		void AlarmManager::DestroyAllMarked()
 		{
 			// Add pending alarms.

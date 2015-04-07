@@ -24,6 +24,8 @@ namespace Gunship
 		{
 		public:
 			Ogre::Entity* mesh;
+
+			/// @todo This can be taken out if we write a custom manager that handles component destruction.
 			Ogre::SceneManager* sceneManager;
 
 			Mesh( const Scene& scene,

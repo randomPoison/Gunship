@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>        /// @todo Remove dependence on STL containers.
-#include <unordered_map> /// @todo Remove dependence on STL containers.
+#include <vector>        ///< @todo Remove dependence on STL containers.
+#include <unordered_map> ///< @todo Remove dependence on STL containers.
 #include <functional>
 #include <cstdint>
 
@@ -29,30 +29,28 @@ namespace Gunship
 			typedef size_t AlarmID;
 			typedef std::function< void( Scene&, Entity ) > AlarmCallback;
 
-			/**
-			 * @brief Registers the alarm with the alarm manager.
-			 *
-			 * @note
-			 *     The alarm is not added immediately to the timeline, rather
-			 *     it is queued up as pending and all pending alarms are added
-			 *     to the timeline after the component destruction sweep. This
-			 *     is done to handle the case where an alarm callback registers
-			 *     new alarms with the manager.
-			 */
+			/// @brief Registers the alarm with the alarm manager.
+			///
+			/// @note
+			///     The alarm is not added immediately to the timeline, rather
+			///     it is queued up as pending and all pending alarms are added
+			///     to the timeline after the component destruction sweep. This
+			///     is done to handle the case where an alarm callback registers
+			///     new alarms with the manager.
 			AlarmID Assign( Entity::ID entityID, float duration, AlarmCallback callback );
 
-			/**
-			 * @brief Marks a given alarm to be cancelled.
-			 *
-			 * @note
-			 *     This does not immediately cancel the alarm, it only
-			 *     marks the alarm to be removed from the timeline during
-			 *     the component destruction sweep. However, since the
-			 *     destruction sweep takes place before the next alarm
-			 *     tick, the alarm is guaranteed not to go off after it's
-			 *     been cancelled.
-			 */
+			/// @brief Marks a given alarm to be cancelled.
+			///
+			/// @note
+			///     This does not immediately cancel the alarm, it only
+			///     marks the alarm to be removed from the timeline during
+			///     the component destruction sweep. However, since the
+			///     destruction sweep takes place before the next alarm
+			///     tick, the alarm is guaranteed not to go off after it's
+			///     been cancelled.
 			void Cancel( AlarmID alarmID );
+
+			void DestroyAll( Entity::ID entityID ) override;
 
 		private:
 			struct Alarm
@@ -83,9 +81,11 @@ namespace Gunship
 			void DestroyAllMarked() override;
 			void DestroyImmediate( AlarmID alarmID );
 
-			/**
-			 * @brief Removes the first alarm through the specified alarm.
-			 */
+			/// @brief Removes the first alarm through the specified alarm.
+			///
+			/// @details
+			///     If \a endIterator points to the first alarm then no
+			///     alarms are removed.
 			void RemoveAlarms( vector< Alarm >::iterator endIterator );
 
 			friend struct Systems::AlarmSystem;
