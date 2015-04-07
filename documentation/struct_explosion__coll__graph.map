@@ -1,0 +1,4 @@
+<map id="Explosion" name="Explosion">
+<area shape="rect" id="node2" href="$classentityx_1_1_event.html" title="entityx::Event\&lt; Explosion \&gt;" alt="" coords="5,80,188,107"/>
+<area shape="rect" id="node3" href="$classentityx_1_1_base_event.html" title="Used internally by the EventManager. " alt="" coords="31,5,162,32"/>
+</map>

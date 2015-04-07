@@ -1,0 +1,7 @@
+<map id="entityx::BaseEvent" name="entityx::BaseEvent">
+<area shape="rect" id="node2" href="$classentityx_1_1_event.html" title="entityx::Event\&lt; Derived \&gt;" alt="" coords="192,5,359,32"/>
+<area shape="rect" id="node3" href="$classentityx_1_1_event.html" title="entityx::Event\&lt; Collision\lEvent \&gt;" alt="" coords="194,57,357,98"/>
+<area shape="rect" id="node5" href="$classentityx_1_1_event.html" title="entityx::Event\&lt; Explosion \&gt;" alt="" coords="184,123,367,149"/>
+<area shape="rect" id="node4" href="$struct_collision_event.html" title="CollisionEvent" alt="" coords="415,64,517,91"/>
+<area shape="rect" id="node6" href="$struct_explosion.html" title="Explosion" alt="" coords="427,123,505,149"/>
+</map>

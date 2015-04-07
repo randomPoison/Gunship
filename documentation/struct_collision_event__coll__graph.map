@@ -1,0 +1,4 @@
+<map id="CollisionEvent" name="CollisionEvent">
+<area shape="rect" id="node2" href="$classentityx_1_1_event.html" title="entityx::Event\&lt; Collision\lEvent \&gt;" alt="" coords="5,80,168,121"/>
+<area shape="rect" id="node3" href="$classentityx_1_1_base_event.html" title="Used internally by the EventManager. " alt="" coords="21,5,152,32"/>
+</map>

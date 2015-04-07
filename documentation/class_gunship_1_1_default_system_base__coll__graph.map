@@ -1,0 +1,4 @@
+<map id="Gunship::DefaultSystemBase" name="Gunship::DefaultSystemBase">
+<area shape="rect" id="node2" href="$class_gunship_1_1_system_base.html" title="The base class for all Gunship systems. " alt="" coords="25,80,179,107"/>
+<area shape="rect" id="node3" href="$class_gunship_1_1_non_copyable.html" title="Gunship::NonCopyable" alt="" coords="25,5,179,32"/>
+</map>

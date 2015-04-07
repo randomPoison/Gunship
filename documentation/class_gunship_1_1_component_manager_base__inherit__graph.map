@@ -1,0 +1,17 @@
+<map id="Gunship::ComponentManagerBase" name="Gunship::ComponentManagerBase">
+<area shape="rect" id="node3" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; AlarmManager \&gt;" alt="" coords="495,5,690,47"/>
+<area shape="rect" id="node5" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; Camera \&gt; \&gt;" alt="" coords="480,71,705,127"/>
+<area shape="rect" id="node8" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; ComponentType \&gt; \&gt;" alt="" coords="480,151,705,207"/>
+<area shape="rect" id="node10" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; Mesh \&gt; \&gt;" alt="" coords="480,231,705,287"/>
+<area shape="rect" id="node13" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; Transform \&gt; \&gt;" alt="" coords="480,311,705,367"/>
+<area shape="rect" id="node16" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; Derived \&gt;" alt="" coords="495,392,690,433"/>
+<area shape="rect" id="node2" href="$class_gunship_1_1_non_copyable.html" title="Gunship::NonCopyable" alt="" coords="5,206,160,233"/>
+<area shape="rect" id="node4" href="$class_gunship_1_1_components_1_1_alarm_manager.html" title="Gunship::Components\l::AlarmManager" alt="" coords="787,5,938,47"/>
+<area shape="rect" id="node6" href="$class_gunship_1_1_simple_struct_component_manager.html" title="Gunship::SimpleStructComponent\lManager\&lt; Camera \&gt;" alt="" coords="753,79,972,120"/>
+<area shape="rect" id="node7" href="$class_gunship_1_1_components_1_1_camera_manager.html" title="Gunship::Components\l::CameraManager" alt="" coords="1020,79,1171,120"/>
+<area shape="rect" id="node9" href="$class_gunship_1_1_simple_struct_component_manager.html" title="A default component manager for easily creating stuct components. " alt="" coords="753,159,972,200"/>
+<area shape="rect" id="node11" href="$class_gunship_1_1_simple_struct_component_manager.html" title="Gunship::SimpleStructComponent\lManager\&lt; Mesh \&gt;" alt="" coords="753,239,972,280"/>
+<area shape="rect" id="node12" href="$class_gunship_1_1_components_1_1_mesh_manager.html" title="Gunship::Components\l::MeshManager" alt="" coords="1020,239,1171,280"/>
+<area shape="rect" id="node14" href="$class_gunship_1_1_simple_struct_component_manager.html" title="Gunship::SimpleStructComponent\lManager\&lt; Transform \&gt;" alt="" coords="753,319,972,360"/>
+<area shape="rect" id="node15" href="$class_gunship_1_1_components_1_1_transform_manager.html" title="Gunship::Components\l::TransformManager" alt="" coords="1020,319,1171,360"/>
+</map>

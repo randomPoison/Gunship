@@ -1,0 +1,31 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classentityx_1_1_base_receiver.html" title="entityx::BaseReceiver" alt="" coords="240,111,388,138"/>
+<area shape="rect" id="node2" href="$classentityx_1_1_receiver.html" title="entityx::Receiver\&lt;\l Derived \&gt;" alt="" coords="494,136,621,177"/>
+<area shape="rect" id="node3" href="$classentityx_1_1_receiver.html" title="entityx::Receiver\&lt;\l Dependency\&lt; C, Deps...\&gt; \&gt;" alt="" coords="463,201,652,243"/>
+<area shape="rect" id="node5" href="$classentityx_1_1_receiver.html" title="entityx::Receiver\&lt;\l ExplosionSystem \&gt;" alt="" coords="487,71,627,112"/>
+<area shape="rect" id="node7" href="$classentityx_1_1_receiver.html" title="entityx::Receiver\&lt;\l Listener \&gt;" alt="" coords="494,5,621,47"/>
+<area shape="rect" id="node4" href="$classentityx_1_1deps_1_1_dependency.html" title="entityx::deps::Dependency\l\&lt; C, Deps \&gt;" alt="" coords="719,329,896,371"/>
+<area shape="rect" id="node6" href="$struct_explosion_system.html" title="ExplosionSystem" alt="" coords="745,177,869,203"/>
+<area shape="rect" id="node8" href="$struct_listener.html" title="Listener" alt="" coords="773,13,841,39"/>
+<area shape="rect" id="node9" href="$classentityx_1_1help_1_1_non_copyable.html" title="entityx::help::NonCopyable" alt="" coords="5,478,184,505"/>
+<area shape="rect" id="node10" href="$classentityx_1_1_base_system.html" title="entityx::BaseSystem" alt="" coords="242,529,386,555"/>
+<area shape="rect" id="node28" href="$classentityx_1_1_event_manager.html" title="entityx::EventManager" alt="" coords="239,427,389,454"/>
+<area shape="rect" id="node29" href="$classentityx_1_1_system_manager.html" title="entityx::SystemManager" alt="" coords="232,478,396,505"/>
+<area shape="rect" id="node11" href="$classentityx_1_1_system.html" title="entityx::System\&lt; Derived \&gt;" alt="" coords="467,747,647,774"/>
+<area shape="rect" id="node12" href="$classentityx_1_1_system.html" title="entityx::System\&lt; BodySystem \&gt;" alt="" coords="451,449,664,475"/>
+<area shape="rect" id="node14" href="$classentityx_1_1_system.html" title="entityx::System\&lt; BounceSystem \&gt;" alt="" coords="444,499,671,526"/>
+<area shape="rect" id="node16" href="$classentityx_1_1_system.html" title="entityx::System\&lt; Collision\lSystem \&gt;" alt="" coords="470,551,645,592"/>
+<area shape="rect" id="node18" href="$classentityx_1_1_system.html" title="entityx::System\&lt; Counter\lSystem \&gt;" alt="" coords="472,616,643,657"/>
+<area shape="rect" id="node20" href="$classentityx_1_1_system.html" title="entityx::System\&lt; Dependency\l\&lt; C, Deps...\&gt; \&gt;" alt="" coords="458,332,657,373"/>
+<area shape="rect" id="node21" href="$classentityx_1_1_system.html" title="entityx::System\&lt; Explosion\lSystem \&gt;" alt="" coords="466,267,649,308"/>
+<area shape="rect" id="node22" href="$classentityx_1_1_system.html" title="entityx::System\&lt; FadeOut\lSystem \&gt;" alt="" coords="469,681,645,723"/>
+<area shape="rect" id="node24" href="$classentityx_1_1_system.html" title="entityx::System\&lt; Movement\lSystem \&gt;" alt="" coords="465,799,650,840"/>
+<area shape="rect" id="node26" href="$classentityx_1_1_system.html" title="entityx::System\&lt; RenderSystem \&gt;" alt="" coords="445,398,669,425"/>
+<area shape="rect" id="node13" href="$struct_body_system.html" title="BodySystem" alt="" coords="759,449,856,475"/>
+<area shape="rect" id="node15" href="$class_bounce_system.html" title="BounceSystem" alt="" coords="752,499,863,526"/>
+<area shape="rect" id="node17" href="$class_collision_system.html" title="CollisionSystem" alt="" coords="749,558,865,585"/>
+<area shape="rect" id="node19" href="$class_counter_system.html" title="CounterSystem" alt="" coords="751,623,863,650"/>
+<area shape="rect" id="node23" href="$struct_fade_out_system.html" title="FadeOutSystem" alt="" coords="749,689,866,715"/>
+<area shape="rect" id="node25" href="$class_movement_system.html" title="MovementSystem" alt="" coords="744,806,871,833"/>
+<area shape="rect" id="node27" href="$class_render_system.html" title="RenderSystem" alt="" coords="753,398,861,425"/>
+</map>

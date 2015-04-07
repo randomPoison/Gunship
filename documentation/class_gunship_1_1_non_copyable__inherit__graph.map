@@ -1,0 +1,30 @@
+<map id="Gunship::NonCopyable" name="Gunship::NonCopyable">
+<area shape="rect" id="node2" href="$class_gunship_1_1_component_manager_base.html" title="Gunship::ComponentManagerBase" alt="" coords="209,246,433,273"/>
+<area shape="rect" id="node17" href="$class_gunship_1_1_singleton.html" title="Gunship::Singleton\l\&lt; Class \&gt;" alt="" coords="255,392,387,433"/>
+<area shape="rect" id="node18" href="$class_gunship_1_1_system_base.html" title="The base class for all Gunship systems. " alt="" coords="245,458,398,485"/>
+<area shape="rect" id="node23" href="$class_gunship_1_1_system_manager.html" title="Gunship::SystemManager\l\&lt; BaseType \&gt;" alt="" coords="235,509,408,551"/>
+<area shape="rect" id="node24" href="$class_gunship_1_1_singleton.html" title="Gunship::Singleton\l\&lt; Input \&gt;" alt="" coords="255,575,387,616"/>
+<area shape="rect" id="node26" href="$class_gunship_1_1_singleton.html" title="Gunship::Singleton\l\&lt; Mouse \&gt;" alt="" coords="255,640,387,681"/>
+<area shape="rect" id="node28" href="$class_gunship_1_1_system_manager.html" title="Gunship::SystemManager\l\&lt; Gunship::BehaviorSystemBase \&gt;" alt="" coords="208,705,435,747"/>
+<area shape="rect" id="node29" href="$class_gunship_1_1_system_manager.html" title="Gunship::SystemManager\l\&lt; Gunship::DefaultSystemBase \&gt;" alt="" coords="213,771,430,812"/>
+<area shape="rect" id="node3" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; AlarmManager \&gt;" alt="" coords="498,5,693,47"/>
+<area shape="rect" id="node5" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; Camera \&gt; \&gt;" alt="" coords="483,71,708,127"/>
+<area shape="rect" id="node8" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; ComponentType \&gt; \&gt;" alt="" coords="483,151,708,207"/>
+<area shape="rect" id="node10" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; Mesh \&gt; \&gt;" alt="" coords="483,231,708,287"/>
+<area shape="rect" id="node13" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; SimpleStructComponentManager\l\&lt; Transform \&gt; \&gt;" alt="" coords="483,311,708,367"/>
+<area shape="rect" id="node16" href="$class_gunship_1_1_component_manager.html" title="Gunship::ComponentManager\l\&lt; Derived \&gt;" alt="" coords="498,392,693,433"/>
+<area shape="rect" id="node4" href="$class_gunship_1_1_components_1_1_alarm_manager.html" title="Gunship::Components\l::AlarmManager" alt="" coords="790,5,941,47"/>
+<area shape="rect" id="node6" href="$class_gunship_1_1_simple_struct_component_manager.html" title="Gunship::SimpleStructComponent\lManager\&lt; Camera \&gt;" alt="" coords="756,79,975,120"/>
+<area shape="rect" id="node7" href="$class_gunship_1_1_components_1_1_camera_manager.html" title="Gunship::Components\l::CameraManager" alt="" coords="1056,79,1207,120"/>
+<area shape="rect" id="node9" href="$class_gunship_1_1_simple_struct_component_manager.html" title="A default component manager for easily creating stuct components. " alt="" coords="756,159,975,200"/>
+<area shape="rect" id="node11" href="$class_gunship_1_1_simple_struct_component_manager.html" title="Gunship::SimpleStructComponent\lManager\&lt; Mesh \&gt;" alt="" coords="756,239,975,280"/>
+<area shape="rect" id="node12" href="$class_gunship_1_1_components_1_1_mesh_manager.html" title="Gunship::Components\l::MeshManager" alt="" coords="1056,239,1207,280"/>
+<area shape="rect" id="node14" href="$class_gunship_1_1_simple_struct_component_manager.html" title="Gunship::SimpleStructComponent\lManager\&lt; Transform \&gt;" alt="" coords="756,319,975,360"/>
+<area shape="rect" id="node15" href="$class_gunship_1_1_components_1_1_transform_manager.html" title="Gunship::Components\l::TransformManager" alt="" coords="1056,319,1207,360"/>
+<area shape="rect" id="node19" href="$class_gunship_1_1_behavior_system_base.html" title="Gunship::BehaviorSystemBase" alt="" coords="494,458,697,485"/>
+<area shape="rect" id="node20" href="$class_gunship_1_1_default_system_base.html" title="Gunship::DefaultSystemBase" alt="" coords="499,509,692,535"/>
+<area shape="rect" id="node21" href="$class_gunship_1_1_system.html" title="Gunship::System\&lt; AlarmSystem,\l Gunship::DefaultSystemBase \&gt;" alt="" coords="756,501,975,543"/>
+<area shape="rect" id="node22" href="$struct_gunship_1_1_systems_1_1_alarm_system.html" title="Gunship::Systems::AlarmSystem" alt="" coords="1023,509,1240,535"/>
+<area shape="rect" id="node25" href="$class_gunship_1_1_input.html" title="Gunship::Input" alt="" coords="542,582,649,609"/>
+<area shape="rect" id="node27" href="$class_gunship_1_1_mouse.html" title="Gunship::Mouse" alt="" coords="537,647,654,674"/>
+</map>

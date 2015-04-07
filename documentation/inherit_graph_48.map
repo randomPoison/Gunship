@@ -1,0 +1,24 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_catch_1_1_non_copyable.html" title="Catch::NonCopyable" alt="" coords="5,69,147,96"/>
+<area shape="rect" id="node2" href="$struct_catch_1_1_i_shared.html" title="Catch::IShared" alt="" coords="195,69,303,96"/>
+<area shape="rect" id="node3" href="$struct_catch_1_1_i_config.html" title="Catch::IConfig" alt="" coords="368,19,471,45"/>
+<area shape="rect" id="node4" href="$struct_catch_1_1_i_test_case.html" title="Catch::ITestCase" alt="" coords="358,69,481,96"/>
+<area shape="rect" id="node7" href="$struct_catch_1_1_shared_impl.html" title="Catch::SharedImpl\&lt;\l IShared \&gt;" alt="" coords="351,143,488,185"/>
+<area shape="rect" id="node5" href="$struct_catch_1_1_shared_impl.html" title="Catch::SharedImpl\&lt;\l ITestCase \&gt;" alt="" coords="554,38,691,79"/>
+<area shape="rect" id="node6" href="$class_catch_1_1_method_test_case.html" title="Catch::MethodTestCase\&lt; C \&gt;" alt="" coords="765,5,960,32"/>
+<area shape="rect" id="node8" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher.html" title="Catch::Matchers::Impl\l::Matcher\&lt; ExpressionT \&gt;" alt="" coords="536,143,709,185"/>
+<area shape="rect" id="node14" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher.html" title="Catch::Matchers::Impl\l::Matcher\&lt; std::string \&gt;" alt="" coords="543,383,702,425"/>
+<area shape="rect" id="node9" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; DerivedT,\l ExpressionT \&gt;" alt="" coords="779,56,946,112"/>
+<area shape="rect" id="node10" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; AllOf\l\&lt; ExpressionT \&gt;, ExpressionT \&gt;" alt="" coords="757,136,968,192"/>
+<area shape="rect" id="node12" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; AnyOf\l\&lt; ExpressionT \&gt;, ExpressionT \&gt;" alt="" coords="757,216,968,272"/>
+<area shape="rect" id="node11" href="$class_catch_1_1_matchers_1_1_impl_1_1_generic_1_1_all_of.html" title="Catch::Matchers::Impl\l::Generic::AllOf\&lt; ExpressionT \&gt;" alt="" coords="1020,143,1227,185"/>
+<area shape="rect" id="node13" href="$class_catch_1_1_matchers_1_1_impl_1_1_generic_1_1_any_of.html" title="Catch::Matchers::Impl\l::Generic::AnyOf\&lt; ExpressionT \&gt;" alt="" coords="1016,223,1231,265"/>
+<area shape="rect" id="node15" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; Contains,\l std::string \&gt;" alt="" coords="779,296,947,352"/>
+<area shape="rect" id="node17" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; EndsWith,\l std::string \&gt;" alt="" coords="775,376,950,432"/>
+<area shape="rect" id="node19" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; Equals,\l std::string \&gt;" alt="" coords="784,456,941,512"/>
+<area shape="rect" id="node21" href="$struct_catch_1_1_matchers_1_1_impl_1_1_matcher_impl.html" title="Catch::Matchers::Impl\l::MatcherImpl\&lt; StartsWith,\l std::string \&gt;" alt="" coords="773,536,952,592"/>
+<area shape="rect" id="node16" href="$struct_catch_1_1_matchers_1_1_impl_1_1_std_string_1_1_contains.html" title="Catch::Matchers::Impl\l::StdString::Contains" alt="" coords="1048,303,1199,345"/>
+<area shape="rect" id="node18" href="$struct_catch_1_1_matchers_1_1_impl_1_1_std_string_1_1_ends_with.html" title="Catch::Matchers::Impl\l::StdString::EndsWith" alt="" coords="1048,383,1199,425"/>
+<area shape="rect" id="node20" href="$struct_catch_1_1_matchers_1_1_impl_1_1_std_string_1_1_equals.html" title="Catch::Matchers::Impl\l::StdString::Equals" alt="" coords="1048,463,1199,505"/>
+<area shape="rect" id="node22" href="$struct_catch_1_1_matchers_1_1_impl_1_1_std_string_1_1_starts_with.html" title="Catch::Matchers::Impl\l::StdString::StartsWith" alt="" coords="1046,543,1201,585"/>
+</map>

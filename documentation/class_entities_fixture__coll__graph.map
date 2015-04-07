@@ -1,0 +1,6 @@
+<map id="EntitiesFixture" name="EntitiesFixture">
+<area shape="rect" id="node2" href="$classentityx_1_1_entity_x.html" title="entityx::EntityX" alt="" coords="88,171,199,197"/>
+<area shape="rect" id="node3" href="$classentityx_1_1_event_manager.html" title="entityx::EventManager" alt="" coords="5,81,156,108"/>
+<area shape="rect" id="node4" href="$classentityx_1_1help_1_1_non_copyable.html" title="entityx::help::NonCopyable" alt="" coords="99,5,278,32"/>
+<area shape="rect" id="node5" href="$classentityx_1_1_system_manager.html" title="entityx::SystemManager" alt="" coords="180,81,344,108"/>
+</map>
