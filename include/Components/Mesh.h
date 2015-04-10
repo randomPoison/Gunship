@@ -47,7 +47,7 @@ namespace Gunship
 			std::unordered_map< Entity::ID, size_t > _indices;
 
 			std::vector< Entity::ID > _markedForDestruction;
-			std::unordered_multimap< Ogre::String, Mesh > _pooledMeshes;
+			std::unordered_map< Ogre::String, std::vector< Mesh > > _pooledMeshes;
 
 			void DestroyAll( Entity::ID entityID ) override;
 			void DestroyAllMarked() override;

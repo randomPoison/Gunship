@@ -25,17 +25,18 @@ namespace Gunship
 
 		Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 		{
+			// ensure that there is a vector for the current ID
+			std::vector< Mesh >& meshPool =
+				_pooledMeshes.insert( { meshName, std::vector< Mesh >() } ).first->second;
+
 			// Retrieve or create a mesh to use.
 			Mesh mesh;
-			if ( _pooledMeshes.count( meshName ) )
+			if ( !meshPool.empty() )
 			{
-				// Use pooled mesh and remove from pool.
-				auto iterator = _pooledMeshes.find( meshName );
-
-				mesh = iterator->second;
+				mesh = meshPool.back();
 				mesh.entityID = entityID;
 
-				_pooledMeshes.erase( iterator );
+				meshPool.pop_back();
 			}
 			else
 			{
@@ -55,7 +56,7 @@ namespace Gunship
 			// Add it to the list of live meshes and add its index
 			// to the index map.
 			_meshes.push_back( mesh );
-			_indices[entityID] = _meshes.size() - 1;
+			_indices.insert( { entityID, _meshes.size() - 1 } );
 
 			return _meshes.back();
 		}
@@ -109,11 +110,10 @@ namespace Gunship
 			Mesh& mesh = _meshes[index];
 
 			// Disable the mesh by detaching it from it's scene node.
-			SDL_assert_paranoid( mesh.mesh->getParentSceneNode() );
 			mesh.mesh->detachFromParent();
 
 			// Add the mesh back to the pool.
-			_pooledMeshes.insert( { mesh.meshName, mesh } );
+			_pooledMeshes[mesh.meshName].push_back( mesh );
 
 			// Swap the mesh if it's not already at the back of the array.
 			if ( index != _meshes.size() - 1 )
