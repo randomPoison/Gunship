@@ -74,18 +74,12 @@ namespace Gunship
 		///     have an associated component.
 		void Destroy( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( _componentIndices.count( entityID ) );
-			SDL_assert_paranoid( !VectorHelpers::Contains( _markedForDestruction, entityID ) );
-
 			_markedForDestruction.push_back( entityID );
 		}
 
 		void DestroyAll( Entity::ID entityID ) override
 		{
-			if ( _componentIndices.count( entityID ) )
-			{
-				Destroy( entityID );
-			}
+			Destroy( entityID );
 		}
 
 		void DestroyAllMarked() override

@@ -63,9 +63,6 @@ namespace Gunship
 
 		void MeshManager::Destroy( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( _indices.count( entityID ) );
-			SDL_assert_paranoid( !VectorHelpers::Contains( _markedForDestruction, entityID ) );
-
 			_markedForDestruction.push_back( entityID );
 		}
 
@@ -76,10 +73,7 @@ namespace Gunship
 
 		void MeshManager::DestroyAll( Entity::ID entityID )
 		{
-			if ( _indices.count( entityID ) )
-			{
-				Destroy( entityID );
-			}
+			Destroy( entityID );
 		}
 
 		void MeshManager::DestroyAllMarked()
