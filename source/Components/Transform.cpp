@@ -8,39 +8,6 @@ namespace Gunship
 {
 	namespace Components
 	{
-		Transform::Transform( const Scene& scene )
-			: node( nullptr )
-		{
-			Ogre::SceneManager& sceneManager = scene.sceneManager();
-			node = sceneManager.createSceneNode();
-			sceneManager.getRootSceneNode()->addChild( node );
-		}
-
-		Transform::Transform( Transform&& original )
-		{
-			MoveOutOf( original );
-		}
-
-		Transform& Transform::operator=( Transform&& original )
-		{
-			MoveOutOf( original );
-
-			return *this;
-		}
-
-		Transform::~Transform()
-		{
-			if ( node != nullptr )
-			{
-				node->detachAllObjects();
-				if ( node->getParentSceneNode() != nullptr )
-				{
-					node->getParentSceneNode()->removeChild( node );
-				}
-				node->getCreator()->destroySceneNode( node );
-			}
-		}
-
 		Vector3 Transform::position()
 		{
 			return node->getPosition();
@@ -169,23 +136,35 @@ namespace Gunship
 			node->removeAllChildren();
 		}
 
-		void Transform::MoveOutOf( Transform& original )
-		{
-			entityID = original.entityID;
-
-			node = original.node;
-			original.node = nullptr;
-		}
-
 		TransformManager::TransformManager( Scene& scene )
 			: _scene( scene )
 		{
 		}
 
-		// Transform Manager
-		Transform& TransformManager::Assign( Entity::ID entity )
+		void TransformManager::Disable( Transform& transform )
 		{
-			return Assign( entity, _scene );
+			transform.node->detachAllObjects();
+			if ( transform.node->getParentSceneNode() != nullptr )
+			{
+				transform.node->getParentSceneNode()->removeChild( transform.node );
+			}
+		}
+
+		void TransformManager::Enable( Entity::ID entityID, Transform& transform )
+		{
+			_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
+		}
+
+		Transform TransformManager::Construct( Entity::ID entityID )
+		{
+			Transform transform;
+			transform.node = _scene.sceneManager().createSceneNode();
+			return transform;
+		}
+
+		void TransformManager::Destruct( Transform& transform )
+		{
+			transform.node->getCreator()->destroySceneNode( transform.node );
 		}
 	}
 }

@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Components/PooledComponentManager.h"
 #include "Components/SimpleStructComponent.h"
-#include "Components/SimpleStructComponentManager.h"
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
 
@@ -16,36 +16,28 @@ namespace Gunship
 
 	namespace Components
 	{
-		/**
-		 * @brief Component for representing the position, rotation, and scale of an object.
-		 *
-		 * @details
-		 *    The Transform component contains the local position, rotation,
-		 *    and scale, and allows retrieval of the transform in world-space.
-		 *
-		 * @remark
-		 *     This component wraps a reference to an Ogre::SceneNode since
-		 *     we let Ogre manage the scene graph for us at this point.
-		 *     This may change as things go forward.
-		 */
+		/// @brief Component for representing the position, rotation, and scale of an object.
+		///
+		/// @details
+		///    The Transform component contains the local position, rotation,
+		///    and scale, and allows retrieval of the transform in world-space.
+		///
+		/// @remark
+		///     This component wraps a reference to an Ogre::SceneNode since
+		///     we let Ogre manage the scene graph for us at this point.
+		///     This may change as things go forward.
 		struct Transform : public SimpleStructComponent
 		{
 		public:
 			Ogre::SceneNode* node;
 
-			/**
-			 * @brief Constructs a transform component.
-			 *
-			 * @param scene
-			 *     The scene in which this transform is active. Note: We
-			 *     should eventually be able to remove the need to explicitly
-			 *     pass in the scene, since you have to go through the scene
-			 *     to create the component in the first place.
-			 */
-			Transform( const Scene& scene );
-			Transform( Transform&& original );
-			Transform& operator=( Transform&& original );
-			~Transform();
+			/// @brief Constructs a transform component.
+			///
+			/// @param scene
+			///     The scene in which this transform is active. Note: We
+			///     should eventually be able to remove the need to explicitly
+			///     pass in the scene, since you have to go through the scene
+			///     to create the component in the first place
 
 			Vector3 position();
 			void position( float x, float y, float z );
@@ -76,21 +68,22 @@ namespace Gunship
 			void AddChild( Transform* child );
 			void RemoveChild( Transform* child );
 			void RemoveAllChildren();
-
-		private:
-			void MoveOutOf( Transform& original );
 		};
 
-		class TransformManager : public SimpleStructComponentManager< Transform >
+		class TransformManager : public PooledComponentManager< Transform >
 		{
 		public:
-			TransformManager( Scene& scene );
+			typedef PooledComponentManager< Transform > base;
 
-			using SimpleStructComponentManager< Transform >::Assign;
-			Transform& Assign( Entity::ID entity );
+			TransformManager( Scene& scene );
 
 		private:
 			Scene& _scene;
+
+			void Disable( Transform& transform ) override;
+			void Enable( Entity::ID entityID, Transform& transform ) override;
+			Transform Construct( Entity::ID entityID ) override;
+			void Destruct( Transform& transform ) override;
 		};
 	}
 }

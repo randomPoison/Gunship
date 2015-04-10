@@ -12,21 +12,34 @@
 
 namespace Gunship
 {
-	/// @brief A default component manager for easily creating stuct components.
+	/// @brief A pooled version of SimpleStructComponentManager.
 	///
 	/// @details
-	///     Most gameplay components are likely to just be structs with the
-	///     necessary data, so to simplify development the SimpleStructComponentManager
-	///     is provided to make it possible to define new components of this
-	///     type without having to create a new ComponentManager.
+	///     Provides similar functionality to SimpleStructComponentManager,
+	///     but pools destroyed resources without destructing them and reuses
+	///     them when a new component is needed. This is useful for simple
+	///     components that are costly to create and destroy, or when components
+	///     hold resources that can be reused rather than destroyed.
 	template < typename ComponentType >
-	class SimpleStructComponentManager
-		: public ComponentManager< SimpleStructComponentManager< ComponentType > >
+	class PooledComponentManager
+		: public ComponentManager< PooledComponentManager< ComponentType > >
 	{
 	public:
-		/// @brief Assigns one component to the entity, constructing it with arguments provided.
+		/// @todo
+		///     This may not be needed if we only tear down component managers
+		///     when the engine is shut down. If we do it on scene switches, though,
+		///     this will be needed to clean up the scene.
+		//~PooledComponentManager< ComponentType >()
+		//{
+		//	for ( ComponentType& component : _components )
+		//	{
+		//		Destruct( component );
+		//	}
+		//}
+
+		/// @brief Assigns one component to the entity, constructing or enabling it with arguments provided.
 		///
-		/// @note
+		/// @details
 		///     This is meant to be a utility method provided to children of this class,
 		///     who should provide their own interface for assigning components
 		///     which only takes the necessary arguments.
@@ -35,19 +48,30 @@ namespace Gunship
 		///     to the constructor, then the manager should cache off a reference to the
 		///     scene on construction and automatically pass the scene to new components
 		///     so that clients do not have to remember to do so every time.
+		///
+		///     If there are components left in the pool then the first one will be reused
+		///     rather than creating a new component. Enable() will still be called in this case.
 		template < typename... Args >
-		ComponentType& Assign( Entity::ID entityID, Args&&... args )
+		ComponentType& Assign( Entity::ID entityID )
 		{
 			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
 
-			// Emplace new component into the components vector
-			_components.emplace_back( std::forward< Args >( args )... );
-			_components.back().entityID = entityID;
+			// If there are no pooled components create a new one.
+			if ( _liveCount == _components.size() )
+			{
+				_components.push_back( Construct( entityID ) );
+			}
 
-			// Associate its ID with its index
-			_componentIndices[entityID] = _components.size() - 1;
+			// Assign the first pooled component with the entity and enable it.
+			++_liveCount;
+			ComponentType& component = _components[_liveCount - 1];
+			component.entityID = entityID;
+			Enable( entityID, component );
 
-			return _components.back();
+			// Add its index to the index map.
+			_componentIndices[entityID] = _liveCount - 1;
+
+			return component;
 		}
 
 		/// @brief Marks the entity's associated component for destruction.
@@ -113,19 +137,42 @@ namespace Gunship
 			return _components;
 		}
 
+		/// @brief Called when a component is destroyed and returned to the pool.
+		///
+		/// @details
+		///     This method should perform any necessary actions to disable the
+		///     component when it is no longer being used.
+		virtual void Disable( ComponentType& component ) = 0;
+
+		/// @brief Called when a component is being assigned to an entity.
+		///
+		/// @details
+		///     This method should perform any necessary actions to initialize the
+		///     component before use. It is called every time the component is assigned
+		///     to an entity, including when the component is first created.
+		virtual void Enable( Entity::ID entityID, ComponentType& component ) = 0;
+
+		virtual ComponentType Construct( Entity::ID entityID ) = 0;
+		virtual void Destruct( ComponentType& component ) = 0;
+
 	private:
 		std::vector< ComponentType > _components;
+		size_t _liveCount = 0;
 		std::unordered_map< Entity::ID, size_t > _componentIndices;
 
 		std::vector< Entity::ID > _markedForDestruction;
 
-		/// @brief Destroys the component associated with the given Entity.
+		/// @brief Returns the component associated with the given Entity back to the pool.
 		///
 		/// @details
 		///     Destruction occurs in constant time, and does not require
 		///     the elements of the internal array to be shifted, so only
 		///     the destroyed component and the last component in the
 		///     array are affected.
+		///
+		/// @note
+		///     The destroyed component is not destructed and remains in the
+		///     list of components. When an
 		void DestroyImmediate( Entity::ID entityID )
 		{
 			// Retrieve the index of the component to be destroyed, then
@@ -133,25 +180,24 @@ namespace Gunship
 			size_t index = _componentIndices[entityID];
 			_componentIndices.erase( entityID );
 
-			// If the component isn't at the end of the vector,
-			// swap the last component into the destroyed component's spot.
+			// If the component isn't the last live one, swap the
+			// last live component into the destroyed component's spot.
 			// Otherwise we can just pop the end of the vector.
-			if ( index != _components.size() - 1 )
+			if ( index != _liveCount - 1 )
 			{
-				// Since the old component isn't at the end of the vector,
-				// the component we're moving shouldn't have the same entityID.
-				SDL_assert_paranoid( _components.back().entityID != entityID );
-
 				// Swap the positions of the two components
-				std::swap( _components[index], _components.back() );
+				std::swap( _components[index], _components[_liveCount - 1] );
 
 				// Put the moved component's index back in the map.
 				_componentIndices[_components[index].entityID] = index;
 			}
 
-			// The marked component is now guaranteed to be at the end.
-			// Pop the last element to destroy it.
-			_components.pop_back();
+			// Decrease the live count, effectively marking the
+			// component as destroyed.
+			--_liveCount;
+
+			// Do the callback to disable the component.
+			Disable( _components[_liveCount] );
 
 			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
 		}
