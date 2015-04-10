@@ -25,18 +25,6 @@ namespace Gunship
 		: public ComponentManager< PooledComponentManager< ComponentType > >
 	{
 	public:
-		/// @todo
-		///     This may not be needed if we only tear down component managers
-		///     when the engine is shut down. If we do it on scene switches, though,
-		///     this will be needed to clean up the scene.
-		//~PooledComponentManager< ComponentType >()
-		//{
-		//	for ( ComponentType& component : _components )
-		//	{
-		//		Destruct( component );
-		//	}
-		//}
-
 		/// @brief Assigns one component to the entity, constructing or enabling it with arguments provided.
 		///
 		/// @details

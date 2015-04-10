@@ -1,7 +1,10 @@
 #pragma once
 
+#include <vector>
+#include <unordered_map>
+
+#include "Entity/ComponentManager.h"
 #include "Components/SimpleStructComponent.h"
-#include "Components/SimpleStructComponentManager.h"
 
 namespace Ogre
 {
@@ -22,35 +25,34 @@ namespace Gunship
 		 */
 		struct Mesh : public SimpleStructComponent
 		{
-		public:
 			Ogre::Entity* mesh;
-
-			/// @todo This can be taken out if we write a custom manager that handles component destruction.
-			Ogre::SceneManager* sceneManager;
-
-			Mesh( const Scene& scene,
-			      const Transform& transform,
-			      const char* meshName );
-			Mesh( Mesh&& original );
-			Mesh& operator=( Mesh&& original );
-			~Mesh();
-
-		private:
-			void MoveOutOf( Mesh& original );
+			Ogre::String meshName; ///< @todo This shouldn't be necessary, find a way to get rid of it.
 		};
 
-		class MeshManager : public SimpleStructComponentManager< Mesh >
+		class MeshManager : public ComponentManager< MeshManager >
 		{
 		public:
 			MeshManager( Scene& scene );
 
-			Mesh& Assign( Entity::ID entity, const char* meshName );
+			Mesh& Assign( Entity::ID entityID, const char* meshName );
+
+			void Destroy( Entity::ID entityID );
+
+			const std::vector< Mesh > components() const;
 
 		private:
-
-			using SimpleStructComponentManager< Mesh >::Assign;
-
 			Scene& _scene;
+
+			std::vector< Mesh > _meshes;
+			std::unordered_map< Entity::ID, size_t > _indices;
+
+			std::vector< Entity::ID > _markedForDestruction;
+			std::unordered_multimap< Ogre::String, Mesh > _pooledMeshes;
+
+			void DestroyAll( Entity::ID entityID ) override;
+			void DestroyAllMarked() override;
+
+			void DestroyImmediate( Entity::ID entityID );
 		};
 	}
 }
