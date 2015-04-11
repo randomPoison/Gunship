@@ -26,7 +26,7 @@ namespace Gunship
 		struct Mesh : public SimpleStructComponent
 		{
 			Ogre::Entity* mesh;
-			Ogre::String meshName; ///< @todo This shouldn't be necessary, find a way to get rid of it.
+			std::vector< Mesh >* meshPool; ///< @todo This shouldn't be necessary, find a way to get rid of it. Also, it shouldn't be null so maybe a pointer isn't a good idea?
 		};
 
 		class MeshManager : public ComponentManager< MeshManager >

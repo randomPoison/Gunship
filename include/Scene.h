@@ -42,7 +42,7 @@ namespace Gunship
 		template< typename ComponentManager >
 		void RegisterComponentManager( ComponentManager* componentManager )
 		{
-			_componentManagers[ComponentManager::id()] = std::shared_ptr< ComponentManagerBase >( componentManager );
+			_RegisterComponentManager( componentManager, ComponentManager::id() );
 		}
 
 		template< typename ComponentManager >
@@ -67,7 +67,7 @@ namespace Gunship
 		SystemManager< DefaultSystemBase > _coreSystems;
 		SystemManager< BehaviorSystemBase > _behaviorSystems;
 
-		std::unordered_map< ComponentManagerBase::ID, std::shared_ptr< ComponentManagerBase > > _componentManagers;
+		std::vector< std::shared_ptr< ComponentManagerBase > > _componentManagers;
 
 		friend class Engine;
 		friend class EntityManager;
@@ -79,7 +79,7 @@ namespace Gunship
 		///     and is not accessible to client code.
 		void Update( float delta );
 
-		/// @brief Retries a reference to the ComponentManagerBase with the specified ID.
+		/// @brief Retrieves a reference to the ComponentManagerBase with the specified ID.
 		///
 		/// @details
 		///     To reduce the cost of recompiling generic code this provides the bulk
@@ -87,5 +87,7 @@ namespace Gunship
 		///     templated version simply provides a wrapper that automatically
 		///     retrieves the ID and typecasts the result.
 		ComponentManagerBase& _componentManager( ComponentManagerBase::ID id );
+
+		void _RegisterComponentManager( ComponentManagerBase* manager, ComponentManagerBase::ID id );
 	};
 }

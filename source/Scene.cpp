@@ -64,16 +64,24 @@ namespace Gunship
 		_behaviorSystems.UpdateAll( *this, delta );
 
 		// Destroy all marked components.
-		for ( auto& element : _componentManagers )
+		for ( auto& manager : _componentManagers )
 		{
-			element.second->DestroyAllMarked();
+			manager->DestroyAllMarked();
 		}
 	}
 
-	ComponentManagerBase& Scene::_componentManager( ComponentManagerBase::ID family )
+	ComponentManagerBase& Scene::_componentManager( ComponentManagerBase::ID id )
 	{
-		SDL_assert_paranoid( _componentManagers.count( family ) );
+		return *_componentManagers[id];
+	}
 
-		return *_componentManagers[family];
+	void Scene::_RegisterComponentManager( ComponentManagerBase* manager, ComponentManagerBase::ID id )
+	{
+		while ( _componentManagers.size() <= id )
+		{
+			_componentManagers.push_back( { nullptr } );
+		}
+
+		_componentManagers[id] = std::shared_ptr< ComponentManagerBase >( manager );
 	}
 }

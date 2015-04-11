@@ -158,9 +158,10 @@ namespace Gunship
 		void DestroyImmediate( Entity::ID entityID )
 		{
 			// Retrieve the index of the component to be destroyed, then
-			// remove the component to be destroyed from the index map.
-			size_t index = _componentIndices[entityID];
-			_componentIndices.erase( entityID );
+			// remove it from the index map.
+			auto iterator = _componentIndices.find( entityID );
+			size_t index = iterator->second;
+			_componentIndices.erase( iterator );
 
 			// If the component isn't the last live one, swap the
 			// last live component into the destroyed component's spot.

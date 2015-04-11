@@ -44,7 +44,7 @@ namespace Gunship
 				Ogre::Entity* meshEntity = _scene.sceneManager().createEntity( meshName );
 				mesh.entityID = entityID;
 				mesh.mesh = meshEntity;
-				mesh.meshName = Ogre::String( meshName );
+				mesh.meshPool = &meshPool;
 			}
 
 			// Enable the component by attaching it's Ogre::Entity
@@ -99,15 +99,16 @@ namespace Gunship
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove the component to be destroyed from the index map.
-			size_t index = _indices[entityID];
-			_indices.erase( entityID );
-			Mesh& mesh = _meshes[index];
+			auto iterator = _indices.find( entityID );
+			size_t index = iterator->second;
+			_indices.erase( iterator );
 
 			// Disable the mesh by detaching it from it's scene node.
+			Mesh& mesh = _meshes[index];
 			mesh.mesh->detachFromParent();
 
 			// Add the mesh back to the pool.
-			_pooledMeshes[mesh.meshName].push_back( mesh );
+			mesh.meshPool->push_back( mesh );
 
 			// Swap the mesh if it's not already at the back of the array.
 			if ( index != _meshes.size() - 1 )

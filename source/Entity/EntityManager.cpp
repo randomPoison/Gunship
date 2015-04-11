@@ -43,7 +43,7 @@ namespace Gunship
 		// Destroy all components associated with the entity.
 		for ( auto pair : _scene._componentManagers )
 		{
-			pair.second->DestroyAll( entityID );
+			pair->DestroyAll( entityID );
 		}
 	}
 }
