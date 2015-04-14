@@ -124,18 +124,15 @@ namespace Gunship
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove the component to be destroyed from the index map.
-			size_t index = _componentIndices[entityID];
-			_componentIndices.erase( entityID );
+			auto iterator = _componentIndices.find( entityID );
+			size_t index = iterator->second;
+			_componentIndices.erase( iterator );
 
 			// If the component isn't at the end of the vector,
 			// swap the last component into the destroyed component's spot.
 			// Otherwise we can just pop the end of the vector.
 			if ( index != _components.size() - 1 )
 			{
-				// Since the old component isn't at the end of the vector,
-				// the component we're moving shouldn't have the same entityID.
-				SDL_assert_paranoid( _components.back().entityID != entityID );
-
 				// Swap the positions of the two components
 				std::swap( _components[index], _components.back() );
 
@@ -146,8 +143,6 @@ namespace Gunship
 			// The marked component is now guaranteed to be at the end.
 			// Pop the last element to destroy it.
 			_components.pop_back();
-
-			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
 		}
 	};
 }
