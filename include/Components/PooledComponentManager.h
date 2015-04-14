@@ -74,18 +74,12 @@ namespace Gunship
 		///     have an associated component.
 		void Destroy( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( _componentIndices.count( entityID ) );
-			SDL_assert_paranoid( !VectorHelpers::Contains( _markedForDestruction, entityID ) );
-
 			_markedForDestruction.push_back( entityID );
 		}
 
 		void DestroyAll( Entity::ID entityID ) override
 		{
-			if ( _componentIndices.count( entityID ) )
-			{
-				Destroy( entityID );
-			}
+			Destroy( entityID );
 		}
 
 		void DestroyAllMarked() override
@@ -164,9 +158,10 @@ namespace Gunship
 		void DestroyImmediate( Entity::ID entityID )
 		{
 			// Retrieve the index of the component to be destroyed, then
-			// remove the component to be destroyed from the index map.
-			size_t index = _componentIndices[entityID];
-			_componentIndices.erase( entityID );
+			// remove it from the index map.
+			auto iterator = _componentIndices.find( entityID );
+			size_t index = iterator->second;
+			_componentIndices.erase( iterator );
 
 			// If the component isn't the last live one, swap the
 			// last live component into the destroyed component's spot.

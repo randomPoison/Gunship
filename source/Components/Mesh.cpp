@@ -25,17 +25,18 @@ namespace Gunship
 
 		Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 		{
+			// ensure that there is a vector for the current ID
+			std::vector< Mesh >& meshPool =
+				_pooledMeshes.insert( { meshName, std::vector< Mesh >() } ).first->second;
+
 			// Retrieve or create a mesh to use.
 			Mesh mesh;
-			if ( _pooledMeshes.count( meshName ) )
+			if ( !meshPool.empty() )
 			{
-				// Use pooled mesh and remove from pool.
-				auto iterator = _pooledMeshes.find( meshName );
-
-				mesh = iterator->second;
+				mesh = meshPool.back();
 				mesh.entityID = entityID;
 
-				_pooledMeshes.erase( iterator );
+				meshPool.pop_back();
 			}
 			else
 			{
@@ -43,7 +44,7 @@ namespace Gunship
 				Ogre::Entity* meshEntity = _scene.sceneManager().createEntity( meshName );
 				mesh.entityID = entityID;
 				mesh.mesh = meshEntity;
-				mesh.meshName = Ogre::String( meshName );
+				mesh.meshPool = &meshPool;
 			}
 
 			// Enable the component by attaching it's Ogre::Entity
@@ -55,16 +56,13 @@ namespace Gunship
 			// Add it to the list of live meshes and add its index
 			// to the index map.
 			_meshes.push_back( mesh );
-			_indices[entityID] = _meshes.size() - 1;
+			_indices.insert( { entityID, _meshes.size() - 1 } );
 
 			return _meshes.back();
 		}
 
 		void MeshManager::Destroy( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( _indices.count( entityID ) );
-			SDL_assert_paranoid( !VectorHelpers::Contains( _markedForDestruction, entityID ) );
-
 			_markedForDestruction.push_back( entityID );
 		}
 
@@ -75,10 +73,7 @@ namespace Gunship
 
 		void MeshManager::DestroyAll( Entity::ID entityID )
 		{
-			if ( _indices.count( entityID ) )
-			{
-				Destroy( entityID );
-			}
+			Destroy( entityID );
 		}
 
 		void MeshManager::DestroyAllMarked()
@@ -104,16 +99,16 @@ namespace Gunship
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove the component to be destroyed from the index map.
-			size_t index = _indices[entityID];
-			_indices.erase( entityID );
-			Mesh& mesh = _meshes[index];
+			auto iterator = _indices.find( entityID );
+			size_t index = iterator->second;
+			_indices.erase( iterator );
 
 			// Disable the mesh by detaching it from it's scene node.
-			SDL_assert_paranoid( mesh.mesh->getParentSceneNode() );
+			Mesh& mesh = _meshes[index];
 			mesh.mesh->detachFromParent();
 
 			// Add the mesh back to the pool.
-			_pooledMeshes.insert( { mesh.meshName, mesh } );
+			mesh.meshPool->push_back( mesh );
 
 			// Swap the mesh if it's not already at the back of the array.
 			if ( index != _meshes.size() - 1 )
