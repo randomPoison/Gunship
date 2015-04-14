@@ -57,6 +57,11 @@ namespace Gunship
 		return _entities;
 	}
 
+	SystemManager< BehaviorSystemBase >& Scene::behaviors()
+	{
+		return _behaviorSystems;
+	}
+
 	void Scene::Update( float delta )
 	{
 		// Update all behaviors.

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <utility>
-#include <memory>        ///< @todo remove dependency on STL containers.
 #include <vector>        ///< @todo remove dependency on STL containers.
 #include <unordered_map> ///< @todo remove dependency on STL containers.
 
@@ -15,20 +14,27 @@ namespace Gunship
 	class SystemManager : public NonCopyable
 	{
 	public:
-		template < class SystemType, typename... Args >
-		std::shared_ptr< SystemType > Add( Args&&... args )
+		~SystemManager< BaseType >()
 		{
-			std::shared_ptr< SystemType > systemPointer(
-				new SystemType( std::forward< Args >( args )... ) );
-			_systems.push_back( systemPointer );
+			for ( BaseType* base : _systems )
+			{
+				delete base;
+			}
+		}
+
+		template < class SystemType, typename... Args >
+		SystemType* Add( Args&&... args )
+		{
+			SystemType* system = new SystemType( std::forward< Args >( args )... );
+			_systems.push_back( system );
 			_indices[SystemType::id()] = _systems.size() - 1;
-			return systemPointer;
+			return system;
 		}
 
 		template < typename... Args >
 		void UpdateAll( Args&&... args )
 		{
-			for ( std::shared_ptr<BaseType>& system : _systems )
+			for ( BaseType* system : _systems )
 			{
 				if ( system->active )
 				{
@@ -40,7 +46,7 @@ namespace Gunship
 		template < typename SystemType >
 		SystemType& Get()
 		{
-			static_cast< SystemType& >( _systems[_indices[SystemType::id()]] );
+			return *static_cast< SystemType* >( _systems[_indices[SystemType::id()]] );
 		}
 
 		template < typename SystemType >
@@ -69,7 +75,7 @@ namespace Gunship
 		}
 
 	private:
-		std::vector< std::shared_ptr< BaseType > > _systems;
+		std::vector< BaseType* > _systems;
 		std::unordered_map< SystemBase::ID, size_t > _indices;
 	};
 }

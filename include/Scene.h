@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map> ///< @todo remove STL dependency
-#include <memory.h>      ///< @todo remove STL dependency
+#include <memory>      ///< @todo remove STL dependency
 
 #include "Entity/SystemManager.h"
 #include "Entity/EntityManager.h"
@@ -56,6 +56,7 @@ namespace Gunship
 		Ogre::RenderWindow& renderWindow() const;
 		Ogre::SceneManager& sceneManager() const;
 		EntityManager& entities();
+		SystemManager< BehaviorSystemBase >& behaviors();
 
 	private:
 		Engine* _engine;
