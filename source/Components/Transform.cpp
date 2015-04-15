@@ -144,21 +144,25 @@ namespace Gunship
 		void TransformManager::Disable( Transform& transform )
 		{
 			transform.node->detachAllObjects();
-			if ( transform.node->getParentSceneNode() != nullptr )
+
+			// Move node back to root if it's not already there.
+			if ( transform.node->getParentSceneNode() != _scene.sceneManager().getRootSceneNode() )
 			{
 				transform.node->getParentSceneNode()->removeChild( transform.node );
+				_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
 			}
 		}
 
 		void TransformManager::Enable( Entity::ID entityID, Transform& transform )
 		{
-			_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
+			//_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
 		}
 
 		Transform TransformManager::Construct( Entity::ID entityID )
 		{
 			Transform transform;
 			transform.node = _scene.sceneManager().createSceneNode();
+			_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
 			return transform;
 		}
 
