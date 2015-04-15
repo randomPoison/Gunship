@@ -1,9 +1,9 @@
 #pragma once
 
-#include <deque>  ///< @todo Remove dependence on STL containers.
-#include <unordered_set> ///< @todo Remove dependence on STL containers.
+#include <vector>  ///< @todo Remove dependence on STL containers.
 
 #include "Entity/Entity.h"
+#include "Containers/EntitySet.h"
 
 namespace Gunship
 {
@@ -34,10 +34,8 @@ namespace Gunship
 		///     IDs are kept on a stack, so the last destroyed ID becomes
 		///     the ID of the next created Entity.
 		///
-		///     Recovered IDs are stored in a queue to maximize the amount
-		///     of time between when an entity is destroyed and when its ID
-		///     is recycled. This is to give as much leeway as possible to
-		///     detect if an entity has been destroyed.
+		///     Recovered IDs are stored on a stack, so the last last destroyed
+		///     entity will be the next one created.
 		void Destroy( Entity::ID entityID );
 
 		/// @brief Checks if the specified Entity is currently alive.
@@ -50,8 +48,8 @@ namespace Gunship
 		static Entity::ID _idCounter;
 
 		Scene& _scene;
-		std::unordered_set< Entity::ID > _liveEntities;
-		std::deque< Entity::ID > _freeIDs;
+		Containers::EntitySet _liveEntities;
+		std::vector< Entity::ID > _freeIDs;
 
 		friend class Scene;
 

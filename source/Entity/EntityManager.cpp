@@ -10,7 +10,8 @@ namespace Gunship
 	Entity::ID EntityManager::_idCounter = 1;
 
 	EntityManager::EntityManager( Scene& scene )
-		: _scene( scene )
+		: _scene( scene ),
+		  _liveEntities( 1500 )
 	{
 	}
 
@@ -20,24 +21,24 @@ namespace Gunship
 
 		if ( !_freeIDs.empty() )
 		{
-			entityID = _freeIDs.front();
-			_freeIDs.pop_front();
+			entityID = _freeIDs.back();
+			_freeIDs.pop_back();
 		}
 		else
 		{
 			entityID  = _idCounter++;
 		}
 
-		_liveEntities.insert( entityID );
+		_liveEntities.Put( entityID );
 		return { entityID };
 	}
 
 	void EntityManager::Destroy( Entity::ID entityID )
 	{
-		SDL_assert_paranoid( _liveEntities.count( entityID ) );
+		SDL_assert_paranoid( _liveEntities.Contains( entityID ) );
 
 		// Free the ID.
-		_liveEntities.erase( entityID );
+		_liveEntities.Remove( entityID );
 		_freeIDs.push_back( entityID );
 
 		// Destroy all components associated with the entity.
