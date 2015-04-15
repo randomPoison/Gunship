@@ -146,10 +146,11 @@ namespace Gunship
 			transform.node->detachAllObjects();
 
 			// Move node back to root if it's not already there.
-			if ( transform.node->getParentSceneNode() != _scene.sceneManager().getRootSceneNode() )
+			Ogre::SceneNode* rootNode = _scene.sceneManager().getRootSceneNode();
+			if ( transform.node->getParentSceneNode() != rootNode )
 			{
 				transform.node->getParentSceneNode()->removeChild( transform.node );
-				_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
+				rootNode->addChild( transform.node );
 			}
 		}
 

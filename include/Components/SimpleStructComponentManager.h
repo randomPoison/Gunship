@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>        /// @todo Remove dependence on STL.
-#include <unordered_map> /// @todo Remove dependence on STL.
 
 #include <SDL_assert.h>
 
 #include "Entity/Entity.h"
 #include "Entity/ComponentManager.h"
+#include "Containers/EntityMap.h"
 
 #include "Utility/VectorHelpers.h"
 
@@ -24,6 +24,11 @@ namespace Gunship
 		: public ComponentManager< SimpleStructComponentManager< ComponentType > >
 	{
 	public:
+		SimpleStructComponentManager< ComponentType >()
+			: _indices( 1500 )
+		{
+		}
+
 		/// @brief Assigns one component to the entity, constructing it with arguments provided.
 		///
 		/// @note
@@ -38,14 +43,14 @@ namespace Gunship
 		template < typename... Args >
 		ComponentType& Assign( Entity::ID entityID, Args&&... args )
 		{
-			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
+			SDL_assert_paranoid( !_indices.Contains( entityID ) );
 
 			// Emplace new component into the components vector
 			_components.emplace_back( std::forward< Args >( args )... );
 			_components.back().entityID = entityID;
 
 			// Associate its ID with its index
-			_componentIndices[entityID] = _components.size() - 1;
+			_indices.Put( entityID, _components.size() - 1 );
 
 			return _components.back();
 		}
@@ -67,7 +72,10 @@ namespace Gunship
 
 		void DestroyAll( Entity::ID entityID ) override
 		{
-			Destroy( entityID );
+			if ( _indices.Contains( entityID ) )
+			{
+				Destroy( entityID );
+			}
 		}
 
 		void DestroyAllMarked() override
@@ -80,7 +88,7 @@ namespace Gunship
 				// already been marked, so if it doesn't exist here we
 				// can assume that it was marked twice and has already
 				// beend destroyed.
-				if ( _componentIndices.count( entityID ) )
+				if ( _indices.Contains( entityID ) )
 				{
 					DestroyImmediate( entityID );
 				}
@@ -92,9 +100,9 @@ namespace Gunship
 		/// @brief Retrieve a reference to the specified entity's component.
 		ComponentType& Get( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( _componentIndices.count( entityID ) );
+			SDL_assert_paranoid( _indices.Contains( entityID ) );
 
-			size_t index = _componentIndices[entityID];
+			size_t index = _indices.Get( entityID );
 
 			SDL_assert_paranoid( index < _components.size() );
 			SDL_assert_paranoid( _components[index].entityID == entityID );
@@ -109,7 +117,7 @@ namespace Gunship
 
 	private:
 		std::vector< ComponentType > _components;
-		std::unordered_map< Entity::ID, size_t > _componentIndices;
+		Containers::EntityMap< size_t > _indices;
 
 		std::vector< Entity::ID > _markedForDestruction;
 
@@ -124,9 +132,8 @@ namespace Gunship
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove the component to be destroyed from the index map.
-			auto iterator = _componentIndices.find( entityID );
-			size_t index = iterator->second;
-			_componentIndices.erase( iterator );
+			size_t index = _indices.Get( entityID );
+			_indices.Remove( entityID );
 
 			// If the component isn't at the end of the vector,
 			// swap the last component into the destroyed component's spot.
@@ -137,7 +144,7 @@ namespace Gunship
 				std::swap( _components[index], _components.back() );
 
 				// Put the moved component's index back in the map.
-				_componentIndices[_components[index].entityID] = index;
+				_indices.Put( _components[index].entityID, index );
 			}
 
 			// The marked component is now guaranteed to be at the end.
