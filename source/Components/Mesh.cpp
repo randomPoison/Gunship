@@ -19,7 +19,8 @@ namespace Gunship
 		//}
 
 		MeshManager::MeshManager( Scene& scene )
-			: _scene( scene )
+			: _scene( scene ),
+			  _indices( 1500 )
 		{
 		}
 
@@ -56,7 +57,7 @@ namespace Gunship
 			// Add it to the list of live meshes and add its index
 			// to the index map.
 			_meshes.push_back( mesh );
-			_indices.insert( { entityID, _meshes.size() - 1 } );
+			_indices.Put( entityID, _meshes.size() - 1 );
 
 			return _meshes.back();
 		}
@@ -86,7 +87,7 @@ namespace Gunship
 				// already been marked, so if it doesn't exist here we
 				// can assume that it was marked twice and has already
 				// beend destroyed.
-				if ( _indices.count( entityID ) )
+				if ( _indices.Contains( entityID ) )
 				{
 					DestroyImmediate( entityID );
 				}
@@ -99,9 +100,8 @@ namespace Gunship
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove the component to be destroyed from the index map.
-			auto iterator = _indices.find( entityID );
-			size_t index = iterator->second;
-			_indices.erase( iterator );
+			size_t index = _indices.Get( entityID );
+			_indices.Remove( entityID );
 
 			// Disable the mesh by detaching it from it's scene node.
 			Mesh& mesh = _meshes[index];
@@ -114,7 +114,7 @@ namespace Gunship
 			if ( index != _meshes.size() - 1 )
 			{
 				std::swap( _meshes[index], _meshes.back() );
-				_indices[_meshes[index].entityID] = index;
+				_indices.Get(_meshes[index].entityID) = index;
 			}
 
 			// Destroy the old component by popping it off the back.

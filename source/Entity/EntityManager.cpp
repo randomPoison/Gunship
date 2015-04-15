@@ -7,7 +7,7 @@
 
 namespace Gunship
 {
-	Entity::ID EntityManager::_idCounter = 0;
+	Entity::ID EntityManager::_idCounter = 1;
 
 	EntityManager::EntityManager( Scene& scene )
 		: _scene( scene )

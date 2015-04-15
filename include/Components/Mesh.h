@@ -1,10 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <unordered_map>
+#include <vector>        ///< @todo Remove dependence on STL containers.
+#include <unordered_map> ///< @todo Remove dependence on STL containers.
 
 #include "Entity/ComponentManager.h"
 #include "Components/SimpleStructComponent.h"
+#include "Containers/EntityMap.h"
 
 namespace Ogre
 {
@@ -31,6 +32,7 @@ namespace Gunship
 
 		class MeshManager : public ComponentManager< MeshManager >
 		{
+
 		public:
 			MeshManager( Scene& scene );
 
@@ -44,7 +46,8 @@ namespace Gunship
 			Scene& _scene;
 
 			std::vector< Mesh > _meshes;
-			std::unordered_map< Entity::ID, size_t > _indices;
+			std::vector< Entity::ID > _entities;
+			Containers::EntityMap< size_t > _indices;
 
 			std::vector< Entity::ID > _markedForDestruction;
 			std::unordered_map< Ogre::String, std::vector< Mesh > > _pooledMeshes;

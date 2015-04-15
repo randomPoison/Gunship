@@ -20,6 +20,10 @@ namespace Gunship
 		///     entities. Entity IDs are recycled, so the entity may have
 		///     the same ID as a previously created Entity, but only if
 		///     that Entity has since been destroyed.
+		///
+		///     Entity IDs are generated linearly starting at 1. 0 is used
+		///     as a sentinel value to mean "invalid entity", so no entity
+		///     may ever have the ID of 0.
 		Entity Create();
 
 		/// @brief Destroys an existing Entity.
