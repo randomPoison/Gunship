@@ -29,7 +29,8 @@ namespace Gunship {
 				size_t index = map( entityID );
 				
 				// linear probing to find open bucket
-				while ( _buckets[index].entityID )
+				while ( _buckets[index].entityID
+				     && _buckets[index].entityID != entityID )
 				{
 					index = ( index + 1 ) % _capactiy;
 				}

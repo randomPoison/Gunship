@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>        /// @todo Remove dependence on STL.
-#include <unordered_map> /// @todo Remove dependence on STL.
 
 #include <SDL_assert.h>
 
 #include "Entity/Entity.h"
 #include "Entity/ComponentManager.h"
+#include "Containers/EntityMap.h"
 
 #include "Utility/VectorHelpers.h"
 
@@ -25,6 +25,11 @@ namespace Gunship
 		: public ComponentManager< PooledComponentManager< ComponentType > >
 	{
 	public:
+		PooledComponentManager< ComponentType >()
+			: _indices( 1500 )
+		{
+		}
+
 		/// @brief Assigns one component to the entity, constructing or enabling it with arguments provided.
 		///
 		/// @details
@@ -42,7 +47,7 @@ namespace Gunship
 		template < typename... Args >
 		ComponentType& Assign( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
+			SDL_assert_paranoid( !_indices.Contains( entityID ) );
 
 			// If there are no pooled components create a new one.
 			if ( _liveCount == _components.size() )
@@ -57,7 +62,7 @@ namespace Gunship
 			Enable( entityID, component );
 
 			// Add its index to the index map.
-			_componentIndices[entityID] = _liveCount - 1;
+			_indices.Put( entityID, _liveCount - 1 );
 
 			return component;
 		}
@@ -92,7 +97,7 @@ namespace Gunship
 				// already been marked, so if it doesn't exist here we
 				// can assume that it was marked twice and has already
 				// beend destroyed.
-				if ( _componentIndices.count( entityID ) )
+				if ( _indices.Contains( entityID ) )
 				{
 					DestroyImmediate( entityID );
 				}
@@ -104,9 +109,9 @@ namespace Gunship
 		/// @brief Retrieve a reference to the specified entity's component.
 		ComponentType& Get( Entity::ID entityID )
 		{
-			SDL_assert_paranoid( _componentIndices.count( entityID ) );
+			SDL_assert_paranoid( _indices.Contains( entityID ) );
 
-			size_t index = _componentIndices[entityID];
+			size_t index = _indices.Get( entityID );
 
 			SDL_assert_paranoid( index < _components.size() );
 			SDL_assert_paranoid( _components[index].entityID == entityID );
@@ -140,7 +145,7 @@ namespace Gunship
 	private:
 		std::vector< ComponentType > _components;
 		size_t _liveCount = 0;
-		std::unordered_map< Entity::ID, size_t > _componentIndices;
+		Containers::EntityMap< size_t > _indices;
 
 		std::vector< Entity::ID > _markedForDestruction;
 
@@ -159,9 +164,11 @@ namespace Gunship
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove it from the index map.
-			auto iterator = _componentIndices.find( entityID );
-			size_t index = iterator->second;
-			_componentIndices.erase( iterator );
+			size_t index = _indices.Get( entityID );
+			_indices.Remove( entityID );
+
+			// Make sure we actually have the right index, EntityMap is still a WIP.
+			SDL_assert_paranoid( _components[index].entityID == entityID );
 
 			// If the component isn't the last live one, swap the
 			// last live component into the destroyed component's spot.
@@ -172,7 +179,7 @@ namespace Gunship
 				std::swap( _components[index], _components[_liveCount - 1] );
 
 				// Put the moved component's index back in the map.
-				_componentIndices[_components[index].entityID] = index;
+				_indices.Put( _components[index].entityID, index );
 			}
 
 			// Decrease the live count, effectively marking the
@@ -182,7 +189,7 @@ namespace Gunship
 			// Do the callback to disable the component.
 			Disable( _components[_liveCount] );
 
-			SDL_assert_paranoid( !_componentIndices.count( entityID ) );
+			SDL_assert_paranoid( !_indices.Contains( entityID ) );
 		}
 	};
 }
