@@ -25,7 +25,6 @@ namespace Gunship
 	{
 	public:
 		SimpleStructComponentManager< ComponentType >()
-			: _indices( 1500 )
 		{
 		}
 

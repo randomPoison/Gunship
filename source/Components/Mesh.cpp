@@ -19,8 +19,7 @@ namespace Gunship
 		//}
 
 		MeshManager::MeshManager( Scene& scene )
-			: _scene( scene ),
-			  _indices( 1500 )
+			: _scene( scene )
 		{
 		}
 

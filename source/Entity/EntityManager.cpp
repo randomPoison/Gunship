@@ -11,7 +11,7 @@ namespace Gunship
 
 	EntityManager::EntityManager( Scene& scene )
 		: _scene( scene ),
-		  _liveEntities( 1500 )
+		  _liveEntities( 10000 )
 	{
 	}
 

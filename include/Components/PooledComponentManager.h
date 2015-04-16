@@ -26,7 +26,6 @@ namespace Gunship
 	{
 	public:
 		PooledComponentManager< ComponentType >()
-			: _indices( 1500 )
 		{
 		}
 
