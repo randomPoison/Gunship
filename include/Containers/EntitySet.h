@@ -20,9 +20,14 @@ namespace Gunship
 			Entity::ID* _buckets;
 			size_t _capacity;
 			size_t _count;
+			size_t _itemsUntilRehash;
 
 			size_t Map( Entity::ID entityID );
 			size_t Hash( Entity::ID entityID );
+
+			void Rehash();
+
+			static Entity::ID* Allocate( size_t capacity );
 		};
 	}
 }

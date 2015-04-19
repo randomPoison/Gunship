@@ -32,9 +32,8 @@ namespace Gunship {
 
 			void Put( Entity::ID entityID, Element element )
 			{
-				size_t index = Map( entityID );
-				
 				// Linear probing to find open bucket.
+				size_t index = Map( entityID );
 				while ( _buckets[index].entityID
 				     && _buckets[index].entityID != entityID )
 				{
@@ -74,9 +73,8 @@ namespace Gunship {
 
 			void Remove( Entity::ID entityID )
 			{
-				size_t index = Map( entityID );
-				
 				// Linear probing to find open bucket.
+				size_t index = Map( entityID );
 				while ( _buckets[index].entityID != entityID )
 				{
 					index = ( index + 1 ) % _capacity;
