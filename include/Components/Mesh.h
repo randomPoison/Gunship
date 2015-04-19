@@ -1,11 +1,11 @@
 #pragma once
 
-#include <vector>        ///< @todo Remove dependence on STL containers.
 #include <unordered_map> ///< @todo Remove dependence on STL containers.
 
 #include "Entity/ComponentManager.h"
 #include "Components/SimpleStructComponent.h"
 #include "Containers/EntityMap.h"
+#include "Containers/FastArray.h"
 
 namespace Ogre
 {
@@ -27,7 +27,7 @@ namespace Gunship
 		struct Mesh : public SimpleStructComponent
 		{
 			Ogre::Entity* mesh;
-			std::vector< Mesh >* meshPool; ///< @todo This shouldn't be necessary, find a way to get rid of it. Also, it shouldn't be null so maybe a pointer isn't a good idea?
+			Containers::FastArray< Mesh >* meshPool; ///< @todo This shouldn't be necessary, find a way to get rid of it. Also, it shouldn't be null so maybe a pointer isn't a good idea?
 		};
 
 		class MeshManager : public ComponentManager< MeshManager >
@@ -40,17 +40,17 @@ namespace Gunship
 
 			void Destroy( Entity::ID entityID );
 
-			const std::vector< Mesh > components() const;
+			const Containers::FastArray< Mesh > components() const;
 
 		private:
 			Scene& _scene;
 
-			std::vector< Mesh > _meshes;
-			std::vector< Entity::ID > _entities;
+			Containers::FastArray< Mesh > _meshes;
+			Containers::FastArray< Entity::ID > _entities;
 			Containers::EntityMap< size_t > _indices;
 
-			std::vector< Entity::ID > _markedForDestruction;
-			std::unordered_map< Ogre::String, std::vector< Mesh > > _pooledMeshes;
+			Containers::FastArray< Entity::ID > _markedForDestruction;
+			std::unordered_map< Ogre::String, Containers::FastArray< Mesh > > _pooledMeshes;
 
 			void DestroyAll( Entity::ID entityID ) override;
 			void DestroyAllMarked() override;
