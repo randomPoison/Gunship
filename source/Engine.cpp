@@ -197,9 +197,9 @@ void Gunship::Engine::Start()
 			startTime = ticks;
 			elapsedFrames = 0;
 
-			printf( "Transforms:\t%lu\n", _currentScene->componentManager< Components::TransformManager >().components().size() );
-			printf( "Cameras:\t%lu\n", _currentScene->componentManager< Components::CameraManager >().components().size() );
-			printf( "Meshes:\t\t%lu\n", _currentScene->componentManager< Components::MeshManager >().components().size() );
+			printf( "Transforms:\t%lu\n", _currentScene->componentManager< Components::TransformManager >().components().count() );
+			printf( "Cameras:\t%lu\n", _currentScene->componentManager< Components::CameraManager >().components().count() );
+			printf( "Meshes:\t\t%lu\n", _currentScene->componentManager< Components::MeshManager >().components().count() );
 			// TODO figure out how many behaviors there are.
 			std::cout << std::endl;
 		}

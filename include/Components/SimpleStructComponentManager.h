@@ -1,14 +1,11 @@
 #pragma once
 
-#include <vector>        /// @todo Remove dependence on STL.
-
 #include <SDL_assert.h>
 
 #include "Entity/Entity.h"
 #include "Entity/ComponentManager.h"
 #include "Containers/EntityMap.h"
-
-#include "Utility/VectorHelpers.h"
+#include "Containers/FastArray.h"
 
 namespace Gunship
 {
@@ -45,13 +42,13 @@ namespace Gunship
 			SDL_assert_paranoid( !_indices.Contains( entityID ) );
 
 			// Emplace new component into the components vector
-			_components.emplace_back( std::forward< Args >( args )... );
-			_components.back().entityID = entityID;
+			auto& element = _components.Push( ComponentType( std::forward< Args >( args )... ) );
+			element.entityID = entityID;
 
 			// Associate its ID with its index
-			_indices.Put( entityID, _components.size() - 1 );
+			_indices.Put( entityID, _components.count() - 1 );
 
-			return _components.back();
+			return element;
 		}
 
 		/// @brief Marks the entity's associated component for destruction.
@@ -66,7 +63,7 @@ namespace Gunship
 		///     have an associated component.
 		void Destroy( Entity::ID entityID )
 		{
-			_markedForDestruction.push_back( entityID );
+			_markedForDestruction.Push( entityID );
 		}
 
 		void DestroyAll( Entity::ID entityID ) override
@@ -93,7 +90,7 @@ namespace Gunship
 				}
 			}
 
-			_markedForDestruction.clear();
+			_markedForDestruction.Clear();
 		}
 
 		/// @brief Retrieve a reference to the specified entity's component.
@@ -103,22 +100,22 @@ namespace Gunship
 
 			size_t index = _indices.Get( entityID );
 
-			SDL_assert_paranoid( index < _components.size() );
+			SDL_assert_paranoid( index < _components.count() );
 			SDL_assert_paranoid( _components[index].entityID == entityID );
 
 			return _components[index];
 		}
 
-		const std::vector< ComponentType >& components() const
+		const Containers::FastArray< ComponentType >& components() const
 		{
 			return _components;
 		}
 
 	private:
-		std::vector< ComponentType > _components;
+		Containers::FastArray< ComponentType > _components;
 		Containers::EntityMap< size_t > _indices;
 
-		std::vector< Entity::ID > _markedForDestruction;
+		Containers::FastArray< Entity::ID > _markedForDestruction;
 
 		/// @brief Destroys the component associated with the given Entity.
 		///
@@ -137,10 +134,10 @@ namespace Gunship
 			// If the component isn't at the end of the vector,
 			// swap the last component into the destroyed component's spot.
 			// Otherwise we can just pop the end of the vector.
-			if ( index != _components.size() - 1 )
+			if ( index != _components.count() - 1 )
 			{
 				// Swap the positions of the two components
-				std::swap( _components[index], _components.back() );
+				std::swap( _components[index], _components.Peek() );
 
 				// Put the moved component's index back in the map.
 				_indices.Put( _components[index].entityID, index );
@@ -148,7 +145,7 @@ namespace Gunship
 
 			// The marked component is now guaranteed to be at the end.
 			// Pop the last element to destroy it.
-			_components.pop_back();
+			_components.Pop();
 		}
 	};
 }

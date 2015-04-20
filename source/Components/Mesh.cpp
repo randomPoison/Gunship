@@ -26,9 +26,11 @@ MeshManager::MeshManager( Scene& scene )
 
 Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 {
+	Ogre::String nameString( meshName );
+
 	// ensure that there is a vector for the current ID
 	FastArray< Mesh >& meshPool =
-		_pooledMeshes.insert( { meshName, FastArray< Mesh >() } ).first->second;
+		_pooledMeshes.emplace( nameString, 0 ).first->second;
 
 	// Retrieve or create a mesh to use.
 	Mesh mesh;
@@ -42,7 +44,7 @@ Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 	else
 	{
 		// Create new mesh.
-		Ogre::Entity* meshEntity = _scene.sceneManager().createEntity( meshName );
+		Ogre::Entity* meshEntity = _scene.sceneManager().createEntity( nameString );
 		mesh.entityID = entityID;
 		mesh.mesh = meshEntity;
 		mesh.meshPool = &meshPool;

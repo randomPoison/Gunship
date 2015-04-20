@@ -1,14 +1,11 @@
 #pragma once
 
-#include <vector>        /// @todo Remove dependence on STL.
-
 #include <SDL_assert.h>
 
 #include "Entity/Entity.h"
 #include "Entity/ComponentManager.h"
 #include "Containers/EntityMap.h"
-
-#include "Utility/VectorHelpers.h"
+#include "Containers/FastArray.h"
 
 namespace Gunship
 {
@@ -49,14 +46,14 @@ namespace Gunship
 			SDL_assert_paranoid( !_indices.Contains( entityID ) );
 
 			// If there are no pooled components create a new one.
-			if ( _liveCount == _components.size() )
+			if ( _liveCount == _components.count() )
 			{
-				_components.push_back( Construct( entityID ) );
+				_components.Push( Construct( entityID ) );
 			}
 
 			// Assign the first pooled component with the entity and enable it.
 			++_liveCount;
-			ComponentType& component = _components[_liveCount - 1];
+			ComponentType& component = _components.Peek();
 			component.entityID = entityID;
 			Enable( entityID, component );
 
@@ -78,7 +75,7 @@ namespace Gunship
 		///     have an associated component.
 		void Destroy( Entity::ID entityID )
 		{
-			_markedForDestruction.push_back( entityID );
+			_markedForDestruction.Push( entityID );
 		}
 
 		void DestroyAll( Entity::ID entityID ) override
@@ -102,7 +99,7 @@ namespace Gunship
 				}
 			}
 
-			_markedForDestruction.clear();
+			_markedForDestruction.Clear();
 		}
 
 		/// @brief Retrieve a reference to the specified entity's component.
@@ -112,13 +109,13 @@ namespace Gunship
 
 			size_t index = _indices.Get( entityID );
 
-			SDL_assert_paranoid( index < _components.size() );
+			SDL_assert_paranoid( index < _components.count() );
 			SDL_assert_paranoid( _components[index].entityID == entityID );
 
 			return _components[index];
 		}
 
-		const std::vector< ComponentType >& components() const
+		const Containers::FastArray< ComponentType >& components() const
 		{
 			return _components;
 		}
@@ -142,11 +139,11 @@ namespace Gunship
 		virtual void Destruct( ComponentType& component ) = 0;
 
 	private:
-		std::vector< ComponentType > _components;
+		Containers::FastArray< ComponentType > _components;
 		size_t _liveCount = 0;
 		Containers::EntityMap< size_t > _indices;
 
-		std::vector< Entity::ID > _markedForDestruction;
+		Containers::FastArray< Entity::ID > _markedForDestruction;
 
 		/// @brief Returns the component associated with the given Entity back to the pool.
 		///
