@@ -2,12 +2,13 @@ cmake_minimum_required(VERSION 2.8.12)
 
 include(ExternalProject)
 
-function(source_group_setup ALL_FILES)
-	foreach(FILE ${ALL_FILES})
-		get_filename_component(PARENT_DIR "${FILE}" PATH)
+function(source_group_setup PROJECT_ROOT)
+	foreach(FILE ${ARGN})
+		get_filename_component(FILE_DIR "${FILE}" DIRECTORY)
 
 		# skip src or include and changes /'s to \\'s
-		string(REGEX REPLACE "(\\./)?(src|include)/?" "" GROUP "${PARENT_DIR}")
+		string(REPLACE "${PROJECT_ROOT}" "" FILE_DIR "${FILE_DIR}")
+		string(REGEX REPLACE "(\\./)?(source|include)/?" "" GROUP "${FILE_DIR}")
 		string(REPLACE "/" "\\" GROUP "${GROUP}")
 
 		# group into "Source Files" and "Header Files"
@@ -42,12 +43,6 @@ set(GUNSHIP_BUILD_EXE ON
 # Include path for additional CMake library finding scripts
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(ENTITYX_DT_TYPE float CACHE STRING "The type used for delta time in EntityX update methods.")
-set(ENTITYX_BUILD_SHARED OFF CACHE BOOL "Build shared libraries?")
-set(ENTITYX_INSTALL_TARGET OFF CACHE BOOL "Create the install target?")
-add_subdirectory(external/entityx)
-list(APPEND LIBS entityx)
-
 set(SDL2_BUILDING_LIBRARY true)
 find_package(SDL2 REQUIRED)
 list(APPEND LIBS ${SDL2_LIBRARY})
@@ -61,8 +56,7 @@ add_definitions(-DOGRE_PLUGIN_DIR_DBG="${OGRE_PLUGIN_DIR_DBG}")
 # The project's include directories
 set(GUNSHIP_EXTERNAL_INCLUDES
     ${SDL2_INCLUDE_DIR}
-    ${OGRE_INCLUDE_DIRS}
-    external/entityx)
+    ${OGRE_INCLUDE_DIRS})
 
 set(GUNSHIP_INCLUDE_DIR
     include)
@@ -87,15 +81,15 @@ set(LIBGUNSHIP_SOURCES ${PROJECT_SOURCES} ${PROJECT_INCLUDES})
 list(REMOVE_ITEM LIBGUNSHIP_SOURCES ${GUNSHIP_EXE_SOURCES})
 
 # setup VS filters (and I guess it also does something for XCode?)
-source_group_setup(PROJECT_SORCES)
-source_group_setup(PROJECT_INCLUDES)
+source_group_setup(${CMAKE_CURRENT_SOURCE_DIR} ${LIBGUNSHIP_SOURCES})
 
 # Create static library target
 add_library(LibGunship STATIC ${LIBGUNSHIP_SOURCES})
-add_dependencies(LibGunship entityx)
 target_link_libraries(LibGunship ${LIBS})
 target_include_directories(LibGunship PUBLIC ${GUNSHIP_INCLUDE_DIR})
 target_include_directories(LibGunship SYSTEM PUBLIC ${GUNSHIP_EXTERNAL_INCLUDES})
+target_compile_definitions(LibGunship
+                           PUBLIC -DSDL_ASSERT_LEVEL=3) #for now we're just going to do maximum assert level
 
 # Now create the default executable
 if(${GUNSHIP_BUILD_EXE})

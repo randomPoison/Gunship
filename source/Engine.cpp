@@ -8,6 +8,9 @@
 
 #include "Engine.h"
 #include "Scene.h"
+#include "Components/Transform.h"
+#include "Components/Camera.h"
+#include "Components/Mesh.h"
 
 Gunship::Engine::Engine() :
 	_window( nullptr ),
@@ -194,7 +197,9 @@ void Gunship::Engine::Start()
 			startTime = ticks;
 			elapsedFrames = 0;
 
-			//printf( "Game Objects:\t%lu\n", currentScene->gameObjects.size() );
+			printf( "Transforms:\t%lu\n", _currentScene->componentManager< Components::TransformManager >().components().count() );
+			printf( "Cameras:\t%lu\n", _currentScene->componentManager< Components::CameraManager >().components().count() );
+			printf( "Meshes:\t\t%lu\n", _currentScene->componentManager< Components::MeshManager >().components().count() );
 			// TODO figure out how many behaviors there are.
 			std::cout << std::endl;
 		}

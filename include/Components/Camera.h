@@ -1,12 +1,10 @@
 #pragma once
 
-#include <entityx/Entity.h>
-
-#include "Components/Transform.h"
+#include "Components/SimpleStructComponent.h"
+#include "Components/SimpleStructComponentManager.h"
 
 namespace Ogre
 {
-	class SceneManager;
 	class Camera;
 }
 
@@ -16,6 +14,8 @@ namespace Gunship
 
 	namespace Components
 	{
+		struct Transform;
+
 		/**
 		 * @brief Component representing a camera in the rendering system.
 		 *
@@ -28,11 +28,24 @@ namespace Gunship
 		 *     but at this point it works. This should be revisited once Gunship and
 		 *     Ogre 2.0 are more mature.
 		 */
-		struct Camera : entityx::Component< Camera >
+		struct Camera : public SimpleStructComponent
 		{
 			Ogre::Camera* camera;
 
-			Camera( const Scene& scene, Components::Transform::Handle transform, const char* cameraName = "Camera" );
+			Camera( const Scene& scene, Transform& transform, const char* cameraName = "Camera" );
+		};
+
+		class CameraManager : public SimpleStructComponentManager< Camera >
+		{
+		public:
+			CameraManager( Scene& scene );
+
+			Camera& Assign( Entity::ID entity );
+
+		private:
+			Scene& _scene;
+
+			using SimpleStructComponentManager< Camera >::Assign;
 		};
 	}
 }

@@ -1,6 +1,6 @@
-#include "System.h"
+#include "Entity/System.h"
 
-Gunship::SystemBase::Family Gunship::SystemBase::familyCounter = 0;
+Gunship::SystemBase::ID Gunship::SystemBase::idCounter = 0;
 
 Gunship::SystemBase::~SystemBase()
 {

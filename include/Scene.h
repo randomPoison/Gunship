@@ -1,8 +1,11 @@
 #pragma once
 
-#include <entityx/Entity.h>
+#include <unordered_map> ///< @todo remove STL dependency
+#include <memory>      ///< @todo remove STL dependency
 
-#include "SystemManager.h"
+#include "Entity/SystemManager.h"
+#include "Entity/EntityManager.h"
+#include "Entity/ComponentManager.h"
 
 namespace Ogre
 {
@@ -27,13 +30,33 @@ namespace Gunship
 		{
 			_behaviorSystems.Add< S >();
 		}
-		entityx::Entity CreateGameObject();
+
+		/// @brief Register the provided ComponentManager object with the scene.
+		///
+		/// @details
+		///     The ComponentManager object provided must inherit from ComponentManagerBase.
+		///
+		/// @todo
+		///     As per essential c++'s recommendation, change this method to take a
+		///     std::shared_ptr rather than a raw pointer for the sake of exception safety.
+		template< typename ComponentManager >
+		void RegisterComponentManager( ComponentManager* componentManager )
+		{
+			_RegisterComponentManager( componentManager, ComponentManager::id() );
+		}
+
+		template< typename ComponentManager >
+		ComponentManager& componentManager()
+		{
+			return static_cast< ComponentManager& >( _componentManager( ComponentManager::id() ) );
+		}
 
 		Engine& engine() const;
 		Ogre::Root& ogreRoot() const;
 		Ogre::RenderWindow& renderWindow() const;
 		Ogre::SceneManager& sceneManager() const;
-		entityx::EntityManager& entities();
+		EntityManager& entities();
+		SystemManager< BehaviorSystemBase >& behaviors();
 
 	private:
 		Engine* _engine;
@@ -41,19 +64,31 @@ namespace Gunship
 		Ogre::RenderWindow* _renderWindow;
 		Ogre::SceneManager* _sceneManager;
 
-		entityx::EntityManager _entities;
+		EntityManager _entities;
 		SystemManager< DefaultSystemBase > _coreSystems;
 		SystemManager< BehaviorSystemBase > _behaviorSystems;
 
-		friend class Engine;
+		std::vector< std::shared_ptr< ComponentManagerBase > > _componentManagers;
 
-		/**
-		 * @brief Update all the running systems.
-		 *
-		 * @details
-		 *     This is called by the Engine as part of the normal frame loop,
-		 *     and is not accessible to client code.
-		 */
+		friend class Engine;
+		friend class EntityManager;
+
+		/// @brief Update all the running systems.
+		///
+		/// @details
+		///     This is called by the Engine as part of the normal frame loop,
+		///     and is not accessible to client code.
 		void Update( float delta );
+
+		/// @brief Retrieves a reference to the ComponentManagerBase with the specified ID.
+		///
+		/// @details
+		///     To reduce the cost of recompiling generic code this provides the bulk
+		///     of the work to retrive a reference to a component manager. The
+		///     templated version simply provides a wrapper that automatically
+		///     retrieves the ID and typecasts the result.
+		ComponentManagerBase& _componentManager( ComponentManagerBase::ID id );
+
+		void _RegisterComponentManager( ComponentManagerBase* manager, ComponentManagerBase::ID id );
 	};
 }

@@ -8,30 +8,6 @@ namespace Gunship
 {
 	namespace Components
 	{
-		Transform::Transform( const Scene& scene,
-									   Vector3 position,
-									   Quaternion orientation,
-									   Vector3 scale )
-			: node( nullptr )
-		{
-			Ogre::SceneManager& sceneManager = scene.sceneManager();
-			node = sceneManager.createSceneNode();
-			sceneManager.getRootSceneNode()->addChild( node );
-			node->setPosition( position );
-			node->setOrientation( orientation );
-			node->setScale( scale );
-		}
-
-		Transform::~Transform()
-		{
-			node->detachAllObjects();
-			if ( node->getParentSceneNode() != nullptr )
-			{
-				node->getParentSceneNode()->removeChild( node );
-			}
-			node->getCreator()->destroySceneNode( node );
-		}
-
 		Vector3 Transform::position()
 		{
 			return node->getPosition();
@@ -139,7 +115,7 @@ namespace Gunship
 		}
 
 
-		void Transform::AddChild( Transform::Handle child )
+		void Transform::AddChild( Transform* child )
 		{
 			// make sure new node isn't already a child of another node
 			if ( child->node->getParentSceneNode() != nullptr )
@@ -150,7 +126,7 @@ namespace Gunship
 			node->addChild( child->node );
 		}
 
-		void Transform::RemoveChild( Transform::Handle child )
+		void Transform::RemoveChild( Transform* child )
 		{
 			node->removeChild( child->node );
 		}
@@ -158,6 +134,42 @@ namespace Gunship
 		void Transform::RemoveAllChildren()
 		{
 			node->removeAllChildren();
+		}
+
+		TransformManager::TransformManager( Scene& scene )
+			: _scene( scene )
+		{
+		}
+
+		void TransformManager::Disable( Transform& transform )
+		{
+			transform.node->detachAllObjects();
+
+			// Move node back to root if it's not already there.
+			Ogre::SceneNode* rootNode = _scene.sceneManager().getRootSceneNode();
+			if ( transform.node->getParentSceneNode() != rootNode )
+			{
+				transform.node->getParentSceneNode()->removeChild( transform.node );
+				rootNode->addChild( transform.node );
+			}
+		}
+
+		void TransformManager::Enable( Entity::ID entityID, Transform& transform )
+		{
+			//_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
+		}
+
+		Transform TransformManager::Construct( Entity::ID entityID )
+		{
+			Transform transform;
+			transform.node = _scene.sceneManager().createSceneNode();
+			_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
+			return transform;
+		}
+
+		void TransformManager::Destruct( Transform& transform )
+		{
+			transform.node->getCreator()->destroySceneNode( transform.node );
 		}
 	}
 }

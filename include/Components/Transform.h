@@ -1,7 +1,7 @@
 #pragma once
 
-#include <entityx/Entity.h>
-
+#include "Components/PooledComponentManager.h"
+#include "Components/SimpleStructComponent.h"
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
 
@@ -16,48 +16,28 @@ namespace Gunship
 
 	namespace Components
 	{
-		/**
-		 * @brief Component for representing the position, rotation, and scale of an object.
-		 *
-		 * @details
-		 *    The Transform component contains the local position, rotation,
-		 *    and scale, and allows retrieval of the transform in world-space.
-		 *
-		 * @remark
-		 *     This component wraps a reference to an Ogre::SceneNode since
-		 *     we let Ogre manage the scene graph for us at this point.
-		 *     This may change as things go forward.
-		 */
-		struct Transform : public entityx::Component< Transform >
+		/// @brief Component for representing the position, rotation, and scale of an object.
+		///
+		/// @details
+		///    The Transform component contains the local position, rotation,
+		///    and scale, and allows retrieval of the transform in world-space.
+		///
+		/// @remark
+		///     This component wraps a reference to an Ogre::SceneNode since
+		///     we let Ogre manage the scene graph for us at this point.
+		///     This may change as things go forward.
+		struct Transform : public SimpleStructComponent
 		{
+		public:
 			Ogre::SceneNode* node;
 
-			/**
-			 * @brief Constructs a transform component.
-			 *
-			 * @param scene
-			 *     The scene in which this transform is active. Note: We
-			 *     should eventually be able to remove the need to explicitly
-			 *     pass in the scene, since you have to go through the scene
-			 *     to create the component in the first place.
-			 *
-			 * @param position
-			 *     The position of the transform. Defaults to zero (object
-			 *     is at local origin).
-			 *
-			 * @param orientation
-			 *     The starting orientation of the transform. Defaults to
-			 *     identity (no rotation).
-			 *
-			 * @param scale
-			 *     The starting scale of the transform. Defaults to no scale.
-			 */
-			Transform( const Scene& scene,
-			           Vector3 position = Vector3::ZERO,
-			           Quaternion orientation = Quaternion::IDENTITY,
-			           Vector3 scale = Vector3::UNIT_SCALE );
-
-			~Transform();
+			/// @brief Constructs a transform component.
+			///
+			/// @param scene
+			///     The scene in which this transform is active. Note: We
+			///     should eventually be able to remove the need to explicitly
+			///     pass in the scene, since you have to go through the scene
+			///     to create the component in the first place
 
 			Vector3 position();
 			void position( float x, float y, float z );
@@ -85,9 +65,25 @@ namespace Gunship
 			void SetScale( float x, float y, float z );
 			void SetScale( Vector3 scale );
 
-			void AddChild( Transform::Handle child );
-			void RemoveChild( Transform::Handle child );
+			void AddChild( Transform* child );
+			void RemoveChild( Transform* child );
 			void RemoveAllChildren();
+		};
+
+		class TransformManager : public PooledComponentManager< Transform >
+		{
+		public:
+			typedef PooledComponentManager< Transform > base;
+
+			TransformManager( Scene& scene );
+
+		private:
+			Scene& _scene;
+
+			void Disable( Transform& transform ) override;
+			void Enable( Entity::ID entityID, Transform& transform ) override;
+			Transform Construct( Entity::ID entityID ) override;
+			void Destruct( Transform& transform ) override;
 		};
 	}
 }

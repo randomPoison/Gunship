@@ -70,7 +70,7 @@ namespace Gunship
 				}
 				break;
 			case SDL_KEYUP:
-				Utility::EraseIfPresent( downKeys, event.key.keysym.scancode );
+				VectorHelpers::EraseIfPresent( downKeys, event.key.keysym.scancode );
 				releasedKeys.push_back( event.key.keysym.scancode );
 				break;
 			case SDL_JOYAXISMOTION:
@@ -90,7 +90,7 @@ namespace Gunship
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
-				Utility::EraseIfPresent( downMouseButtons, event.button.button );
+				VectorHelpers::EraseIfPresent( downMouseButtons, event.button.button );
 				releasedMousebuttons.push_back( event.button.button );
 				break;
 			}
