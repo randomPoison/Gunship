@@ -64,6 +64,12 @@ Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 	return _meshes.Peek();
 }
 
+Mesh& MeshManager::Get( Entity::ID entityID )
+{
+	size_t index = _indices.Get( entityID );
+	return _meshes[index];
+}
+
 void MeshManager::Destroy( Entity::ID entityID )
 {
 	_markedForDestruction.Push( entityID );

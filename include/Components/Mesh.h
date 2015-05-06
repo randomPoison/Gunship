@@ -38,6 +38,8 @@ namespace Gunship
 
 			Mesh& Assign( Entity::ID entityID, const char* meshName );
 
+			Mesh& Get( Entity::ID entityID );
+
 			void Destroy( Entity::ID entityID );
 
 			const Containers::FastArray< Mesh > components() const;

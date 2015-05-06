@@ -111,6 +111,16 @@ namespace Gunship
 			return _components;
 		}
 
+		ComponentType* begin()
+		{
+			return _components.begin();
+		}
+
+		ComponentType* end()
+		{
+			return _components.end();
+		}
+
 	private:
 		Containers::FastArray< ComponentType > _components;
 		Containers::EntityMap< size_t > _indices;
