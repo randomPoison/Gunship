@@ -19,25 +19,25 @@ namespace Gunship
 			delete[] _buckets;
 		}
 
-		void EntitySet::Put( Entity::ID entityID )
+		void EntitySet::Put( Entity entity )
 		{
 			// Linear probing to find open bucket.
-			size_t index = Map( entityID );
+			size_t index = Map( entity );
 			while ( _buckets[index]
-			     && _buckets[index] != entityID )
+			     && _buckets[index] != entity )
 			{
 				index = ( index + 1 ) % _capacity;
 			}
 
 			// If we're not overwriting an existing value, increase
 			// the count and decrease items until rehash.
-			if ( _buckets[index] != entityID )
+			if ( _buckets[index] != entity )
 			{
 				_count += 1;
 				_itemsUntilRehash -= 1;
 			}
 
-			_buckets[index] = entityID;
+			_buckets[index] = entity;
 
 			// If no more items until rehash perform the rehash.
 			if ( _itemsUntilRehash == 0 )
@@ -46,45 +46,45 @@ namespace Gunship
 			}
 		}
 
-		void EntitySet::Remove( Entity::ID entityID )
+		void EntitySet::Remove( Entity entity )
 		{
 			// Linear probing to find open bucket.
-			size_t index = Map( entityID );
-			while ( _buckets[index] != entityID )
+			size_t index = Map( entity );
+			while ( _buckets[index] != entity )
 			{
 				index = ( index + 1 ) % _capacity;
 			}
 
 			// Zeroing-out the entity ID effectively removes the element.
-			_buckets[index] = 0;
+			_buckets[index].id = 0;
 
 			// Adjust count and items until rehash.
 			_count -= 1;
 			_itemsUntilRehash += 1;
 		}
 
-		bool EntitySet::Contains( Entity::ID entityID )
+		bool EntitySet::Contains( Entity entity )
 		{
-			size_t index = Map( entityID );
+			size_t index = Map( entity );
 
 			// Linear probing to find open bucket.
 			while ( _buckets[index]
-			      && _buckets[index] != entityID )
+			      && _buckets[index] != entity )
 			{
 				index = ( index + 1 ) % _capacity;
 			}
 
-			return _buckets[index] == entityID;
+			return _buckets[index] == entity;
 		}
 
-		size_t EntitySet::Map( Entity::ID entityID )
+		size_t EntitySet::Map( Entity entity )
 		{
-			return Hash( entityID ) % _capacity;
+			return Hash( entity ) % _capacity;
 		}
 
-		size_t EntitySet::Hash( Entity::ID entityID )
+		size_t EntitySet::Hash( Entity entity )
 		{
-			return entityID;
+			return entity;
 		}
 
 		void EntitySet::Rehash()
@@ -94,7 +94,7 @@ namespace Gunship
 			size_t oldCapacity = _capacity;
 			_capacity *= 2;
 
-			Entity::ID* oldBuckets = _buckets;
+			Entity* oldBuckets = _buckets;
 			_buckets = Allocate( _capacity );
 
 			// Reset count and elements until rehash so that
@@ -115,10 +115,10 @@ namespace Gunship
 			std::free( oldBuckets );
 		}
 
-		Entity::ID* EntitySet::Allocate( size_t capacity )
+		Entity* EntitySet::Allocate( size_t capacity )
 		{
-			void* rawBytes = std::calloc( capacity, sizeof( Entity::ID ) );
-			return static_cast< Entity::ID* >( rawBytes );
+			void* rawBytes = std::calloc( capacity, sizeof( Entity ) );
+			return static_cast< Entity* >( rawBytes );
 		}
 	}
 }

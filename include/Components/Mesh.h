@@ -36,11 +36,11 @@ namespace Gunship
 		public:
 			MeshManager( Scene& scene );
 
-			Mesh& Assign( Entity::ID entityID, const char* meshName );
+			Mesh& Assign( Entity entity, const char* meshName );
 
-			Mesh& Get( Entity::ID entityID );
+			Mesh& Get( Entity entity );
 
-			void Destroy( Entity::ID entityID );
+			void Destroy( Entity entity );
 
 			const Containers::FastArray< Mesh > components() const;
 
@@ -48,16 +48,16 @@ namespace Gunship
 			Scene& _scene;
 
 			Containers::FastArray< Mesh > _meshes;
-			Containers::FastArray< Entity::ID > _entities;
+			Containers::FastArray< Entity > _entities;
 			Containers::EntityMap< size_t > _indices;
 
-			Containers::FastArray< Entity::ID > _markedForDestruction;
+			Containers::FastArray< Entity > _markedForDestruction;
 			std::unordered_map< Ogre::String, Containers::FastArray< Mesh > > _pooledMeshes;
 
-			void DestroyAll( Entity::ID entityID ) override;
+			void DestroyAll( Entity entity ) override;
 			void DestroyAllMarked() override;
 
-			void DestroyImmediate( Entity::ID entityID );
+			void DestroyImmediate( Entity entity );
 		};
 	}
 }

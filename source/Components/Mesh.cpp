@@ -24,7 +24,7 @@ MeshManager::MeshManager( Scene& scene )
 {
 }
 
-Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
+Mesh& MeshManager::Assign( Entity entity, const char* meshName )
 {
 	Ogre::String nameString( meshName );
 
@@ -37,7 +37,7 @@ Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 	if ( !meshPool.empty() )
 	{
 		mesh = meshPool.Peek();
-		mesh.entityID = entityID;
+		mesh.entity = entity;
 
 		meshPool.Pop();
 	}
@@ -45,7 +45,7 @@ Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 	{
 		// Create new mesh.
 		Ogre::Entity* meshEntity = _scene.sceneManager().createEntity( nameString );
-		mesh.entityID = entityID;
+		mesh.entity = entity;
 		mesh.mesh = meshEntity;
 		mesh.meshPool = &meshPool;
 	}
@@ -53,26 +53,26 @@ Mesh& MeshManager::Assign( Entity::ID entityID, const char* meshName )
 	// Enable the component by attaching it's Ogre::Entity
 	// to the node held by its transform.
 	Transform& transform =
-		_scene.componentManager< TransformManager >().Get( entityID );
+		_scene.componentManager< TransformManager >().Get( entity );
 	transform.node->attachObject( mesh.mesh );
 
 	// Add it to the list of live meshes and add its index
 	// to the index map.
 	_meshes.Push( mesh );
-	_indices.Put( entityID, _meshes.count() - 1 );
+	_indices.Put( entity, _meshes.count() - 1 );
 
 	return _meshes.Peek();
 }
 
-Mesh& MeshManager::Get( Entity::ID entityID )
+Mesh& MeshManager::Get( Entity entity )
 {
-	size_t index = _indices.Get( entityID );
+	size_t index = _indices.Get( entity );
 	return _meshes[index];
 }
 
-void MeshManager::Destroy( Entity::ID entityID )
+void MeshManager::Destroy( Entity entity )
 {
-	_markedForDestruction.Push( entityID );
+	_markedForDestruction.Push( entity );
 }
 
 const FastArray< Mesh > MeshManager::components() const
@@ -80,14 +80,14 @@ const FastArray< Mesh > MeshManager::components() const
 	return _meshes;
 }
 
-void MeshManager::DestroyAll( Entity::ID entityID )
+void MeshManager::DestroyAll( Entity entity )
 {
-	Destroy( entityID );
+	Destroy( entity );
 }
 
 void MeshManager::DestroyAllMarked()
 {
-	for ( Entity::ID entityID : _markedForDestruction )
+	for ( Entity entity : _markedForDestruction )
 	{
 		// We have to check first if the component exists.
 		// We check when marking the component for destruction
@@ -95,21 +95,21 @@ void MeshManager::DestroyAllMarked()
 		// already been marked, so if it doesn't exist here we
 		// can assume that it was marked twice and has already
 		// beend destroyed.
-		if ( _indices.Contains( entityID ) )
+		if ( _indices.Contains( entity ) )
 		{
-			DestroyImmediate( entityID );
+			DestroyImmediate( entity );
 		}
 	}
 
 	_markedForDestruction.Clear();
 }
 
-void MeshManager::DestroyImmediate( Entity::ID entityID )
+void MeshManager::DestroyImmediate( Entity entity )
 {
 	// Retrieve the index of the component to be destroyed, then
 	// remove the component to be destroyed from the index map.
-	size_t index = _indices.Get( entityID );
-	_indices.Remove( entityID );
+	size_t index = _indices.Get( entity );
+	_indices.Remove( entity );
 
 	// Disable the mesh by detaching it from it's scene node.
 	Mesh& mesh = _meshes[index];
@@ -122,7 +122,7 @@ void MeshManager::DestroyImmediate( Entity::ID entityID )
 	if ( index != _meshes.count() - 1 )
 	{
 		std::swap( _meshes[index], _meshes.Peek() );
-		_indices.Get(_meshes[index].entityID) = index;
+		_indices.Get(_meshes[index].entity) = index;
 	}
 
 	// Destroy the old component by popping it off the back.

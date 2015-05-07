@@ -37,16 +37,16 @@ namespace Gunship
 		///     scene on construction and automatically pass the scene to new components
 		///     so that clients do not have to remember to do so every time.
 		template < typename... Args >
-		ComponentType& Assign( Entity::ID entityID, Args&&... args )
+		ComponentType& Assign( Entity entity, Args&&... args )
 		{
-			SDL_assert_paranoid( !_indices.Contains( entityID ) );
+			SDL_assert_paranoid( !_indices.Contains( entity ) );
 
 			// Emplace new component into the components vector
 			auto& element = _components.Push( ComponentType( std::forward< Args >( args )... ) );
-			element.entityID = entityID;
+			element.entity = entity;
 
 			// Associate its ID with its index
-			_indices.Put( entityID, _components.count() - 1 );
+			_indices.Put( entity, _components.count() - 1 );
 
 			return element;
 		}
@@ -61,22 +61,22 @@ namespace Gunship
 		///
 		///     This method will assert in debug builds if the entity does not
 		///     have an associated component.
-		void Destroy( Entity::ID entityID )
+		void Destroy( Entity entity )
 		{
-			_markedForDestruction.Push( entityID );
+			_markedForDestruction.Push( entity );
 		}
 
-		void DestroyAll( Entity::ID entityID ) override
+		void DestroyAll( Entity entity ) override
 		{
-			if ( _indices.Contains( entityID ) )
+			if ( _indices.Contains( entity ) )
 			{
-				Destroy( entityID );
+				Destroy( entity );
 			}
 		}
 
 		void DestroyAllMarked() override
 		{
-			for ( Entity::ID entityID : _markedForDestruction )
+			for ( Entity entity : _markedForDestruction )
 			{
 				// We have to check first if the component exists.
 				// We check when marking the component for destruction
@@ -84,9 +84,9 @@ namespace Gunship
 				// already been marked, so if it doesn't exist here we
 				// can assume that it was marked twice and has already
 				// beend destroyed.
-				if ( _indices.Contains( entityID ) )
+				if ( _indices.Contains( entity ) )
 				{
-					DestroyImmediate( entityID );
+					DestroyImmediate( entity );
 				}
 			}
 
@@ -94,14 +94,14 @@ namespace Gunship
 		}
 
 		/// @brief Retrieve a reference to the specified entity's component.
-		ComponentType& Get( Entity::ID entityID )
+		ComponentType& Get( Entity entity )
 		{
-			SDL_assert_paranoid( _indices.Contains( entityID ) );
+			SDL_assert_paranoid( _indices.Contains( entity ) );
 
-			size_t index = _indices.Get( entityID );
+			size_t index = _indices.Get( entity );
 
 			SDL_assert_paranoid( index < _components.count() );
-			SDL_assert_paranoid( _components[index].entityID == entityID );
+			SDL_assert_paranoid( _components[index].entity == entity );
 
 			return _components[index];
 		}
@@ -125,7 +125,7 @@ namespace Gunship
 		Containers::FastArray< ComponentType > _components;
 		Containers::EntityMap< size_t > _indices;
 
-		Containers::FastArray< Entity::ID > _markedForDestruction;
+		Containers::FastArray< Entity > _markedForDestruction;
 
 		/// @brief Destroys the component associated with the given Entity.
 		///
@@ -134,12 +134,12 @@ namespace Gunship
 		///     the elements of the internal array to be shifted, so only
 		///     the destroyed component and the last component in the
 		///     array are affected.
-		void DestroyImmediate( Entity::ID entityID )
+		void DestroyImmediate( Entity entity )
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove the component to be destroyed from the index map.
-			size_t index = _indices.Get( entityID );
-			_indices.Remove( entityID );
+			size_t index = _indices.Get( entity );
+			_indices.Remove( entity );
 
 			// If the component isn't at the end of the vector,
 			// swap the last component into the destroyed component's spot.
@@ -150,7 +150,7 @@ namespace Gunship
 				std::swap( _components[index], _components.Peek() );
 
 				// Put the moved component's index back in the map.
-				_indices.Put( _components[index].entityID, index );
+				_indices.Put( _components[index].entity, index );
 			}
 
 			// The marked component is now guaranteed to be at the end.

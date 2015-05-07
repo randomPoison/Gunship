@@ -81,8 +81,8 @@ namespace Gunship
 			Scene& _scene;
 
 			void Disable( Transform& transform ) override;
-			void Enable( Entity::ID entityID, Transform& transform ) override;
-			Transform Construct( Entity::ID entityID ) override;
+			void Enable( Entity entity, Transform& transform ) override;
+			Transform Construct( Entity entity ) override;
 			void Destruct( Transform& transform ) override;
 		};
 	}

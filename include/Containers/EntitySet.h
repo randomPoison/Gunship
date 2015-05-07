@@ -12,22 +12,22 @@ namespace Gunship
 			EntitySet( size_t capactiy = 7 );
 			~EntitySet();
 
-			void Put( Entity::ID entityID );
-			void Remove( Entity::ID entityID );
-			bool Contains( Entity::ID entityID );
+			void Put( Entity entity );
+			void Remove( Entity entity );
+			bool Contains( Entity entity );
 
 		private:
-			Entity::ID* _buckets;
+			Entity* _buckets;
 			size_t _capacity;
 			size_t _count;
 			size_t _itemsUntilRehash;
 
-			size_t Map( Entity::ID entityID );
-			size_t Hash( Entity::ID entityID );
+			size_t Map( Entity entity );
+			size_t Hash( Entity entity );
 
 			void Rehash();
 
-			static Entity::ID* Allocate( size_t capacity );
+			static Entity* Allocate( size_t capacity );
 		};
 	}
 }

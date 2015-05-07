@@ -9,14 +9,14 @@ namespace Gunship
 {
 	namespace Components
 	{
-		AlarmManager::AlarmID AlarmManager::Assign( Entity::ID entityID, float duration, AlarmCallback callback )
+		AlarmManager::AlarmID AlarmManager::Assign( Entity entity, float duration, AlarmCallback callback )
 		{
 			// Add the alarm to the pending queue.
 			AlarmID alarmID = _idCounter++;
 			_pendingForAdd.push_back( { alarmID, duration } );
 
 			// Add the alarm data to the data map.
-			_alarmData[alarmID] = { entityID, callback };
+			_alarmData[alarmID] = { entity, callback };
 			return alarmID;
 		}
 
@@ -28,11 +28,11 @@ namespace Gunship
 			_cancelled.push_back( alarmID );
 		}
 
-		void AlarmManager::DestroyAll( Entity::ID entityID )
+		void AlarmManager::DestroyAll( Entity entity )
 		{
 			for ( auto pair : _alarmData )
 			{
-				if ( pair.second.entityID == entityID &&
+				if ( pair.second.entity == entity &&
 				     VectorHelpers::Contains( _cancelled, pair.first ) )
 				{
 					Cancel( pair.first );

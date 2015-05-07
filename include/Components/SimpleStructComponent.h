@@ -8,7 +8,7 @@ namespace Gunship
 	{
 		struct SimpleStructComponent
 		{
-			Entity::ID entityID;
+			Entity entity;
 		};
 	}
 }

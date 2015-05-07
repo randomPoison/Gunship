@@ -36,20 +36,20 @@ namespace Gunship
 		///
 		///     Recovered IDs are stored on a stack, so the last last destroyed
 		///     entity will be the next one created.
-		void Destroy( Entity::ID entityID );
+		void Destroy( Entity entity );
 
 		/// @brief Checks if the specified Entity is currently alive.
 		///
 		/// @details
 		///     The lookup is done in constant time.
-		bool Alive( Entity::ID entityID );
+		bool Alive( Entity entity );
 
 	private:
 		static Entity::ID _idCounter;
 
 		Scene& _scene;
 		Containers::EntitySet _liveEntities;
-		std::vector< Entity::ID > _freeIDs;
+		std::vector< Entity > _freeIDs;
 
 		friend class Scene;
 

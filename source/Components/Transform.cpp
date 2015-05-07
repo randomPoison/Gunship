@@ -154,12 +154,12 @@ namespace Gunship
 			}
 		}
 
-		void TransformManager::Enable( Entity::ID entityID, Transform& transform )
+		void TransformManager::Enable( Entity entity, Transform& transform )
 		{
 			//_scene.sceneManager().getRootSceneNode()->addChild( transform.node );
 		}
 
-		Transform TransformManager::Construct( Entity::ID entityID )
+		Transform TransformManager::Construct( Entity entity )
 		{
 			Transform transform;
 			transform.node = _scene.sceneManager().createSceneNode();

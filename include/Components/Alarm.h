@@ -37,7 +37,7 @@ namespace Gunship
 			///     to the timeline after the component destruction sweep. This
 			///     is done to handle the case where an alarm callback registers
 			///     new alarms with the manager.
-			AlarmID Assign( Entity::ID entityID, float duration, AlarmCallback callback );
+			AlarmID Assign( Entity entity, float duration, AlarmCallback callback );
 
 			/// @brief Marks a given alarm to be cancelled.
 			///
@@ -50,7 +50,7 @@ namespace Gunship
 			///     been cancelled.
 			void Cancel( AlarmID alarmID );
 
-			void DestroyAll( Entity::ID entityID ) override;
+			void DestroyAll( Entity entity ) override;
 
 		private:
 			struct Alarm
@@ -61,7 +61,7 @@ namespace Gunship
 
 			struct AlarmData
 			{
-				Entity::ID entityID;
+				Entity entity;
 				AlarmCallback callback;
 			};
 

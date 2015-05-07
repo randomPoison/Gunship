@@ -46,7 +46,7 @@ namespace Gunship
 		{
 		}
 
-		Camera& CameraManager::Assign( Entity::ID entity )
+		Camera& CameraManager::Assign( Entity entity )
 		{
 			return Assign( entity,
 			               _scene,

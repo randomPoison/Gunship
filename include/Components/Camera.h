@@ -40,7 +40,7 @@ namespace Gunship
 		public:
 			CameraManager( Scene& scene );
 
-			Camera& Assign( Entity::ID entity );
+			Camera& Assign( Entity entity );
 
 		private:
 			Scene& _scene;

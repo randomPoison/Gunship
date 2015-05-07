@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <cstring>
 
 #include <SDL_assert.h>
 
@@ -89,6 +90,16 @@ public:
 	}
 
 	Element* end()
+	{
+		return _elements + _count;
+	}
+
+	const Element* begin() const
+	{
+		return _elements;
+	}
+
+	const Element* end() const
 	{
 		return _elements + _count;
 	}

@@ -34,7 +34,7 @@ namespace Gunship
 		///     This is called automatically by EntityManager when an entity
 		///     is destroyed. This is to ensure that no components remain alive
 		///     once an entity is destroyed.
-		virtual void DestroyAll( Entity::ID entityID ) = 0;
+		virtual void DestroyAll( Entity entity ) = 0;
 	};
 
 	template< typename Derived >

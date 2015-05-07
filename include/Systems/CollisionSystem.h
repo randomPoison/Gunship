@@ -5,8 +5,9 @@
 namespace Gunship {
 namespace Systems {
 
-struct AlarmSystem : public System< AlarmSystem, Gunship::DefaultSystemBase >
+class CollisionSystem : public System< CollisionSystem >
 {
+public:
 	void Update( Scene& scene, float delta ) override;
 };
 

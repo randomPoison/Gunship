@@ -41,24 +41,24 @@ namespace Gunship
 		///     If there are components left in the pool then the first one will be reused
 		///     rather than creating a new component. Enable() will still be called in this case.
 		template < typename... Args >
-		ComponentType& Assign( Entity::ID entityID )
+		ComponentType& Assign( Entity entity )
 		{
-			SDL_assert_paranoid( !_indices.Contains( entityID ) );
+			SDL_assert_paranoid( !_indices.Contains( entity ) );
 
 			// If there are no pooled components create a new one.
 			if ( _liveCount == _components.count() )
 			{
-				_components.Push( Construct( entityID ) );
+				_components.Push( Construct( entity ) );
 			}
 
 			// Assign the first pooled component with the entity and enable it.
 			++_liveCount;
 			ComponentType& component = _components.Peek();
-			component.entityID = entityID;
-			Enable( entityID, component );
+			component.entity = entity;
+			Enable( entity, component );
 
 			// Add its index to the index map.
-			_indices.Put( entityID, _liveCount - 1 );
+			_indices.Put( entity, _liveCount - 1 );
 
 			return component;
 		}
@@ -73,19 +73,19 @@ namespace Gunship
 		///
 		///     This method will assert in debug builds if the entity does not
 		///     have an associated component.
-		void Destroy( Entity::ID entityID )
+		void Destroy( Entity entity )
 		{
-			_markedForDestruction.Push( entityID );
+			_markedForDestruction.Push( entity );
 		}
 
-		void DestroyAll( Entity::ID entityID ) override
+		void DestroyAll( Entity entity ) override
 		{
-			Destroy( entityID );
+			Destroy( entity );
 		}
 
 		void DestroyAllMarked() override
 		{
-			for ( Entity::ID entityID : _markedForDestruction )
+			for ( Entity entity : _markedForDestruction )
 			{
 				// We have to check first if the component exists.
 				// We check when marking the component for destruction
@@ -93,9 +93,9 @@ namespace Gunship
 				// already been marked, so if it doesn't exist here we
 				// can assume that it was marked twice and has already
 				// beend destroyed.
-				if ( _indices.Contains( entityID ) )
+				if ( _indices.Contains( entity ) )
 				{
-					DestroyImmediate( entityID );
+					DestroyImmediate( entity );
 				}
 			}
 
@@ -103,14 +103,15 @@ namespace Gunship
 		}
 
 		/// @brief Retrieve a reference to the specified entity's component.
-		ComponentType& Get( Entity::ID entityID )
+		ComponentType& Get( Entity entity )
 		{
-			SDL_assert_paranoid( _indices.Contains( entityID ) );
 
-			size_t index = _indices.Get( entityID );
+			SDL_assert_paranoid( _indices.Contains( entity ) );
+
+			size_t index = _indices.Get( entity );
 
 			SDL_assert_paranoid( index < _components.count() );
-			SDL_assert_paranoid( _components[index].entityID == entityID );
+			SDL_assert_paranoid( _components[index].entity == entity );
 
 			return _components[index];
 		}
@@ -133,9 +134,9 @@ namespace Gunship
 		///     This method should perform any necessary actions to initialize the
 		///     component before use. It is called every time the component is assigned
 		///     to an entity, including when the component is first created.
-		virtual void Enable( Entity::ID entityID, ComponentType& component ) = 0;
+		virtual void Enable( Entity entity, ComponentType& component ) = 0;
 
-		virtual ComponentType Construct( Entity::ID entityID ) = 0;
+		virtual ComponentType Construct( Entity entity ) = 0;
 		virtual void Destruct( ComponentType& component ) = 0;
 
 	private:
@@ -143,7 +144,7 @@ namespace Gunship
 		size_t _liveCount = 0;
 		Containers::EntityMap< size_t > _indices;
 
-		Containers::FastArray< Entity::ID > _markedForDestruction;
+		Containers::FastArray< Entity > _markedForDestruction;
 
 		/// @brief Returns the component associated with the given Entity back to the pool.
 		///
@@ -156,15 +157,15 @@ namespace Gunship
 		/// @note
 		///     The destroyed component is not destructed and remains in the
 		///     list of components. When an
-		void DestroyImmediate( Entity::ID entityID )
+		void DestroyImmediate( Entity entity )
 		{
 			// Retrieve the index of the component to be destroyed, then
 			// remove it from the index map.
-			size_t index = _indices.Get( entityID );
-			_indices.Remove( entityID );
+			size_t index = _indices.Get( entity );
+			_indices.Remove( entity );
 
 			// Make sure we actually have the right index, EntityMap is still a WIP.
-			SDL_assert_paranoid( _components[index].entityID == entityID );
+			SDL_assert_paranoid( _components[index].entity == entity );
 
 			// If the component isn't the last live one, swap the
 			// last live component into the destroyed component's spot.
@@ -175,7 +176,7 @@ namespace Gunship
 				std::swap( _components[index], _components[_liveCount - 1] );
 
 				// Put the moved component's index back in the map.
-				_indices.Put( _components[index].entityID, index );
+				_indices.Put( _components[index].entity, index );
 			}
 
 			// Decrease the live count, effectively marking the
@@ -185,7 +186,7 @@ namespace Gunship
 			// Do the callback to disable the component.
 			Disable( _components[_liveCount] );
 
-			SDL_assert_paranoid( !_indices.Contains( entityID ) );
+			SDL_assert_paranoid( !_indices.Contains( entity ) );
 		}
 	};
 }

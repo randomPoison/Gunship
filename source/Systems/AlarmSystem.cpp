@@ -22,7 +22,7 @@ namespace Gunship
 
 					// Call the callback.
 					auto& alarmData = alarmManager._alarmData[iterator->id];
-					alarmData.callback( scene, { alarmData.entityID } );
+					alarmData.callback( scene, { alarmData.entity } );
 				}
 				else
 				{

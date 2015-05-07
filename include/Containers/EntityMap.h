@@ -13,7 +13,7 @@ namespace Gunship {
 		public:
 			struct Bucket
 			{
-				Entity::ID entityID;
+				Entity entity;
 				Element element;
 			};
 
@@ -30,25 +30,25 @@ namespace Gunship {
 				std::free( _buckets );
 			}
 
-			void Put( Entity::ID entityID, Element element )
+			void Put( Entity entity, Element element )
 			{
 				// Linear probing to find open bucket.
-				size_t index = Map( entityID );
-				while ( _buckets[index].entityID
-				     && _buckets[index].entityID != entityID )
+				size_t index = Map( entity );
+				while ( _buckets[index].entity
+				     && _buckets[index].entity != entity )
 				{
 					index = ( index + 1 ) % _capacity;
 				}
 
 				// If we're not overwriting an existing value, increase
 				// the count and decrease items until rehash.
-				if ( _buckets[index].entityID != entityID )
+				if ( _buckets[index].entity != entity )
 				{
 					_count += 1;
 					_itemsUntilRehash -= 1;
 				}
 
-				_buckets[index].entityID = entityID;
+				_buckets[index].entity = entity;
 				_buckets[index].element = element;
 
 				// If no more items until rehash perform the rehash.
@@ -58,12 +58,12 @@ namespace Gunship {
 				}
 			}
 
-			Element& Get( Entity::ID entityID )
+			Element& Get( Entity entity )
 			{
-				size_t index = Map( entityID );
+				size_t index = Map( entity );
 				
 				// Linear probing to find open bucket.
-				while ( _buckets[index].entityID != entityID )
+				while ( _buckets[index].entity != entity )
 				{
 					index = ( index + 1 ) % _capacity;
 				}
@@ -71,35 +71,35 @@ namespace Gunship {
 				return _buckets[index].element;
 			}
 
-			void Remove( Entity::ID entityID )
+			void Remove( Entity entity )
 			{
 				// Linear probing to find open bucket.
-				size_t index = Map( entityID );
-				while ( _buckets[index].entityID != entityID )
+				size_t index = Map( entity );
+				while ( _buckets[index].entity != entity )
 				{
 					index = ( index + 1 ) % _capacity;
 				}
 
 				// Zeroing-out the entity ID effectively removes the element.
-				_buckets[index].entityID = 0;
+				_buckets[index].entity.id = 0;
 
 				// Adjust count and items until rehash.
 				_count -= 1;
 				_itemsUntilRehash += 1;
 			}
 
-			bool Contains( Entity::ID entityID )
+			bool Contains( Entity entity )
 			{
-				size_t index = Map( entityID );
+				size_t index = Map( entity );
 				
 				// Linear probing to find open bucket.
-				while ( _buckets[index].entityID
-				     && _buckets[index].entityID != entityID )
+				while ( _buckets[index].entity
+				     && _buckets[index].entity != entity )
 				{
 					index = ( index + 1 ) % _capacity;
 				}
 
-				return _buckets[index].entityID == entityID;
+				return _buckets[index].entity == entity;
 			}
 
 		private:
@@ -108,14 +108,14 @@ namespace Gunship {
 			size_t _count;
 			size_t _itemsUntilRehash;
 
-			size_t Map( Entity::ID entityID )
+			size_t Map( Entity entity )
 			{
-				return Hash( entityID ) % _capacity;
+				return Hash( entity ) % _capacity;
 			}
 
-			size_t Hash( Entity::ID entityID )
+			size_t Hash( Entity entity )
 			{
-				return entityID;
+				return entity;
 			}
 
 			/// @brief Reallocates the underlying table and rehashes the existing elements into it.
@@ -142,9 +142,9 @@ namespace Gunship {
 				// Transfer the existing elements into the new table.
 				for ( size_t index = 0; index < oldCapacity; ++index )
 				{
-					if ( oldBuckets[index].entityID )
+					if ( oldBuckets[index].entity )
 					{
-						Put( oldBuckets[index].entityID, oldBuckets[index].element );
+						Put( oldBuckets[index].entity, oldBuckets[index].element );
 					}
 				}
 

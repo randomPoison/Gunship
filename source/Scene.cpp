@@ -6,10 +6,12 @@
 #include "Scene.h"
 
 #include "Systems/AlarmSystem.h"
+#include "Systems/CollisionSystem.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Components/Mesh.h"
 #include "Components/Alarm.h"
+#include "Components/Collider.h"
 
 namespace Gunship
 {
@@ -28,8 +30,10 @@ namespace Gunship
 		RegisterComponentManager< Components::CameraManager >( new Components::CameraManager( *this ) );
 		RegisterComponentManager< Components::MeshManager >( new Components::MeshManager( *this ) );
 		RegisterComponentManager< Components::AlarmManager >( new Components::AlarmManager() );
+		RegisterComponentManager< Components::ColliderManager >( new Components::ColliderManager( *this ) );
 
 		_coreSystems.Add< Systems::AlarmSystem >();
+		_coreSystems.Add< Systems::CollisionSystem >();
 	}
 
 	Gunship::Engine& Scene::engine() const
