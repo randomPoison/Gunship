@@ -1,11 +1,13 @@
 #include "Systems/CollisionSystem.h"
 #include "Components/Transform.h"
 #include "Components/Collider.h"
+#include "Components/Collision.h"
 #include "Scene.h"
 #include "Math/Vector3.h"
 
 using Gunship::Components::TransformManager;
 using Gunship::Components::ColliderManager;
+using Gunship::Components::CollisionManager;
 
 namespace Gunship {
 namespace Systems {
@@ -14,6 +16,10 @@ void CollisionSystem::Update( Scene& scene, float delta )
 {
 	auto& transformManager = scene.componentManager< TransformManager >();
 	auto& colliderManager = scene.componentManager< ColliderManager >();
+	auto& collisionManager = scene.componentManager< CollisionManager >();
+
+	// Clear out old collisions.
+	collisionManager.Clear();
 
 	// Perform pair-wise collisions on all components colliders.
 	auto& colliders = colliderManager.colliders();
@@ -40,7 +46,7 @@ void CollisionSystem::Update( Scene& scene, float delta )
 			float colliderDistanceSqr = a * a + 2 * a * b + b * b;
 			if ( distanceSqr <= colliderDistanceSqr )
 			{
-				// TODO: Notify of collision.
+				collisionManager.Add( *entity, *otherEntity );
 			}
 		}
 	}

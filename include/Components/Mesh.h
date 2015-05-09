@@ -42,7 +42,7 @@ namespace Gunship
 
 			void Destroy( Entity entity );
 
-			const Containers::FastArray< Mesh > components() const;
+			const Containers::FastArray< Mesh >& components() const;
 
 		private:
 			Scene& _scene;

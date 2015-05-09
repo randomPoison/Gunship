@@ -12,6 +12,7 @@
 #include "Components/Mesh.h"
 #include "Components/Alarm.h"
 #include "Components/Collider.h"
+#include "Components/Collision.h"
 
 namespace Gunship
 {
@@ -29,8 +30,9 @@ namespace Gunship
 		RegisterComponentManager< Components::TransformManager >( new Components::TransformManager( *this ) );
 		RegisterComponentManager< Components::CameraManager >( new Components::CameraManager( *this ) );
 		RegisterComponentManager< Components::MeshManager >( new Components::MeshManager( *this ) );
-		RegisterComponentManager< Components::AlarmManager >( new Components::AlarmManager() );
+		RegisterComponentManager< Components::AlarmManager >( new Components::AlarmManager );
 		RegisterComponentManager< Components::ColliderManager >( new Components::ColliderManager( *this ) );
+		RegisterComponentManager< Components::CollisionManager >( new Components::CollisionManager );
 
 		_coreSystems.Add< Systems::AlarmSystem >();
 		_coreSystems.Add< Systems::CollisionSystem >();

@@ -75,7 +75,7 @@ void MeshManager::Destroy( Entity entity )
 	_markedForDestruction.Push( entity );
 }
 
-const FastArray< Mesh > MeshManager::components() const
+const FastArray< Mesh >& MeshManager::components() const
 {
 	return _meshes;
 }
