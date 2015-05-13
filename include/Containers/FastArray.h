@@ -32,7 +32,15 @@ public:
 		free( _elements );
 	}
 
-	Element& Push( Element& element )
+	/// @brief Pushes the provided element onto the back of the list.
+	///
+	/// @remarks
+	///     This method copy constructs a new element, so if Element
+	///     does not support copy construction then you must use Emplace().
+	///
+	/// @todo
+	///     Perhaps don't use copy assignment for this one. Can we do placement new for copy construction?
+	Element& Push( const Element& element )
 	{
 		if ( _count == _capacity )
 		{
@@ -41,6 +49,29 @@ public:
 
 		size_t index = _count;
 		_elements[index] = element;
+		//new ( _elements + index ) Element;
+		_count += 1;
+
+		return _elements[index];
+	}
+
+	/// @brief Directly constructs a new element within the array.
+	///
+	/// @remarks
+	///     This method is needed for types that cannot be copy constructed/assigned
+	///     and therefore cannot be used with Push().
+	///
+	/// @todo
+	///     Support forwarding constructor arguments like vector::emplace_back().
+	Element& Emplace()
+	{
+		if ( _count == _capacity )
+		{
+			Reallocate();
+		}
+
+		size_t index = _count;
+		new ( _elements + index ) Element;
 		_count += 1;
 
 		return _elements[index];
@@ -65,6 +96,17 @@ public:
 	void Clear()
 	{
 		_count = 0;
+	}
+
+	void FillToCount( size_t count )
+	{
+		// TODO: Maybe do a single allocation do ensure capacity is large enough
+		// to handle the new items without doing multiple reallocations.
+
+		while ( _count < count )
+		{
+			Emplace();
+		}
 	}
 
 	Element& operator[]( size_t index )

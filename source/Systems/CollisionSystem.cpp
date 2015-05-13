@@ -6,8 +6,12 @@
 #include "Math/Vector3.h"
 
 using Gunship::Components::TransformManager;
+using Gunship::Components::Transform;
 using Gunship::Components::ColliderManager;
 using Gunship::Components::CollisionManager;
+using Gunship::Components::CollisionLayer;
+using Gunship::Components::SphereCollider;
+using Gunship::Containers::FastArray;
 
 namespace Gunship {
 namespace Systems {
@@ -22,31 +26,42 @@ void CollisionSystem::Update( Scene& scene, float delta )
 	collisionManager.Clear();
 
 	// Perform pair-wise collisions on all components colliders.
-	auto& colliders = colliderManager.colliders();
-	auto& entities = colliderManager.entities();
-
-	auto collider = colliders.begin();
-	auto entity = entities.begin();
-	for ( ; collider != colliders.end() - 1 && entity != entities.end() - 1; ++collider, ++entity )
+	const FastArray< CollisionLayer >& layers = colliderManager.layers();
+	for ( const CollisionLayer* layer = layers.begin(); layer != layers.end(); ++layer )
 	{
-		auto& transform = transformManager.Get( *entity );
+		// TODO: Collide layer with self if necessary.
 
-		auto otherCollider = collider + 1;
-		auto otherEntity = entity + 1;
-		for ( ; otherCollider != colliders.end() && otherEntity != entities.end(); ++otherCollider, ++otherEntity )
+		for ( auto secondLayer = layer->layersToCollide.begin(); secondLayer != layer->layersToCollide.end(); ++secondLayer )
 		{
-			auto& otherTransform = transformManager.Get( *otherEntity );
+			CollideLayers( *layer, **secondLayer, transformManager, collisionManager );
+		}
+	}
+}
 
-			Vector3 position = transform.position();
-			Vector3 otherPosition = otherTransform.position();
+void CollisionSystem::CollideLayers( const CollisionLayer& firstLayer, const CollisionLayer& secondLayer, TransformManager& transformManager, CollisionManager& collisionManager )
+{
+	const SphereCollider* firstCollider = firstLayer.colliders.begin();
+	const Entity* firstEntity = firstLayer.entities.begin();
+	for ( ; firstCollider != firstLayer.colliders.end(); ++firstCollider, ++firstEntity )
+	{
+		Transform& firstTransform = transformManager.Get( *firstEntity );
+
+		const SphereCollider* secondCollider = secondLayer.colliders.begin();
+		const Entity* secondEntity = secondLayer.entities.begin();
+		for ( ; secondCollider != secondLayer.colliders.end(); ++secondCollider, ++secondEntity )
+		{
+			Transform& secondTransform = transformManager.Get( *secondEntity );
+
+			Vector3 position = firstTransform.position();
+			Vector3 otherPosition = secondTransform.position();
 
 			float distanceSqr = position.squaredDistance( otherPosition );
-			float a = collider->radius;
-			float b = otherCollider->radius;
+			float a = firstCollider->radius;
+			float b = secondCollider->radius;
 			float colliderDistanceSqr = a * a + 2 * a * b + b * b;
 			if ( distanceSqr <= colliderDistanceSqr )
 			{
-				collisionManager.Add( *entity, *otherEntity );
+				collisionManager.Add( *firstEntity, *secondEntity );
 			}
 		}
 	}

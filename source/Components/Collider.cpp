@@ -9,32 +9,40 @@ namespace Gunship {
 namespace Components {
 
 ColliderManager::ColliderManager( Scene& scene )
-	: _scene( scene )
+	: _scene( scene ),
+	  _layers( 32 )
 {
+	_layers.FillToCount( 32 );
 }
 
-SphereCollider& ColliderManager::Assign( Entity entity )
+SphereCollider& ColliderManager::Assign( Entity entity, unsigned int layer )
 {
 	SDL_assert_paranoid( !_indices.Contains( entity ) );
 
 	// TODO: Ensure the entity has a transform component.
 
-	size_t index = _colliders.count();
-	SphereCollider& collider = _colliders.Push( SphereCollider() );
-	_entities.Push( entity );
-	_indices.Put( entity, index );
+	CollisionLayer& collisionLayer = _layers[layer];
+	size_t index = collisionLayer.colliders.count();
+	SphereCollider& collider = collisionLayer.colliders.Push( SphereCollider() );
+	collisionLayer.entities.Push( entity );
+
+	IndexPair indices{ layer, index };
+	_indices.Put( entity, indices );
 
 	return collider;
 }
 
-const Containers::FastArray< SphereCollider >& ColliderManager::colliders() const
+void ColliderManager::CollideLayers( unsigned int first, unsigned int second )
 {
-	return _colliders;
+	// TODO: Handle self collision?
+	// TODO: Out of bounds layers?
+
+	_layers[first].layersToCollide.Push( &_layers[second] );
 }
 
-const Containers::FastArray< Entity >& ColliderManager::entities() const
+const Containers::FastArray< CollisionLayer >& ColliderManager::layers() const
 {
-	return _entities;
+	return _layers;
 }
 
 void ColliderManager::DestroyAllMarked() {}
