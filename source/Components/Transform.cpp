@@ -8,7 +8,7 @@ namespace Gunship
 {
 	namespace Components
 	{
-		Vector3 Transform::position()
+		Vector3 Transform::position() const
 		{
 			return node->getPosition();
 		}

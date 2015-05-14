@@ -29,7 +29,7 @@ void CollisionSystem::Update( Scene& scene, float delta )
 	// Handle self collisions for layers.
 	for ( size_t layerIndex : colliderManager.selfCollisions() )
 	{
-		//SelfCollideLayer( collisionLayers[layerIndex], transformManager, collisionManager );
+		SelfCollideLayer( collisionLayers[layerIndex], transformManager, collisionManager );
 	}
 
 	// Perform pair-wise collisions for all layers.
@@ -44,7 +44,25 @@ void CollisionSystem::Update( Scene& scene, float delta )
 	}
 }
 
-void CollisionSystem::CollideLayers( const CollisionLayer& firstLayer, const CollisionLayer& secondLayer, TransformManager& transformManager, CollisionManager& collisionManager )
+bool SphereCollision(
+	const SphereCollider& firstCollider, const Transform& firstTransform,
+	const SphereCollider& secondCollider, const Transform& secondTransform )
+{
+	Vector3 position = firstTransform.position();
+	Vector3 otherPosition = secondTransform.position();
+
+	float distanceSqr = position.squaredDistance( otherPosition );
+	float a = firstCollider.radius;
+	float b = secondCollider.radius;
+	float colliderDistanceSqr = a * a + 2 * a * b + b * b;
+	return distanceSqr <= colliderDistanceSqr;
+}
+
+void CollisionSystem::CollideLayers(
+	const CollisionLayer& firstLayer,
+	const CollisionLayer& secondLayer,
+	TransformManager& transformManager,
+	CollisionManager& collisionManager )
 {
 	const SphereCollider* firstCollider = firstLayer.colliders.begin();
 	const Entity* firstEntity = firstLayer.entities.begin();
@@ -58,14 +76,32 @@ void CollisionSystem::CollideLayers( const CollisionLayer& firstLayer, const Col
 		{
 			Transform& secondTransform = transformManager.Get( *secondEntity );
 
-			Vector3 position = firstTransform.position();
-			Vector3 otherPosition = secondTransform.position();
+			if ( SphereCollision( *firstCollider, firstTransform, *secondCollider, secondTransform ) )
+			{
+				collisionManager.Add( *firstEntity, *secondEntity );
+			}
+		}
+	}
+}
 
-			float distanceSqr = position.squaredDistance( otherPosition );
-			float a = firstCollider->radius;
-			float b = secondCollider->radius;
-			float colliderDistanceSqr = a * a + 2 * a * b + b * b;
-			if ( distanceSqr <= colliderDistanceSqr )
+void CollisionSystem::SelfCollideLayer(
+	const Components::CollisionLayer& layer,
+	Components::TransformManager& transformManager,
+	Components::CollisionManager& collisionManager )
+{
+	const SphereCollider* firstCollider = layer.colliders.begin();
+	const Entity* firstEntity = layer.entities.begin();
+	for ( ; firstCollider != layer.colliders.end() - 1; ++firstCollider, ++firstEntity )
+	{
+		Transform& firstTransform = transformManager.Get( *firstEntity );
+
+		const SphereCollider* secondCollider = firstCollider + 1;
+		const Entity* secondEntity = firstEntity + 1;
+		for ( ; secondCollider != layer.colliders.end(); ++secondCollider, ++secondEntity )
+		{
+			Transform& secondTransform = transformManager.Get( *secondEntity );
+
+			if ( SphereCollision( *firstCollider, firstTransform, *secondCollider, secondTransform ) )
 			{
 				collisionManager.Add( *firstEntity, *secondEntity );
 			}

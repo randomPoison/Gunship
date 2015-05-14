@@ -39,7 +39,7 @@ namespace Gunship
 			///     pass in the scene, since you have to go through the scene
 			///     to create the component in the first place
 
-			Vector3 position();
+			Vector3 position() const;
 			void position( float x, float y, float z );
 			void position( Vector3 position );
 			Vector3 derivedPosition();
