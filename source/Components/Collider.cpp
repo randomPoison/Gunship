@@ -4,15 +4,15 @@
 #include "Components/Collider.h"
 
 using Gunship::Scene;
+using Gunship::Containers::FastArray;
 
 namespace Gunship {
 namespace Components {
 
 ColliderManager::ColliderManager( Scene& scene )
-	: _scene( scene ),
-	  _layers( 32 )
+	: _scene( scene )
 {
-	_layers.FillToCount( 32 );
+	SetLayerCount( 32 );
 }
 
 SphereCollider& ColliderManager::Assign( Entity entity, unsigned int layer )
@@ -32,17 +32,64 @@ SphereCollider& ColliderManager::Assign( Entity entity, unsigned int layer )
 	return collider;
 }
 
-void ColliderManager::CollideLayers( unsigned int first, unsigned int second )
+void ColliderManager::SetLayerCount( size_t layerCount )
 {
-	// TODO: Handle self collision?
-	// TODO: Out of bounds layers?
+	// Ignore requests to decreate the number of layers.
+	if ( _layers.count() >= layerCount ) return;
 
-	_layers[first].layersToCollide.Push( &_layers[second] );
+	// Ensure that there are enough layers.
+	_layers.FillToCount( layerCount );
+	_collisionPairs.FillToCount( layerCount );
+}
+
+void ColliderManager::SetCollision( unsigned int first, unsigned int second, bool collide )
+{
+	SDL_assert_paranoid( first < _layers.count() );
+	SDL_assert_paranoid( second < _layers.count() );
+	SDL_assert_paranoid( first <= second ); // TODO: Automatically handle misordered collision requrests.
+
+	// Handle self collisions
+	if ( first == second )
+	{
+		size_t index;
+		if ( collide && !_selfCollisions.Contains( first, &index ) )
+		{
+			_selfCollisions.Push( first );
+		}
+		else if ( !collide && _selfCollisions.Contains( first, &index ) )
+		{
+			_selfCollisions.SwapRemove( index );
+		}
+
+		return;
+	}
+
+	// Register the collision pair.
+	FastArray< size_t >& layerCollisions = _collisionPairs[first];
+	size_t index;
+	if ( collide && !layerCollisions.Contains( second, &index ) )
+	{
+		layerCollisions.Push( second );
+	}
+	else if ( !collide && layerCollisions.Contains( second, &index ) )
+	{
+		layerCollisions.SwapRemove( index );
+	}
 }
 
 const Containers::FastArray< CollisionLayer >& ColliderManager::layers() const
 {
 	return _layers;
+}
+
+const ColliderManager::CollisionPairs& ColliderManager::collisionPairs() const
+{
+	return _collisionPairs;
+}
+
+const Containers::FastArray< size_t >& ColliderManager::selfCollisions() const
+{
+	return _selfCollisions;
 }
 
 void ColliderManager::DestroyAllMarked() {}

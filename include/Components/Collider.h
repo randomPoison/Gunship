@@ -17,15 +17,10 @@ struct SphereCollider
 	float radius;
 };
 
-struct CollisionLayer
+struct CollisionLayer : NonCopyable
 {
 	Containers::FastArray< SphereCollider > colliders;
 	Containers::FastArray< Entity > entities;
-	Containers::FastArray< CollisionLayer* > layersToCollide;
-	bool collideSelf;
-
-private:
-	CollisionLayer& operator=( const CollisionLayer& other );
 };
 
 class ColliderManager : public ComponentManager< ColliderManager >
@@ -39,19 +34,40 @@ class ColliderManager : public ComponentManager< ColliderManager >
 	};
 
 public:
+	typedef Containers::FastArray< Containers::FastArray< size_t > > CollisionPairs;
+
 	/// @brief Assign a sphere collider to the given entity.
 	SphereCollider& Assign( Entity entity, unsigned int layer );
 
-	/// @brief Specify a pair of layers that should be processed for collisions.
-	void CollideLayers( unsigned int first, unsigned int second );
+	/// @brief Increase the layer count if it is less than the specified count.
+	///
+	/// @note
+	///     This will not decrease the number of layers if it is more than \a layerCount.
+	void SetLayerCount( size_t layerCount );
+
+	/// @brief Specify whether a pair of layers should be checked for collisions.
+	void SetCollision( unsigned int first, unsigned int second, bool collide );
 
 	const Containers::FastArray< CollisionLayer >& layers() const;
+	const CollisionPairs& collisionPairs() const;
+	const Containers::FastArray< size_t >& selfCollisions() const;
+
+	/// @brief Returns the number of supported layers.
+	size_t layerCount() const;
 
 private:
 	Gunship::Scene& _scene;
 
 	Containers::FastArray< CollisionLayer > _layers;
 	Containers::EntityMap< IndexPair > _indices;
+
+	/// @brief A 2D array where each row is the list of collision partners for that layer.
+	///
+	/// @todo
+	///     FastArray is not safe for the outer list because it doesn't call destructors of its
+	///     elements when destroyed, so it will leak the memory of all the inner arrays.
+	CollisionPairs _collisionPairs;
+	Containers::FastArray< size_t > _selfCollisions;
 
 	ColliderManager( Gunship::Scene& scene );
 

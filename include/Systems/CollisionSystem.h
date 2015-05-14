@@ -20,6 +20,7 @@ public:
 
 private:
 	void CollideLayers( const Components::CollisionLayer& firstLayer, const Components::CollisionLayer& secondLayer, Components::TransformManager& transformManager, Components::CollisionManager& collisionManager );
+	void SelfCollideLayer( const Components::CollisionLayer& layer, Components::TransformManager& transformManager, Components::CollisionManager& collisionManager );
 };
 
 }

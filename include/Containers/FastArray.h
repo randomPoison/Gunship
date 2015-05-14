@@ -109,7 +109,50 @@ public:
 		}
 	}
 
+	/// @brief Check if the array contains the specified element.
+	///
+	/// @details
+	///     This method can optionally retrieve the index of the found element. It will
+	///     store the index in the index parameter if it is not null.
+	size_t Contains( const Element& element, size_t* const outIndex = nullptr )
+	{
+		size_t index = 0;
+		for ( Element* ownedElement = begin(); ownedElement != end(); ++index, ++ownedElement )
+		{
+			if ( *ownedElement == element )
+			{
+				if ( outIndex )
+				{
+					*outIndex = index;
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/// @brief Remove an element from anywhere in the array, replacing it with the last element.
+	///
+	/// @remarks
+	///     This method does not preserve ordering but does perform removal in O(1) time.
+	void SwapRemove( size_t index )
+	{
+		SDL_assert_paranoid( index < _count );
+
+		_elements[index] = back();
+		Pop();
+	}
+
 	Element& operator[]( size_t index )
+	{
+		SDL_assert_paranoid( index < _count );
+
+		return _elements[index];
+	}
+
+	const Element& operator[]( size_t index ) const
 	{
 		SDL_assert_paranoid( index < _count );
 
@@ -124,6 +167,16 @@ public:
 	size_t count() const
 	{
 		return _count;
+	}
+
+	Element& front()
+	{
+		return _elements[0];
+	}
+
+	Element& back()
+	{
+		return _elements[_count - 1];
 	}
 
 	Element* begin()

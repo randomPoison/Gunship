@@ -18,22 +18,28 @@ namespace Systems {
 
 void CollisionSystem::Update( Scene& scene, float delta )
 {
-	auto& transformManager = scene.componentManager< TransformManager >();
-	auto& colliderManager = scene.componentManager< ColliderManager >();
-	auto& collisionManager = scene.componentManager< CollisionManager >();
+	TransformManager& transformManager = scene.componentManager< TransformManager >();
+	ColliderManager& colliderManager = scene.componentManager< ColliderManager >();
+	CollisionManager& collisionManager = scene.componentManager< CollisionManager >();
 
 	// Clear out old collisions.
 	collisionManager.Clear();
+	const FastArray< CollisionLayer >& collisionLayers = colliderManager.layers();
 
-	// Perform pair-wise collisions on all components colliders.
-	const FastArray< CollisionLayer >& layers = colliderManager.layers();
-	for ( const CollisionLayer* layer = layers.begin(); layer != layers.end(); ++layer )
+	// Handle self collisions for layers.
+	for ( size_t layerIndex : colliderManager.selfCollisions() )
 	{
-		// TODO: Collide layer with self if necessary.
+		//SelfCollideLayer( collisionLayers[layerIndex], transformManager, collisionManager );
+	}
 
-		for ( auto secondLayer = layer->layersToCollide.begin(); secondLayer != layer->layersToCollide.end(); ++secondLayer )
+	// Perform pair-wise collisions for all layers.
+	const ColliderManager::CollisionPairs& collisionPairs = colliderManager.collisionPairs();
+	const CollisionLayer* layer = collisionLayers.begin();
+	for ( const FastArray< size_t >* layerCollisions = collisionPairs.begin(); layerCollisions != collisionPairs.end(); ++layerCollisions, ++layer )
+	{
+		for ( size_t layerIndex : *layerCollisions )
 		{
-			CollideLayers( *layer, **secondLayer, transformManager, collisionManager );
+			CollideLayers( *layer, collisionLayers[layerIndex], transformManager, collisionManager );
 		}
 	}
 }
