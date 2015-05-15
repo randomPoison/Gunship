@@ -108,14 +108,14 @@ namespace Gunship {
 			size_t _count;
 			size_t _itemsUntilRehash;
 
-			size_t Map( Entity entity )
+			size_t Map( Entity::ID entityID )
 			{
-				return Hash( entity ) % _capacity;
+				return Hash( entityID ) % _capacity;
 			}
 
-			size_t Hash( Entity entity )
+			size_t Hash( Entity::ID entityID )
 			{
-				return entity;
+				return entityID;
 			}
 
 			/// @brief Reallocates the underlying table and rehashes the existing elements into it.

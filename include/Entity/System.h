@@ -26,6 +26,8 @@ namespace Gunship
 
 		bool active;
 
+		SystemBase();
+
 		virtual ~SystemBase();
 	};
 

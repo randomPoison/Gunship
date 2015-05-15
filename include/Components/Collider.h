@@ -4,10 +4,16 @@
 #include "Entity/Entity.h"
 #include "Containers/FastArray.h"
 #include "Containers/EntityMap.h"
+#include "Math/Vector3.h"
 
 namespace Gunship {
 
 class Scene;
+
+namespace Systems
+{
+	class CollisionSystem;
+}
 
 namespace Components {
 
@@ -15,6 +21,7 @@ struct SphereCollider
 {
 	unsigned int layer;
 	float radius;
+	Vector3 _cachedPosition;
 };
 
 struct CollisionLayer : NonCopyable
@@ -26,6 +33,7 @@ struct CollisionLayer : NonCopyable
 class ColliderManager : public ComponentManager< ColliderManager >
 {
 	friend class Scene;
+	friend class Systems::CollisionSystem;
 
 	struct IndexPair
 	{
@@ -70,6 +78,8 @@ private:
 	Containers::FastArray< size_t > _selfCollisions;
 
 	ColliderManager( Gunship::Scene& scene );
+
+	void UpdateCachedPositions();
 
 	void DestroyAllMarked() override;
 	void DestroyAll( Entity entity ) override;

@@ -2,9 +2,11 @@
 
 #include "Scene.h"
 #include "Components/Collider.h"
+#include "Components/Transform.h"
 
 using Gunship::Scene;
 using Gunship::Containers::FastArray;
+using Gunship::Components::TransformManager;
 
 namespace Gunship {
 namespace Components {
@@ -90,6 +92,20 @@ const ColliderManager::CollisionPairs& ColliderManager::collisionPairs() const
 const Containers::FastArray< size_t >& ColliderManager::selfCollisions() const
 {
 	return _selfCollisions;
+}
+
+void ColliderManager::UpdateCachedPositions()
+{
+	TransformManager& transformManager = _scene.componentManager< TransformManager >();
+
+	for ( CollisionLayer* layer = _layers.begin(); layer != _layers.end(); ++layer )
+	{
+		Entity* entity = layer->entities.begin();
+		for ( SphereCollider* collider = layer->colliders.begin(); collider != layer->colliders.end(); ++collider, ++entity )
+		{
+			collider->_cachedPosition = transformManager.Get( *entity ).position();
+		}
+	}
 }
 
 void ColliderManager::DestroyAllMarked() {}
